@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin – EXPOUSIPA 2026</title>
+<style>
+:root { --red:#004C99; --green:#00A651; --gray:#3C3C3B; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, Arial, sans-serif; background: #F4F4F4; color: var(--gray); }
+header { background: var(--red); color: white; padding: 24px 40px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+header h1 { font-size: 28px; font-weight: 900; }
+header p { font-size: 14px; opacity: .8; }
+.hdr-right { display: flex; gap: 12px; flex-wrap: wrap; }
+button { padding: 10px 22px; border-radius: 10px; border: none; cursor: pointer; font-size: 15px; font-weight: 600; }
+.btn-white  { background: white; color: var(--red); }
+.btn-green  { background: var(--green); color: white; }
+.btn-gray   { background: #555; color: white; }
+.btn-orange { background: #F59E0B; color: white; }
+.btn-danger { background: #DC2626; color: white; }
+
+main { padding: 32px 40px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 20px; margin-bottom: 32px; }
+.stat-card { background: white; border-radius: 14px; padding: 24px 28px; box-shadow: 0 2px 12px rgba(0,0,0,.07); }
+.stat-card .val { font-size: 44px; font-weight: 900; color: var(--red); }
+.stat-card .lbl { font-size: 14px; color: #888; margin-top: 4px; }
+
+.filters { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; align-items: center; }
+.filters input, .filters select { padding: 8px 14px; border: 2px solid #ddd; border-radius: 8px; font-size: 15px; outline: none; }
+.filters input:focus, .filters select:focus { border-color: var(--red); }
+
+.table-wrap { background: white; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,.07); overflow: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { background: #F8F8F8; padding: 14px 16px; text-align: left; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; color: #888; border-bottom: 2px solid #eee; white-space: nowrap; }
+td { padding: 13px 16px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #FAFAFA; }
+tr.deleted td { opacity: .4; text-decoration: line-through; background: #FFF5F5; }
+.badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; }
+.badge-sesc     { background: #E0ECF8; color: #004C99; }
+.badge-senac    { background: #E5ECF8; color: #003E8E; }
+.badge-sind     { background: #E5E7EB; color: #374151; }
+.badge-teste    { background: #FEF3C7; color: #92400E; font-size: 11px; margin-left: 4px; }
+.score { font-weight: 700; }
+.empty { text-align: center; padding: 60px; color: #aaa; font-size: 18px; }
+.btn-del { padding: 5px 12px; border-radius: 7px; border: none; cursor: pointer; font-size: 12px; font-weight: 700; background: #FEE2E2; color: #DC2626; white-space: nowrap; }
+.btn-del:hover { background: #DC2626; color: white; }
+.btn-restore { padding: 5px 12px; border-radius: 7px; border: none; cursor: pointer; font-size: 12px; font-weight: 700; background: #D1FAE5; color: #065F46; white-space: nowrap; }
+.btn-restore:hover { background: #065F46; color: white; }
+
+.pwd-screen { display: flex; align-items: center; justify-content: center; min-height: 80vh; }
+.pwd-box { background: white; border-radius: 20px; padding: 60px 48px; box-shadow: 0 8px 40px rgba(0,0,0,.1); text-align: center; max-width: 400px; width: 100%; }
+.pwd-box h2 { font-size: 28px; color: var(--gray); margin-bottom: 8px; }
+.pwd-box p { color: #888; margin-bottom: 28px; }
+.pwd-box input { width: 100%; padding: 14px 18px; border: 2px solid #ddd; border-radius: 10px; font-size: 18px; text-align: center; letter-spacing: 4px; outline: none; margin-bottom: 16px; }
+.pwd-box input:focus { border-color: var(--red); }
+.pwd-box button { width: 100%; padding: 14px; background: var(--red); color: white; font-size: 18px; font-weight: 700; border-radius: 10px; }
+.pwd-err { color: #dc2626; font-size: 14px; margin-top: 8px; display: none; }
+
+/* Modal de confirmação */
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:1000; align-items:center; justify-content:center; }
+.modal-overlay.open { display:flex; }
+.modal-box { background:white; border-radius:20px; padding:40px; max-width:440px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,.2); text-align:center; }
+.modal-box h3 { font-size:22px; margin-bottom:12px; color:#1F2937; }
+.modal-box p  { font-size:15px; color:#6B7280; margin-bottom:28px; line-height:1.6; }
+.modal-btns { display:flex; gap:12px; justify-content:center; }
+.modal-btns button { min-width:120px; }
+</style>
+</head>
+<body>
+
+<!-- PASSWORD SCREEN -->
+<div id="pwd-screen" class="pwd-screen">
+  <div class="pwd-box">
+    <h2>🔐 Área Restrita</h2>
+    <p>Painel de leads EXPOUSIPA 2026<br>Sistema Fecomércio MG</p>
+    <input type="password" id="pwd-inp" placeholder="senha" maxlength="20" onkeydown="if(event.key==='Enter')checkPwd()">
+    <button onclick="checkPwd()">Entrar</button>
+    <div class="pwd-err" id="pwd-err">Senha incorreta. Tente novamente.</div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin-panel" style="display:none">
+  <header>
+    <div>
+      <h1>EXPOUSIPA 2026 — Painel de Leads</h1>
+      <p>Sistema Fecomércio MG | Dados armazenados localmente neste dispositivo</p>
+    </div>
+    <div class="hdr-right">
+      <button class="btn-green"  onclick="exportCSV()">⬇ Exportar CSV</button>
+      <button class="btn-orange" onclick="confirmDeleteTeste()">🧪 Apagar testes</button>
+      <button class="btn-gray"   onclick="confirmClear()">🗑 Limpar tudo</button>
+      <button class="btn-white"  onclick="location.href='index.html'">← Jogo</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="stats" id="stats"></div>
+
+    <div class="filters">
+      <input type="text" id="filter-search" placeholder="🔍 Buscar por nome, e-mail ou cidade…" style="flex:1;min-width:200px" oninput="renderTable()">
+      <select id="filter-path" onchange="renderTable()">
+        <option value="">Todos os caminhos</option>
+        <option value="sesc">SESC</option>
+        <option value="senac">SENAC</option>
+        <option value="sindicato">Sindicato</option>
+      </select>
+      <select id="filter-estado" onchange="renderTable()">
+        <option value="">Todos os estados</option>
+      </select>
+      <select id="filter-deleted" onchange="renderTable()">
+        <option value="active">Apenas ativos</option>
+        <option value="all">Todos (incl. apagados)</option>
+        <option value="deleted">Apenas apagados</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>Data/Hora</th><th>Nome</th><th>Telefone</th><th>E-mail</th>
+            <th>Cidade/UF</th><th>Intenção</th><th>Perfil</th><th>Papel</th>
+            <th>Caminho</th><th>Pontuação</th><th>Ação</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      <div class="empty" id="empty" style="display:none">Nenhum lead encontrado.</div>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL DE CONFIRMAÇÃO -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <h3 id="modal-title"></h3>
+    <p  id="modal-body"></p>
+    <div class="modal-btns">
+      <button class="btn-gray" onclick="closeModal()">Cancelar</button>
+      <button class="btn-danger" id="modal-confirm-btn">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const PASS = 'sesc2026';
+
+function checkPwd(){
+  const v=document.getElementById('pwd-inp').value;
+  if(v===PASS){
+    document.getElementById('pwd-screen').style.display='none';
+    document.getElementById('admin-panel').style.display='block';
+    loadAdmin();
+  } else {
+    document.getElementById('pwd-err').style.display='block';
+    document.getElementById('pwd-inp').value='';
+    document.getElementById('pwd-inp').focus();
+  }
+}
+
+let allLeads=[];
+const labelMap={
+  intencao:{ 'bem-estar':'Bem-estar/Lazer','capacitacao':'Capacitação Prof.','saude':'Saúde','negocio':'Negócio','informacoes':'Informações Gerais' },
+  perfil:{ 'empregado':'Empregado CLT','empresario':'Empresário','autonomo':'Autônomo','estudante':'Estudante','aposentado':'Aposentado','outro':'Outro' },
+  papel:{ 'funcionario':'Funcionário','gestor':'Gestor','diretor':'Diretor','proprietario':'Proprietário','nao-se-aplica':'N/A' },
+  path:{ 'sesc':'SESC','senac':'SENAC','sindicato':'Sindicato' }
+};
+
+function label(group, val){ return (labelMap[group]&&labelMap[group][val])||val||'—'; }
+function isTeste(l){ return (l.nome||'').toLowerCase().includes('(teste)'); }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function saveLeads(){
+  localStorage.setItem('expousipa_leads', JSON.stringify(allLeads));
+}
+
+function loadAdmin(){
+  try { allLeads = JSON.parse(localStorage.getItem('expousipa_leads')||'[]'); } catch(e){ allLeads=[]; }
+  renderStats();
+  populateEstadoFilter();
+  renderTable();
+}
+
+function renderStats(){
+  const active=allLeads.filter(l=>!l.deleted);
+  const total=active.length;
+  const paths={sesc:0,senac:0,sindicato:0};
+  active.forEach(l=>{ if(l.path) paths[l.path]=(paths[l.path]||0)+1; });
+  const avgScore=active.filter(l=>l.total>0).reduce((a,l)=>a+(l.score/l.total),0)/(active.filter(l=>l.total>0).length||1);
+  const teste=allLeads.filter(l=>isTeste(l)&&!l.deleted).length;
+  document.getElementById('stats').innerHTML=`
+    <div class="stat-card"><div class="val">${total}</div><div class="lbl">Leads ativos</div></div>
+    <div class="stat-card"><div class="val">${paths.sesc}</div><div class="lbl">Jogaram SESC</div></div>
+    <div class="stat-card"><div class="val">${paths.senac}</div><div class="lbl">Jogaram SENAC</div></div>
+    <div class="stat-card"><div class="val">${paths.sindicato}</div><div class="lbl">Jogaram Sindicato</div></div>
+    <div class="stat-card"><div class="val">${total?Math.round(avgScore*100)+'%':'—'}</div><div class="lbl">Média de acertos</div></div>
+    <div class="stat-card"><div class="val" style="color:#F59E0B">${teste}</div><div class="lbl">Leads de teste</div></div>
+  `;
+}
+
+function populateEstadoFilter(){
+  const estados=[...new Set(allLeads.map(l=>l.estado).filter(Boolean))].sort();
+  const sel=document.getElementById('filter-estado');
+  sel.innerHTML='<option value="">Todos os estados</option>';
+  estados.forEach(e=>{ const o=document.createElement('option'); o.value=e; o.textContent=e; sel.appendChild(o); });
+}
+
+function renderTable(){
+  const q=document.getElementById('filter-search').value.toLowerCase();
+  const fp=document.getElementById('filter-path').value;
+  const fe=document.getElementById('filter-estado').value;
+  const fd=document.getElementById('filter-deleted').value;
+
+  let rows=allLeads.filter(l=>{
+    if(fd==='active'  && l.deleted) return false;
+    if(fd==='deleted' && !l.deleted) return false;
+    if(fp && l.path!==fp) return false;
+    if(fe && l.estado!==fe) return false;
+    if(q && !(`${l.nome} ${l.email} ${l.cidade} ${l.tel}`).toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  const tbody=document.getElementById('tbody');
+  tbody.innerHTML='';
+  if(rows.length===0){ document.getElementById('empty').style.display='block'; return; }
+  document.getElementById('empty').style.display='none';
+
+  rows.forEach((l,i)=>{
+    const dt=new Date(l.timestamp);
+    const dtStr=dt.toLocaleDateString('pt-BR')+' '+dt.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    const pathBadge=l.path?`<span class="badge badge-${l.path}">${label('path',l.path)}</span>`:'<span class="badge">—</span>';
+    const testeBadge=isTeste(l)?`<span class="badge badge-teste">TESTE</span>`:'';
+    const scoreTxt=l.total>0?`<span class="score">${l.score}/${l.total}</span>`:'—';
+    const acaoBtns=l.deleted
+      ? `<button class="btn-restore" onclick="confirmRestore(${l.id})">↩ Restaurar</button>`
+      : `<button class="btn-del" onclick="confirmDeleteOne(${l.id})">🗑 Apagar</button>`;
+
+    const tr=document.createElement('tr');
+    if(l.deleted) tr.className='deleted';
+    tr.innerHTML=`
+      <td>${rows.length-i}</td>
+      <td style="white-space:nowrap">${dtStr}</td>
+      <td><strong>${esc(l.nome)}</strong>${testeBadge}</td>
+      <td>${esc(l.tel)}</td>
+      <td>${esc(l.email)}</td>
+      <td>${esc(l.cidade)}/${esc(l.estado)}</td>
+      <td>${label('intencao',l.intencao)}</td>
+      <td>${label('perfil',l.perfil)}</td>
+      <td>${label('papel',l.papel)}</td>
+      <td>${pathBadge}</td>
+      <td>${scoreTxt}</td>
+      <td>${acaoBtns}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+/* ── MODAL ── */
+let _modalAction = null;
+
+function openModal(title, body, confirmLabel, action){
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').textContent  = body;
+  document.getElementById('modal-confirm-btn').textContent = confirmLabel;
+  _modalAction = action;
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+  _modalAction = null;
+}
+
+document.getElementById('modal-confirm-btn').onclick = function(){
+  closeModal();
+  if(_modalAction) _modalAction();
+};
+
+/* ── SOFT DELETE — lead individual ── */
+function confirmDeleteOne(id){
+  const lead = allLeads.find(l=>l.id===id);
+  if(!lead) return;
+  openModal(
+    '⚠️ Apagar lead?',
+    `Você está prestes a apagar o lead de "${lead.nome}". O dado não será excluído permanentemente e pode ser restaurado.`,
+    'Apagar',
+    () => openModal(
+      '⚠️ Confirmar exclusão',
+      `Segunda confirmação: apagar "${lead.nome}" definitivamente do painel? (Soft delete — recuperável)`,
+      'Sim, apagar',
+      () => { lead.deleted = true; lead.deletedAt = new Date().toISOString(); saveLeads(); renderStats(); renderTable(); }
+    )
+  );
+}
+
+/* ── SOFT DELETE — restaurar ── */
+function confirmRestore(id){
+  const lead = allLeads.find(l=>l.id===id);
+  if(!lead) return;
+  openModal(
+    '↩ Restaurar lead?',
+    `Restaurar o lead de "${lead.nome}" para a lista ativa?`,
+    'Restaurar',
+    () => { delete lead.deleted; delete lead.deletedAt; saveLeads(); renderStats(); renderTable(); }
+  );
+}
+
+/* ── SOFT DELETE — apagar todos os testes ── */
+function confirmDeleteTeste(){
+  const count = allLeads.filter(l=>isTeste(l)&&!l.deleted).length;
+  if(count===0){ alert('Nenhum lead de teste ativo encontrado.'); return; }
+  openModal(
+    '🧪 Apagar leads de teste?',
+    `Foram encontrados ${count} lead(s) com "(teste)" no nome. Eles serão marcados como apagados mas poderão ser restaurados.`,
+    'Apagar testes',
+    () => openModal(
+      '🧪 Confirmar exclusão dos testes',
+      `Segunda confirmação: marcar ${count} lead(s) de teste como apagados?`,
+      'Sim, apagar testes',
+      () => {
+        allLeads.forEach(l=>{ if(isTeste(l)&&!l.deleted){ l.deleted=true; l.deletedAt=new Date().toISOString(); } });
+        saveLeads(); renderStats(); renderTable();
+      }
+    )
+  );
+}
+
+/* ── SOFT DELETE — limpar tudo ── */
+function confirmClear(){
+  const count = allLeads.filter(l=>!l.deleted).length;
+  openModal(
+    '🗑 Limpar todos os leads?',
+    `Isso marcará ${count} lead(s) ativo(s) como apagados. Nenhum dado será perdido permanentemente.`,
+    'Limpar tudo',
+    () => openModal(
+      '🗑 Confirmar limpeza total',
+      'Segunda confirmação: marcar TODOS os leads ativos como apagados?',
+      'Sim, limpar tudo',
+      () => {
+        allLeads.forEach(l=>{ if(!l.deleted){ l.deleted=true; l.deletedAt=new Date().toISOString(); } });
+        saveLeads(); renderStats(); renderTable();
+      }
+    )
+  );
+}
+
+/* ── EXPORTAR CSV (apenas ativos) ── */
+function exportCSV(){
+  const ativos = allLeads.filter(l=>!l.deleted);
+  const rows=[['#','Data','Hora','Nome','CPF','Telefone','E-mail','Cidade','Estado','Idade','Intencao','Perfil','Papel','Caminho','Score','Total']];
+  ativos.forEach((l,i)=>{
+    const dt=new Date(l.timestamp);
+    rows.push([
+      i+1, dt.toLocaleDateString('pt-BR'), dt.toLocaleTimeString('pt-BR'),
+      l.nome, l.cpf, l.tel, l.email, l.cidade, l.estado, l.idade||'',
+      label('intencao',l.intencao), label('perfil',l.perfil), label('papel',l.papel),
+      l.path||'', l.score||0, l.total||0
+    ]);
+  });
+  const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`leads_expousipa_${new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+}
+</script>
+</body>
+</html>

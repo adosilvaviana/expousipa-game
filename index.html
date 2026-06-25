@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EXPOUSIPA 2026 – Sistema Fecomércio MG</title>
+<style>
+/* ═══════════════════ RESET & TOKENS ═══════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  /* ── Paleta oficial Manual da Marca SESC ── */
+  --sesc-blue:   #004C99;   /* Azul SESC – Pantone 288 C – cor principal */
+  --sesc-blue-dk:#003A75;   /* Azul escuro para hover/dark */
+  --sesc-yellow: #F6BE00;   /* Amarelo SESC – Pantone 7408 C */
+  --sesc-gray-md:#747678;   /* Cinza médio – Pantone Cool Gray 9 C */
+  --sesc-gray-lt:#D0D0CE;   /* Cinza claro – Pantone Cool Gray 2 C */
+  --white:       #FFFFFF;
+  --gray-lt:     #F4F4F4;
+  --gray-dk:     #3C3C3B;
+  --gray-md:     #747678;
+
+  /* Aliases para compat. com o código existente */
+  --red:         #004C99;   /* azul assume papel do "red" (primário) */
+  --dark-red:    #003A75;
+  --green:       #00A651;
+  --blue:        #004C99;
+  --senac:       #003E8E;
+  --sind:        #1F2937;
+
+  --radius: 24px;
+  --shadow: 0 8px 40px rgba(0,0,0,.13);
+  --font:   'Segoe UI', system-ui, Arial, sans-serif;
+}
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: #111;
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+#app-root {
+  width: 1080px;
+  height: 1920px;
+  overflow: hidden;
+  background: var(--gray-lt);
+  position: relative;
+  transform-origin: top left;
+}
+
+/* ═══════════════════ SCREEN MANAGER ═══════════════════ */
+.screen {
+  position: absolute; inset: 0;
+  width: 1080px; height: 1920px;
+  display: none; flex-direction: column;
+  overflow: hidden;
+  animation: screenIn .3s ease;
+}
+.screen.active { display: flex; }
+@keyframes screenIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: none; } }
+
+/* ═══════════════════ COMMON HEADER ═══════════════════ */
+.hdr {
+  flex-shrink: 0;
+  padding: 44px 60px 36px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.hdr-red  { background: var(--red); }
+.hdr-senac { background: var(--senac); }
+.hdr-sind  { background: var(--sind); }
+.hdr-white { background: white; border-bottom: 3px solid #eee; }
+
+.hdr-logo {
+  display: flex; align-items: center; gap: 24px; margin-bottom: 16px;
+}
+.logo-box {
+  width: 96px; height: 64px; background: white; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; font-weight: 900; color: var(--red); letter-spacing: -2px;
+  flex-shrink: 0;
+}
+.logo-box-dark { background: var(--red); color: white; }
+.hdr-title { font-size: 46px; font-weight: 900; color: white; line-height: 1.15; }
+.hdr-title-dark { color: var(--gray-dk); }
+.hdr-sub   { font-size: 28px; color: rgba(255,255,255,.8); }
+.hdr-sub-dark { color: var(--gray-md); }
+
+.progress-bar { width: 100%; height: 14px; background: rgba(255,255,255,.3); border-radius: 8px; overflow: hidden; margin-top: 14px; }
+.progress-fill { height: 100%; background: var(--sesc-yellow); border-radius: 8px; transition: width .4s ease; }
+.progress-label { font-size: 26px; color: rgba(255,255,255,.8); margin-top: 8px; }
+
+/* ═══════════════════ CONTENT AREA ═══════════════════ */
+.content {
+  flex: 1; overflow-y: auto; padding: 48px 60px;
+  display: flex; flex-direction: column; gap: 36px;
+}
+.content-white { background: white; }
+.content-lt    { background: var(--gray-lt); }
+
+/* ═══════════════════ BOTTOM NAV ═══════════════════ */
+.bnav {
+  flex-shrink: 0; padding: 32px 60px; display: flex; gap: 24px;
+  background: white; border-top: 2px solid #eee;
+}
+.bnav .btn { flex: 1; }
+
+/* ═══════════════════ BUTTONS ═══════════════════ */
+.btn {
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  min-height: 104px; border-radius: 20px;
+  font-size: 38px; font-weight: 700; cursor: pointer; border: none;
+  transition: transform .12s, opacity .2s;
+  touch-action: manipulation;
+}
+.btn:active { transform: scale(.96); }
+.btn-red    { background: var(--red); color: white; }
+.btn-senac  { background: var(--senac); color: white; }
+.btn-sind   { background: var(--sind); color: white; }
+.btn-outline { background: transparent; color: var(--red); border: 4px solid var(--red); }
+.btn-ghost  { background: var(--gray-lt); color: var(--gray-dk); }
+.btn-white  { background: white; border: 3px solid #e5e7eb; color: var(--gray-dk); }
+.btn-green  { background: var(--green); color: white; }
+.btn-disabled { opacity: .45; pointer-events: none; }
+
+/* ═══════════════════ INPUTS ═══════════════════ */
+.inp-group { display: flex; flex-direction: column; gap: 12px; }
+.inp-label { font-size: 30px; font-weight: 600; color: var(--gray-dk); }
+.req { color: var(--red); }
+.inp {
+  width: 100%; height: 92px;
+  border: 3px solid #ddd; border-radius: 16px;
+  padding: 0 30px; font-size: 34px; color: var(--gray-dk);
+  background: white; outline: none;
+  transition: border-color .2s;
+  font-family: var(--font);
+}
+.inp:focus { border-color: var(--red); }
+.inp::placeholder { color: #bbb; font-style: italic; opacity: 1; }
+::-webkit-input-placeholder { color: #bbb; font-style: italic; }
+::-moz-placeholder { color: #bbb; font-style: italic; }
+.inp.err   { border-color: #dc2626; }
+.err-msg   { font-size: 26px; color: #dc2626; font-weight: 500; display: none; }
+.err-msg.show { display: block; }
+
+select.inp { appearance: none; cursor: pointer; }
+
+/* ═══════════════════ CHOICE CARDS ═══════════════════ */
+.choice-list { display: flex; flex-direction: column; gap: 24px; }
+.choice-card {
+  width: 100%; min-height: 130px; background: white;
+  border: 3px solid #e5e7eb; border-radius: 20px;
+  display: flex; align-items: center; padding: 28px 40px; gap: 28px;
+  cursor: pointer; transition: all .2s;
+  font-size: 36px; font-weight: 500; color: var(--gray-dk);
+  touch-action: manipulation;
+}
+.choice-card:active { transform: scale(.98); }
+.choice-card.sel { border-color: var(--red); background: #EEF3FF; color: var(--red); font-weight: 700; }
+.choice-icon { font-size: 52px; flex-shrink: 0; }
+.choice-check {
+  margin-left: auto; width: 50px; height: 50px; border-radius: 50%;
+  border: 3px solid #ddd; display: flex; align-items: center;
+  justify-content: center; font-size: 28px; color: transparent; flex-shrink: 0;
+}
+.choice-card.sel .choice-check { background: var(--red); border-color: var(--red); color: white; }
+
+/* ═══════════════════ SPLASH ═══════════════════ */
+#screen-splash {
+  background: var(--red);
+  align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.splash-inner {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 56px; text-align: center; padding: 80px;
+}
+.splash-logo-big {
+  width: 320px; height: 210px; background: white; border-radius: 28px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 74px; font-weight: 900; color: var(--red); letter-spacing: -5px;
+}
+.splash-title { font-size: 90px; font-weight: 900; color: white; line-height: 1.1; }
+.splash-sub   { font-size: 44px; color: rgba(255,255,255,.85); line-height: 1.45; }
+.splash-event {
+  font-size: 36px; color: var(--sesc-blue);
+  background: var(--sesc-yellow);
+  border-radius: 50px; padding: 16px 52px;
+  font-weight: 800;
+}
+.splash-cta {
+  font-size: 52px; font-weight: 800; color: var(--sesc-yellow);
+  animation: pulse 1.8s ease-in-out infinite;
+}
+.splash-dots { display: flex; gap: 18px; align-items: center; }
+.dot { width: 14px; height: 14px; border-radius: 50%; background: rgba(255,255,255,.45); }
+.dot.big { background: var(--sesc-yellow); width: 44px; border-radius: 7px; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.55;transform:scale(.93)} }
+
+/* ═══════════════════ PATH SELECTION ═══════════════════ */
+.path-cards { display: flex; flex-direction: column; gap: 36px; }
+.path-card {
+  width: 100%; min-height: 260px; border-radius: 28px;
+  display: flex; flex-direction: column; padding: 52px 60px;
+  cursor: pointer; box-shadow: var(--shadow); gap: 14px;
+  transition: transform .15s;
+  touch-action: manipulation;
+}
+.path-card:active { transform: scale(.97); }
+.path-icon  { font-size: 72px; }
+.path-org   { font-size: 26px; font-weight: 700; opacity: .75; text-transform: uppercase; letter-spacing: 2px; }
+.path-title { font-size: 48px; font-weight: 900; line-height: 1.2; }
+.path-desc  { font-size: 34px; opacity: .88; line-height: 1.4; }
+.path-arrow { font-size: 44px; margin-top: auto; }
+.pc-sesc  { background: var(--red); color: white; }
+.pc-senac { background: var(--senac); color: white; }
+.pc-sind  { background: var(--sind); color: white; }
+
+/* ═══════════════════ SENAC V/F GAME ═══════════════════ */
+.q-counter { font-size: 28px; color: rgba(255,255,255,.7); margin-top: 12px; }
+.q-dots { display: flex; gap: 14px; margin-top: 10px; }
+.q-dot { width: 18px; height: 18px; border-radius: 50%; background: rgba(255,255,255,.3); }
+.q-dot.done-ok   { background: var(--green); }
+.q-dot.done-err  { background: #dc2626; }
+.q-dot.current   { background: white; }
+
+.q-box {
+  background: white; border-radius: 28px; padding: 44px 52px;
+  box-shadow: var(--shadow);
+  display: flex; flex-direction: column; gap: 20px; flex-shrink: 0;
+}
+.q-box-label {
+  font-size: 24px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 2px; color: var(--senac); opacity: .7;
+}
+.q-box-text {
+  font-size: 42px; font-weight: 600; color: var(--gray-dk); line-height: 1.6;
+}
+
+.vf-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; flex-shrink: 0; padding: 0 60px 52px; }
+.vf-btn {
+  height: 160px; border-radius: 28px;
+  display: flex; flex-direction: row; align-items: center; justify-content: center;
+  gap: 20px; border: none; cursor: pointer;
+  transition: transform .12s; touch-action: manipulation;
+}
+.vf-btn:active { transform: scale(.95); }
+.vf-t  { background: var(--green); color: white; }
+.vf-f  { background: #dc2626; color: white; }
+.vf-icon { font-size: 52px; }
+.vf-label { font-size: 44px; font-weight: 900; color: white; }
+
+/* feedback overlay */
+.feedback {
+  position: absolute; inset: 0; z-index: 50;
+  display: none; flex-direction: column; align-items: center; justify-content: center;
+  gap: 36px; padding: 80px; text-align: center;
+  animation: fadeIn .25s ease;
+}
+.feedback.show { display: flex; }
+.feedback.ok  { background: rgba(0,166,81,.95); }
+.feedback.err { background: rgba(220,38,38,.95); }
+.fb-icon  { font-size: 180px; }
+.fb-title { font-size: 84px; font-weight: 900; color: white; }
+.fb-text  { font-size: 38px; color: rgba(255,255,255,.92); line-height: 1.55; max-width: 860px; }
+.fb-btn {
+  background: white; border: none; border-radius: 20px; cursor: pointer;
+  font-size: 40px; font-weight: 700; padding: 40px 88px;
+  transition: transform .12s; touch-action: manipulation;
+}
+.fb-btn:active { transform: scale(.96); }
+.fb-btn-senac { color: var(--senac); }
+.fb-btn-sesc  { color: var(--red); }
+.fb-btn-sind  { color: var(--sind); }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+/* ═══════════════════ SESC MATCH GAME ═══════════════════ */
+.match-instr {
+  background: white; border-radius: 20px; padding: 32px 40px;
+  font-size: 32px; color: var(--gray-md); line-height: 1.5;
+  border-left: 8px solid var(--red); flex-shrink: 0;
+}
+.match-grid {
+  display: flex; flex-direction: column; gap: 22px; flex: 1; overflow-y: auto;
+  position: relative;
+}
+.match-row {
+  display: grid; grid-template-columns: 1fr 56px 1fr; gap: 14px; align-items: center;
+}
+.match-item {
+  background: white; border: 3px solid #e5e7eb; border-radius: 18px;
+  padding: 20px 26px; min-height: 116px;
+  display: flex; flex-direction: column; justify-content: center; gap: 6px;
+  cursor: pointer; transition: all .2s;
+  touch-action: manipulation;
+}
+.match-item:active { transform: scale(.97); }
+.match-item.sel  { border-color: var(--red); background: #EEF3FF; box-shadow: 0 0 0 3px rgba(0,76,153,.25); }
+.match-item.ok   { border-color: var(--green); background: #F0FAF4; cursor: default; }
+.match-item.wrong { border-color: #dc2626; background: #EEF3FF; }
+.mi-emoji { font-size: 36px; }
+.mi-name  { font-size: 26px; font-weight: 700; color: var(--gray-dk); line-height: 1.25; }
+.mi-sub   { font-size: 22px; color: var(--gray-md); }
+.match-conn { display: flex; align-items: center; justify-content: center; font-size: 36px; color: #ccc; }
+.drop-z {
+  background: #F9FAFB; border: 3px dashed #d1d5db; border-radius: 18px;
+  padding: 20px 26px; min-height: 116px;
+  display: flex; flex-direction: column; justify-content: center; gap: 6px;
+  cursor: pointer; transition: all .2s;
+  touch-action: manipulation;
+}
+.drop-z.over  { border-color: var(--red); background: #EEF3FF; border-style: solid; }
+.drop-z.ok    { border-color: var(--green); background: #F0FAF4; border-style: solid; cursor: default; }
+.drop-z.wrong { border-color: #dc2626; background: #EEF3FF; border-style: solid; }
+.dz-emoji { font-size: 36px; }
+.dz-name  { font-size: 26px; font-weight: 700; color: var(--gray-dk); line-height: 1.25; }
+.dz-sub   { font-size: 22px; color: var(--gray-md); }
+.ok-badge { display: inline-flex; align-items: center; gap: 6px; color: var(--green); font-size: 24px; font-weight: 700; }
+.wrong-badge { color: #dc2626; font-size: 24px; font-weight: 700; }
+
+/* progress strip */
+.match-prog-bar { width: 100%; height: 12px; background: #e5e7eb; border-radius: 6px; overflow: hidden; flex-shrink:0; }
+.match-prog-fill { height:100%; background: var(--green); border-radius:6px; transition: width .4s ease; }
+
+/* ═══════════════════ SINDICATO QUIZ ═══════════════════ */
+.quiz-q-box {
+  background: white; border-radius: 24px; padding: 52px;
+  font-size: 40px; font-weight: 600; color: var(--gray-dk); line-height: 1.55;
+  box-shadow: var(--shadow); flex-shrink: 0;
+}
+.quiz-opts { display: flex; flex-direction: column; gap: 22px; }
+.quiz-opt {
+  width: 100%; min-height: 130px; background: white;
+  border: 4px solid #e5e7eb; border-radius: 20px;
+  padding: 28px 40px; font-size: 34px; font-weight: 600; color: var(--gray-dk);
+  cursor: pointer; display: flex; align-items: center; gap: 28px;
+  transition: all .2s; touch-action: manipulation;
+}
+.quiz-opt:active { transform: scale(.98); }
+.quiz-opt.ok    { border-color: var(--green); background: #F0FAF4; color: var(--green); }
+.quiz-opt.wrong { border-color: #dc2626; background: #EEF3FF; color: #dc2626; }
+.quiz-opt.reveal { border-color: var(--green); background: #F0FAF4; color: var(--green); }
+.quiz-opt.disabled { pointer-events: none; }
+.opt-letter {
+  width: 60px; height: 60px; border-radius: 50%; background: var(--gray-lt);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; font-weight: 800; flex-shrink: 0;
+}
+.ok .opt-letter    { background: var(--green); color: white; }
+.wrong .opt-letter { background: #dc2626; color: white; }
+.reveal .opt-letter{ background: var(--green); color: white; }
+
+/* ═══════════════════ RESULT ═══════════════════ */
+#screen-result { align-items: center; justify-content: center; background: var(--gray-lt); }
+.result-box {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; gap: 44px; padding: 80px 80px;
+  background: white; margin: 60px; border-radius: 40px;
+  box-shadow: var(--shadow);
+}
+.res-icon  { font-size: 200px; }
+.res-title { font-size: 86px; font-weight: 900; line-height: 1; }
+.res-score { font-size: 50px; font-weight: 700; padding: 18px 60px; border-radius: 20px; }
+.res-text  { font-size: 38px; color: var(--gray-dk); line-height: 1.65; max-width: 820px; }
+.res-sub   { font-size: 30px; color: var(--gray-md); }
+.win .res-title { color: var(--green); }
+.win .res-score { background: #F0FAF4; color: var(--green); }
+.lose .res-title { color: var(--gray-dk); }
+.lose .res-score { background: var(--gray-lt); color: var(--gray-md); }
+.res-continue { margin-top: 8px; }
+
+/* ═══════════════════ CTA ═══════════════════ */
+#screen-cta { background: var(--red); align-items: center; justify-content: center; }
+.cta-inner {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; gap: 48px; padding: 100px 80px;
+}
+.cta-icon  { font-size: 160px; }
+.cta-title { font-size: 76px; font-weight: 900; color: white; line-height: 1.2; }
+.cta-text  { font-size: 40px; color: rgba(255,255,255,.9); line-height: 1.65; max-width: 860px; }
+.cta-badge {
+  background: var(--sesc-yellow); color: var(--sesc-blue);
+  font-size: 44px; font-weight: 800; padding: 24px 64px; border-radius: 20px;
+}
+.cta-btn {
+  background: var(--sesc-yellow); color: var(--sesc-blue); font-size: 44px; font-weight: 800;
+  padding: 44px 88px; border-radius: 24px; border: none; cursor: pointer;
+  transition: transform .12s; touch-action: manipulation;
+}
+.cta-btn:active { transform: scale(.96); }
+.cta-timer { font-size: 30px; color: rgba(255,255,255,.55); }
+
+/* ═══════════════════ LGPD ═══════════════════ */
+.lgpd-box {
+  background: white; border: 2px solid #e5e7eb; border-radius: 20px;
+  padding: 40px; font-size: 27px; color: var(--gray-md); line-height: 1.75;
+  max-height: 640px; overflow-y: auto;
+}
+.ck-row {
+  display: flex; align-items: flex-start; gap: 24px; padding: 32px 36px;
+  background: white; border: 3px solid #e5e7eb; border-radius: 20px;
+  cursor: pointer; transition: all .2s;
+}
+.ck-row.ck-on { border-color: var(--red); background: #EEF3FF; }
+.ck-box {
+  width: 54px; height: 54px; border: 3px solid #ccc; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 34px; color: transparent; flex-shrink: 0;
+}
+.ck-row.ck-on .ck-box { background: var(--red); border-color: var(--red); color: white; }
+.ck-text { font-size: 30px; color: var(--gray-dk); line-height: 1.55; font-weight: 500; }
+
+/* ═══════════════════ CUSTOM PICKER ═══════════════════ */
+.picker-overlay {
+  position: absolute; inset: 0; z-index: 200;
+  background: rgba(0,0,0,.5);
+  display: none; align-items: flex-end; justify-content: center;
+}
+.picker-overlay.open { display: flex; animation: fadeIn .2s ease; }
+.picker-sheet {
+  width: 100%; background: white;
+  border-radius: 40px 40px 0 0;
+  overflow: hidden; max-height: 1200px;
+  display: flex; flex-direction: column;
+}
+.picker-header {
+  padding: 40px 60px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 2px solid #eee; flex-shrink: 0;
+}
+.picker-header h3 { font-size: 44px; font-weight: 800; color: var(--gray-dk); }
+.picker-close {
+  width: 80px; height: 80px; border-radius: 50%; border: none;
+  background: var(--gray-lt); font-size: 40px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.picker-list {
+  overflow-y: auto; flex: 1;
+  padding: 20px 0;
+}
+.picker-item {
+  padding: 30px 60px; font-size: 36px; font-weight: 500; color: var(--gray-dk);
+  cursor: pointer; display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid #f5f5f5; touch-action: manipulation;
+}
+.picker-item:active { background: var(--gray-lt); }
+.picker-item.active { color: var(--sesc-blue); font-weight: 700; }
+.picker-item .pi-check { color: var(--sesc-blue); font-size: 36px; }
+
+/* ═══════════════════ SCALE FIT ═══════════════════ */
+#scale-root { width:100vw; height:100vh; display:flex; align-items:center; justify-content:center; background:#1a1a1a; overflow:hidden; }
+
+/* ═══════════════════ SHAKE ANIMATION ═══════════════════ */
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 20%{transform:translateX(-12px)} 40%{transform:translateX(12px)}
+  60%{transform:translateX(-8px)} 80%{transform:translateX(8px)}
+}
+.shake { animation: shake .4s ease; }
+
+/* ═══════════════════ SECTION LABELS ═══════════════════ */
+.sec-title  { font-size: 54px; font-weight: 800; color: var(--gray-dk); line-height: 1.2; }
+.sec-sub    { font-size: 34px; color: var(--gray-md); line-height: 1.45; }
+/* ── MENU FLUTUANTE ── */
+#float-menu-btn {
+  position: absolute; top: 24px; right: 24px; z-index: 200;
+  width: 72px; height: 72px; border-radius: 50%;
+  background: rgba(0,0,0,0.08); color: #333;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48px; font-weight: 900; cursor: pointer;
+  letter-spacing: -2px; user-select: none;
+  transition: background .15s;
+}
+#float-menu-btn:active { background: rgba(0,0,0,0.18); }
+#float-menu-overlay {
+  display: none; position: absolute; inset: 0; z-index: 198;
+}
+#float-menu {
+  display: none; position: absolute; top: 108px; right: 24px; z-index: 199;
+  background: white; border-radius: 20px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  min-width: 380px; overflow: hidden;
+}
+#float-menu.open { display: block; }
+#float-menu-overlay.open { display: block; }
+.float-menu-item {
+  padding: 36px 44px; font-size: 32px; font-weight: 600; color: #1F2937;
+  cursor: pointer; display: flex; align-items: center; gap: 20px;
+  transition: background .12s;
+}
+.float-menu-item:active { background: #F3F4F6; }
+.float-menu-divider { height: 1px; background: #E5E7EB; margin: 0 24px; }
+.float-menu-admin { color: #004C99; }
+</style>
+</head>
+<body>
+<div id="app-root">
+
+<!-- ═══════════════════ SPLASH ═══════════════════ -->
+<div id="screen-splash" class="screen active" onclick="goTo('form-1')">
+  <div class="splash-inner">
+    <div class="splash-title">Sistema<br>Fecomércio MG</div>
+    <div class="splash-sub">Bem-estar, Capacitação<br>e Desenvolvimento</div>
+    <div class="splash-event">⭐ EXPOUSIPA 2026 ⭐</div>
+    <div class="splash-dots">
+      <div class="dot"></div><div class="dot big"></div><div class="dot"></div>
+    </div>
+    <div class="splash-cta">👆 Toque para começar</div>
+  </div>
+</div>
+
+<!-- ═══════════════════ FORM 1: DADOS OBRIGATÓRIOS ═══════════════════ -->
+<div id="screen-form-1" class="screen">
+  <div class="hdr hdr-red">
+    <div class="hdr-logo">
+      <div>
+        <div class="hdr-title">Cadastro</div>
+        <div class="hdr-sub">Seus dados • Etapa 1 de 6</div>
+      </div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" style="width:16.6%"></div></div>
+    <div class="progress-label">Dados pessoais</div>
+  </div>
+  <div class="content content-lt" style="gap:32px">
+    <div class="sec-title">Vamos nos conhecer! <span onclick="fillMockData()" style="cursor:pointer" title="Preencher com dados de teste">👋</span></div>
+    <div class="sec-sub">Preencha seus dados para participar.</div>
+
+    <div class="inp-group">
+      <label class="inp-label">Nome completo <span class="req">*</span></label>
+      <input id="f-nome" class="inp" type="text" placeholder="Toque e escreva seu nome completo…" autocomplete="off">
+      <span id="err-nome" class="err-msg">Por favor, informe seu nome completo.</span>
+    </div>
+    <div class="inp-group">
+      <label class="inp-label">CPF <span class="req">*</span></label>
+      <input id="f-cpf" class="inp" type="tel" placeholder="Toque e escreva seu CPF…" maxlength="14" autocomplete="off">
+      <span id="err-cpf" class="err-msg">CPF inválido. Verifique e tente novamente.</span>
+    </div>
+    <div class="inp-group">
+      <label class="inp-label">Telefone / WhatsApp <span class="req">*</span></label>
+      <input id="f-tel" class="inp" type="tel" placeholder="Toque e escreva seu telefone…" maxlength="15" autocomplete="off">
+      <span id="err-tel" class="err-msg">Por favor, informe um telefone válido.</span>
+    </div>
+    <div class="inp-group">
+      <label class="inp-label">E-mail <span class="req">*</span></label>
+      <input id="f-email" class="inp" type="email" placeholder="Toque e escreva seu e-mail…" autocomplete="off">
+      <span id="err-email" class="err-msg">Por favor, informe um e-mail válido.</span>
+    </div>
+  </div>
+  <div class="bnav">
+    <button class="btn btn-ghost" onclick="goTo('splash')">← Início</button>
+    <button class="btn btn-red" onclick="validateForm1()">Próximo →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ FORM 2: INTENÇÃO ═══════════════════ -->
+<div id="screen-form-2" class="screen">
+  <div class="hdr hdr-red">
+    <div class="hdr-logo">
+      <div>
+        <div class="hdr-title">Sua intenção</div>
+        <div class="hdr-sub">O que você busca • Etapa 2 de 6</div>
+      </div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" style="width:33.3%"></div></div>
+    <div class="progress-label">Intenção de visita</div>
+  </div>
+  <div class="content content-lt">
+    <div class="sec-title">O que você busca neste momento?</div>
+    <div style="background:var(--sesc-yellow);color:var(--sesc-blue);font-size:28px;font-weight:700;padding:18px 30px;border-radius:16px;display:flex;align-items:center;gap:14px">
+      ☑️ Selecione <strong>uma ou mais</strong> opções
+    </div>
+
+    <div class="choice-list" id="inten-list">
+      <div class="choice-card multi" data-val="bem-estar" onclick="toggleIntencao(this)">
+        <span class="choice-icon">🏊</span>Bem-estar e lazer para mim e minha família
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card multi" data-val="capacitacao" onclick="toggleIntencao(this)">
+        <span class="choice-icon">🎓</span>Capacitação profissional
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card multi" data-val="saude" onclick="toggleIntencao(this)">
+        <span class="choice-icon">🏥</span>Serviços de saúde e odontologia
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card multi" data-val="negocio" onclick="toggleIntencao(this)">
+        <span class="choice-icon">💼</span>Fortalecer meu negócio ou empresa
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card multi" data-val="informacoes" onclick="toggleIntencao(this)">
+        <span class="choice-icon">ℹ️</span>Informações gerais sobre o Sistema Fecomércio
+        <span class="choice-check">✓</span>
+      </div>
+    </div>
+    <span id="err-intencao" class="err-msg">Selecione ao menos uma opção para continuar.</span>
+  </div>
+  <div class="bnav">
+    <button class="btn btn-ghost" onclick="goTo('form-1')">← Voltar</button>
+    <button class="btn btn-red" onclick="validateForm2()">Próximo →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ FORM 3: PERFIL PROFISSIONAL ═══════════════════ -->
+<div id="screen-form-3" class="screen">
+  <div class="hdr hdr-red">
+    <div class="hdr-logo">
+      <div>
+        <div class="hdr-title">Perfil profissional</div>
+        <div class="hdr-sub">Sua atuação • Etapa 3 de 6</div>
+      </div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" style="width:50%"></div></div>
+    <div class="progress-label">Perfil profissional</div>
+  </div>
+  <div class="content content-lt">
+    <div class="sec-title">Qual é o seu perfil profissional?</div>
+
+    <div class="choice-list">
+      <div class="choice-card" data-group="perfil" data-val="empregado" onclick="selectChoice(this,'perfil')">
+        <span class="choice-icon">👷</span>Empregado(a) CLT
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card" data-group="perfil" data-val="empresario" onclick="selectChoice(this,'perfil')">
+        <span class="choice-icon">🏢</span>Empresário(a) / Comerciante
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card" data-group="perfil" data-val="autonomo" onclick="selectChoice(this,'perfil')">
+        <span class="choice-icon">🔧</span>Autônomo(a) / Freelancer
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card" data-group="perfil" data-val="estudante" onclick="selectChoice(this,'perfil')">
+        <span class="choice-icon">📚</span>Estudante
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card" data-group="perfil" data-val="aposentado" onclick="selectChoice(this,'perfil')">
+        <span class="choice-icon">🌿</span>Aposentado(a)
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card" data-group="perfil" data-val="outro" onclick="selectChoice(this,'perfil')">
+        <span class="choice-icon">🙋</span>Outro
+        <span class="choice-check">✓</span>
+      </div>
+    </div>
+    <span id="err-perfil" class="err-msg">Selecione uma opção para continuar.</span>
+  </div>
+  <div class="bnav">
+    <button class="btn btn-ghost" onclick="goTo('form-2')">← Voltar</button>
+    <button class="btn btn-red" onclick="validateForm3()">Próximo →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ FORM 4: DADOS ADICIONAIS ═══════════════════ -->
+<div id="screen-form-4" class="screen">
+  <div class="hdr hdr-red">
+    <div class="hdr-logo">
+      <div>
+        <div class="hdr-title">Dados adicionais</div>
+        <div class="hdr-sub">Onde você está • Etapa 4 de 6</div>
+      </div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" style="width:66.6%"></div></div>
+    <div class="progress-label">Localização</div>
+  </div>
+  <div class="content content-lt" style="gap:32px">
+    <div class="sec-title">Onde você mora?</div>
+
+    <div class="inp-group">
+      <label class="inp-label">Cidade <span class="req">*</span></label>
+      <input id="f-cidade" class="inp" type="text" placeholder="Toque e escreva sua cidade…" autocomplete="off">
+      <span id="err-cidade" class="err-msg">Por favor, informe sua cidade.</span>
+    </div>
+    <div class="inp-group">
+      <label class="inp-label">Estado <span class="req">*</span></label>
+      <input id="f-estado-display" class="inp" type="text" readonly
+        value="Minas Gerais" onclick="openEstadoPicker()"
+        style="cursor:pointer;background:white" autocomplete="off">
+      <input type="hidden" id="f-estado" value="MG">
+    </div>
+    <div class="inp-group">
+      <label class="inp-label">Faixa etária</label>
+      <select id="f-idade" class="inp">
+        <option value="">Prefiro não informar</option>
+        <option value="18-25">18 a 25 anos</option>
+        <option value="26-35">26 a 35 anos</option>
+        <option value="36-45">36 a 45 anos</option>
+        <option value="46-55">46 a 55 anos</option>
+        <option value="56+">56 anos ou mais</option>
+      </select>
+    </div>
+  </div>
+  <div class="bnav">
+    <button class="btn btn-ghost" onclick="goTo('form-3')">← Voltar</button>
+    <button class="btn btn-red" onclick="validateForm4()">Próximo →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ FORM 5: PAPEL NA EMPRESA ═══════════════════ -->
+<div id="screen-form-5" class="screen">
+  <div class="hdr hdr-red">
+    <div class="hdr-logo">
+      <div>
+        <div class="hdr-title">Papel na empresa</div>
+        <div class="hdr-sub">Sua posição • Etapa 5 de 6</div>
+      </div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" style="width:83.3%"></div></div>
+    <div class="progress-label">Posição profissional</div>
+  </div>
+  <div class="content content-lt">
+    <div class="sec-title">Qual é seu papel na empresa?</div>
+
+    <div class="choice-list">
+      <div class="choice-card" data-group="papel" data-val="funcionario" onclick="selectChoice(this,'papel')">
+        <span class="choice-icon">👤</span>Funcionário(a)
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card" data-group="papel" data-val="gestor" onclick="selectChoice(this,'papel')">
+        <span class="choice-icon">📋</span>Gestor(a) / Supervisor(a)
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card" data-group="papel" data-val="diretor" onclick="selectChoice(this,'papel')">
+        <span class="choice-icon">🏆</span>Diretor(a) / Gerente
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card" data-group="papel" data-val="proprietario" onclick="selectChoice(this,'papel')">
+        <span class="choice-icon">🔑</span>Proprietário(a) / Sócio(a)
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card" data-group="papel" data-val="outro-nao-se-aplica" onclick="selectChoice(this,'papel')">
+        <span class="choice-icon">🙋</span>Outro / Não se aplica
+        <span class="choice-check">✓</span>
+      </div>
+    </div>
+    <span id="err-papel" class="err-msg">Selecione uma opção para continuar.</span>
+  </div>
+  <div class="bnav">
+    <button class="btn btn-ghost" onclick="goTo('form-4')">← Voltar</button>
+    <button class="btn btn-red" onclick="validateForm5()">Próximo →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ FORM 6: LGPD ═══════════════════ -->
+<div id="screen-form-6" class="screen">
+  <div class="hdr hdr-red">
+    <div class="hdr-logo">
+      <div>
+        <div class="hdr-title">Consentimento</div>
+        <div class="hdr-sub">LGPD • Etapa 6 de 6</div>
+      </div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+    <div class="progress-label">Quase lá! ✓</div>
+  </div>
+  <div class="content content-lt">
+    <div class="sec-title">Política de Privacidade</div>
+
+    <div class="lgpd-box">
+      <p>O <strong>Sistema Fecomércio MG</strong> (Fecomércio, Sesc e Senac Minas Gerais) coleta os dados pessoais informados neste formulário com a finalidade de enviar informações sobre nossos produtos, serviços, eventos e promoções.</p>
+      <br>
+      <p>Seus dados serão tratados de acordo com a <strong>Lei Geral de Proteção de Dados Pessoais (LGPD – Lei nº 13.709/2018)</strong> e utilizados exclusivamente para comunicação com você sobre nossos serviços.</p>
+      <br>
+      <p>Você poderá solicitar o acesso, correção ou exclusão de seus dados a qualquer momento pelo e-mail <strong>lgpd@sescmg.com.br</strong> ou pelos canais oficiais do Sesc Minas.</p>
+      <br>
+      <p>Ao marcar a opção abaixo, você declara ter lido e concordar com a coleta e uso dos seus dados pessoais conforme descrito nesta política.</p>
+    </div>
+
+    <div class="ck-row" id="ck-lgpd" onclick="toggleLgpd()">
+      <div class="ck-box" id="ck-box">✓</div>
+      <div class="ck-text">Li e <strong>concordo</strong> com a coleta e uso dos meus dados pessoais pelo Sistema Fecomércio MG para fins de comunicação e marketing.</div>
+    </div>
+    <span id="err-lgpd" class="err-msg">Você precisa aceitar os termos para continuar.</span>
+  </div>
+  <div class="bnav">
+    <button class="btn btn-ghost" onclick="goTo('form-5')">← Voltar</button>
+    <button class="btn btn-red" onclick="validateForm6()">Jogar! 🎮</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ ESCOLHA DO CAMINHO ═══════════════════ -->
+<div id="screen-choose" class="screen">
+  <div class="hdr hdr-red" style="padding-bottom:48px">
+    <div class="hdr-logo">
+      <div>
+        <div class="hdr-title">Vamos jogar!</div>
+        <div class="hdr-sub">Sistema Fecomércio MG</div>
+      </div>
+    </div>
+  </div>
+  <div class="content content-lt">
+    <div class="sec-title">O Sistema Fecomércio atua em diferentes áreas da vida das pessoas.</div>
+    <div class="sec-sub">Escolha a opção que mais faz sentido para você neste momento:</div>
+
+    <div class="path-cards">
+      <div class="path-card pc-sesc" onclick="startGame('sesc')">
+        <div class="path-icon">🏖️</div>
+        <div class="path-org">Sesc</div>
+        <div class="path-title">Bem-estar e Qualidade de Vida</div>
+        <div class="path-desc">"Mais bem-estar para mim e minha família."</div>
+        <div class="path-arrow">→</div>
+      </div>
+      <div class="path-card pc-senac" onclick="startGame('senac')">
+        <div class="path-icon">🎓</div>
+        <div class="path-org">Senac</div>
+        <div class="path-title">Capacitação Profissional</div>
+        <div class="path-desc">"Me capacitar para crescer profissionalmente."</div>
+        <div class="path-arrow">→</div>
+      </div>
+      <div class="path-card pc-sind" onclick="startGame('sindicato')">
+        <div class="path-icon">🤝</div>
+        <div class="path-org">Fecomércio / Sindicato</div>
+        <div class="path-title">Desenvolvimento do Negócio</div>
+        <div class="path-desc">"Fortalecer meu negócio ou empresa."</div>
+        <div class="path-arrow">→</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ JOGO SENAC: V/F ═══════════════════ -->
+<div id="screen-senac" class="screen" style="background:#F4F6FA">
+  <div class="hdr hdr-senac">
+    <div class="hdr-logo">
+      <div class="logo-box logo-box-dark" style="color:white;background:var(--senac)">SN</div>
+      <div>
+        <div class="hdr-title">Verdadeiro ou Falso?</div>
+        <div class="hdr-sub">Quanto você sabe sobre o Senac?</div>
+      </div>
+    </div>
+    <div class="q-dots" id="senac-dots"></div>
+  </div>
+
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:44px 60px;gap:48px">
+    <div class="q-box" style="text-align:center;align-items:center">
+      <div class="q-box-label">AFIRMAÇÃO — VERDADEIRO OU FALSO?</div>
+      <div class="q-box-text" id="senac-q"></div>
+    </div>
+
+    <div class="vf-btns" style="width:100%;padding:0">
+      <button class="vf-btn vf-t" onclick="answerVF(true)">
+        <div class="vf-label">VERDADEIRO</div>
+      </button>
+      <button class="vf-btn vf-f" onclick="answerVF(false)">
+        <div class="vf-label">FALSO</div>
+      </button>
+    </div>
+  </div>
+
+  <!-- feedback overlay -->
+  <div class="feedback" id="senac-feedback">
+    <div class="fb-icon" id="senac-fb-icon"></div>
+    <div class="fb-title" id="senac-fb-title"></div>
+    <div class="fb-text" id="senac-fb-text"></div>
+    <button class="fb-btn fb-btn-senac" onclick="nextSenac()">Próxima →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ JOGO SESC: DESCUBRA DESTINOS ═══════════════════ -->
+<div id="screen-sesc" class="screen" style="background:#F4F6FA">
+  <div class="hdr hdr-red">
+    <div class="hdr-logo">
+      <div>
+        <div class="hdr-title">Descubra Destinos!</div>
+        <div class="hdr-sub">Conecte os destinos às unidades Sesc</div>
+      </div>
+    </div>
+    <div class="match-prog-bar" style="margin-top:16px"><div class="match-prog-fill" id="sesc-prog" style="width:0%"></div></div>
+  </div>
+
+  <div class="content" style="padding:36px 48px;gap:20px">
+    <div class="match-instr">
+      👆 <strong>Toque em um ponto turístico</strong> (esquerda) e depois toque na <strong>unidade Sesc</strong> correspondente (direita).
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 40px 1fr;gap:10px;margin-bottom:8px">
+      <div style="font-size:26px;font-weight:700;color:var(--gray-md);text-align:center">🗺️ PONTO TURÍSTICO</div>
+      <div></div>
+      <div style="font-size:26px;font-weight:700;color:var(--gray-md);text-align:center">🏨 UNIDADE SESC</div>
+    </div>
+
+    <div class="match-grid" id="sesc-grid"></div>
+  </div>
+
+  <div class="bnav">
+    <button class="btn btn-ghost" onclick="skipSesc()">Pular jogo</button>
+    <button class="btn btn-red btn-disabled" id="sesc-next-btn" onclick="finishSesc()">Ver resultado →</button>
+  </div>
+
+  <!-- feedback overlay -->
+  <div class="feedback" id="sesc-feedback">
+    <div class="fb-icon" id="sesc-fb-icon"></div>
+    <div class="fb-title" id="sesc-fb-title"></div>
+    <div class="fb-text" id="sesc-fb-text"></div>
+    <button class="fb-btn fb-btn-sesc" onclick="closeSescFeedback()">Continuar →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ JOGO SINDICATO: QUIZ ═══════════════════ -->
+<div id="screen-sindicato" class="screen" style="background:#F4F6FA">
+  <div class="hdr hdr-sind">
+    <div class="hdr-logo">
+      <div class="logo-box logo-box-dark" style="background:#374151;color:white">FC</div>
+      <div>
+        <div class="hdr-title">Quiz Fecomércio</div>
+        <div class="hdr-sub">Teste seus conhecimentos!</div>
+      </div>
+    </div>
+    <div class="q-dots" id="sind-dots"></div>
+  </div>
+
+  <div class="content" style="gap:36px;justify-content:center">
+    <div class="quiz-q-box" id="sind-q"></div>
+    <div class="vf-btns" style="width:100%;padding:0">
+      <button class="vf-btn vf-t" id="sind-btn-t" onclick="answerSind(true)">
+        <span class="vf-label">Verdadeiro</span>
+      </button>
+      <button class="vf-btn vf-f" id="sind-btn-f" onclick="answerSind(false)">
+        <span class="vf-label">Falso</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- feedback overlay -->
+  <div class="feedback" id="sind-feedback">
+    <div class="fb-icon" id="sind-fb-icon"></div>
+    <div class="fb-title" id="sind-fb-title"></div>
+    <div class="fb-text" id="sind-fb-text"></div>
+    <button class="fb-btn fb-btn-sind" onclick="nextSind()">Próxima →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ RESULTADO ═══════════════════ -->
+<div id="screen-result" class="screen">
+  <div class="result-box" id="result-box">
+    <div class="res-icon" id="res-icon"></div>
+    <div class="res-title" id="res-title"></div>
+    <div class="res-score" id="res-score"></div>
+    <div class="res-text" id="res-text"></div>
+    <div class="res-sub" id="res-sub"></div>
+    <button class="btn btn-red res-continue" style="min-width:500px" onclick="goTo('cta')">Continuar →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ CTA DINÂMICO ═══════════════════ -->
+<div id="screen-cta" class="screen">
+  <div class="cta-inner" id="cta-inner"></div>
+</div>
+
+<!-- ═══════════════════ SCRIPT ═══════════════════ -->
+<script>
+/* ── TIMERS ── */
+let ctaTimer = null;
+let resultTimer = null;
+
+/* ── MOCK DATA (dev shortcut) ── */
+function fillMockData() {
+  const nomes = ['Ana Lima','Carlos Souza','Beatriz Ferreira','Rafael Oliveira','Juliana Costa','Marcos Pereira'];
+  const cidades = ['Ipatinga','Belo Horizonte','Contagem','Uberlândia','Montes Claros','Juiz de Fora'];
+  const emails = ['ana.lima','carlos.souza','beatriz.f','rafael.o','ju.costa','marcos.p'];
+  const idx = Math.floor(Math.random() * nomes.length);
+  const cpfN = String(Math.floor(Math.random()*99999999999)).padStart(11,'0');
+  const telN = '119' + String(Math.floor(Math.random()*99999999)).padStart(8,'0');
+
+  const nomeComTeste = nomes[idx] + ' (teste)';
+  document.getElementById('f-nome').value  = nomeComTeste;
+  document.getElementById('f-cpf').value   = cpfN.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,'$1.$2.$3-$4');
+  document.getElementById('f-tel').value   = telN.replace(/(\d{2})(\d{5})(\d{4})/,'($1) $2-$3');
+  document.getElementById('f-email').value = emails[idx] + Math.floor(Math.random()*99) + '@email.com';
+
+  // limpa erros visuais
+  ['f-nome','f-cpf','f-tel','f-email'].forEach(id => document.getElementById(id).classList.remove('err'));
+  ['err-nome','err-cpf','err-tel','err-email'].forEach(id => document.getElementById(id).classList.remove('show'));
+
+  state.nome  = document.getElementById('f-nome').value;
+  state.cpf   = cpfN;
+  state.tel   = telN;
+  state.email = document.getElementById('f-email').value;
+
+  document.getElementById('f-cidade').value = cidades[Math.floor(Math.random()*cidades.length)];
+}
+
+/* ── SCALE TO FIT VIEWPORT ── */
+function scaleToFit() {
+  const root = document.getElementById('app-root');
+  const scaleX = window.innerWidth  / 1080;
+  const scaleY = window.innerHeight / 1920;
+  const scale  = Math.min(scaleX, scaleY);
+  const offsetX = (window.innerWidth  - 1080 * scale) / 2;
+  const offsetY = (window.innerHeight - 1920 * scale) / 2;
+  root.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+}
+scaleToFit();
+window.addEventListener('resize', scaleToFit);
+
+/* ────────────────────────────────────────────────
+   STATE
+─────────────────────────────────────────────────*/
+const state = {
+  nome:'', cpf:'', tel:'', email:'',
+  intencao:[], perfil:'', cidade:'', estado:'MG', idade:'',
+  papel:'', lgpd: false,
+  path:'', score:0, total:0,
+  senacIdx:0, senacScore:0,
+  sindIdx:0, sindScore:0,
+  sescMatches:{}, sescSel:null, sescCorrect:0, sescTotal:6
+};
+
+/* ────────────────────────────────────────────────
+   NAVIGATION
+─────────────────────────────────────────────────*/
+function clearAllTimers() {
+  if(ctaTimer)    { clearInterval(ctaTimer);  ctaTimer=null; }
+  if(resultTimer) { clearTimeout(resultTimer); resultTimer=null; }
+}
+
+function openAdmin(){
+  // Tenta navegar para admin.html na mesma pasta
+  const base = window.location.href.replace(/\/[^/]*$/, '');
+  window.open(base + '/admin.html', '_blank');
+}
+
+function toggleFloatMenu(){
+  document.getElementById('float-menu').classList.toggle('open');
+  document.getElementById('float-menu-overlay').classList.toggle('open');
+}
+function closeFloatMenu(){
+  document.getElementById('float-menu').classList.remove('open');
+  document.getElementById('float-menu-overlay').classList.remove('open');
+}
+
+function goTo(id) {
+  clearAllTimers();
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id)?.classList.add('active');
+  if(id==='cta') startCtaTimer();
+  history.replaceState(null, '', '#'+id);
+}
+
+// Restaura tela pelo hash da URL ao recarregar
+const _hash = location.hash.slice(1);
+if (_hash && document.getElementById('screen-'+_hash)) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+_hash).classList.add('active');
+}
+
+const ctaContent = {
+  sesc: {
+    icon: '🎟️',
+    bg: 'var(--sesc-blue)',
+    badge: 'Credencial Sesc',
+    title: 'Quer aproveitar tudo isso e muito mais?',
+    text: 'Com a <strong>Credencial Sesc</strong>, o trabalhador do comércio tem acesso a <strong>descontos de até 60%</strong> nos hotéis Sesc, além de diversos serviços em todo o Brasil para você e seus dependentes.',
+    sub: 'Fale com um de nossos consultores e descubra como planejar sua próxima viagem!'
+  },
+  senac: {
+    icon: '🎓',
+    bg: 'var(--senac)',
+    badge: 'Senac Minas',
+    title: 'Pronto para dar o próximo passo na sua carreira?',
+    text: 'O <strong>Senac Minas</strong> oferece centenas de cursos presenciais e online, do técnico ao MBA — incluindo opções <strong>gratuitas</strong> pelo Programa Senac de Gratuidade (PSG) e pelo <strong>Senac+</strong>.',
+    sub: 'Fale com um de nossos consultores e encontre o curso ideal para você!'
+  },
+  sindicato: {
+    icon: '🤝',
+    bg: 'var(--sind)',
+    badge: 'Fecomércio MG',
+    title: 'Fortaleça seu negócio com o Sistema Fecomércio MG!',
+    text: 'A <strong>Fecomércio MG</strong> e os Sindicatos do Comércio oferecem assessoria jurídica, trabalhista e representatividade para empresas de todos os portes — do microempreendedor às grandes redes.',
+    sub: 'Converse com um de nossos consultores e descubra como podemos apoiar seu negócio!'
+  }
+};
+
+function renderCta(path) {
+  const c = ctaContent[path] || ctaContent.sesc;
+  document.getElementById('screen-cta').style.background = c.bg;
+  document.getElementById('cta-inner').innerHTML = `
+    <div class="cta-icon">${c.icon}</div>
+    <div class="cta-title">${c.title}</div>
+    <div class="cta-badge">${c.badge}</div>
+    <div class="cta-text">${c.text}</div>
+    <div class="cta-text" style="font-size:36px">${c.sub}</div>
+    <div style="display:flex;gap:24px;width:100%;margin-top:8px">
+      <button class="cta-btn" style="flex:1;background:rgba(255,255,255,.2);color:white;border:3px solid rgba(255,255,255,.5);font-size:36px;padding:36px 40px" onclick="resetAll();goTo('splash')">
+        Encerrar experiência
+      </button>
+      <button class="cta-btn" style="flex:1;font-size:36px;padding:36px 40px" onclick="goTo('choose')">
+        🔄 Jogar outros jogos
+      </button>
+    </div>
+    <div class="cta-timer">Encerrando em <span id="cta-count">15</span>s</div>
+  `;
+}
+
+function startCtaTimer() {
+  renderCta(state.path);
+  let t=30;
+  document.getElementById('cta-count').textContent=t;
+  ctaTimer=setInterval(()=>{
+    t--;
+    document.getElementById('cta-count').textContent=t;
+    if(t<=0){ clearAllTimers(); resetAll(); goTo('splash'); }
+  },1000);
+}
+
+function resetAll() {
+  clearAllTimers();
+  Object.assign(state,{
+    intencao:[], perfil:'', cidade:'', estado:'MG', idade:'',
+    papel:'', lgpd:false, path:'', score:0, total:0,
+    senacIdx:0, senacScore:0, sindIdx:0, sindScore:0,
+    sescMatches:{}, sescSel:null, sescCorrect:0
+  });
+  state.intencao = [];
+  document.querySelectorAll('.choice-card').forEach(c=>c.classList.remove('sel'));
+  document.querySelectorAll('.inp').forEach(i=>{ if(i.tagName==='INPUT') i.value=''; });
+  document.querySelectorAll('select').forEach(s=>{ s.value = s.id==='f-estado' ? 'MG' : ''; });
+  document.getElementById('ck-lgpd')?.classList.remove('ck-on');
+  document.querySelectorAll('.err-msg').forEach(e=>e.classList.remove('show'));
+  document.querySelectorAll('.inp').forEach(i=>i.classList.remove('err'));
+  document.querySelectorAll('.feedback').forEach(f=>f.classList.remove('show'));
+}
+
+/* ────────────────────────────────────────────────
+   INPUT MASKS
+─────────────────────────────────────────────────*/
+document.getElementById('f-cpf').addEventListener('input', function(){
+  let v=this.value.replace(/\D/g,'').substring(0,11);
+  if(v.length>9) v=v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/,'$1.$2.$3-$4');
+  else if(v.length>6) v=v.replace(/(\d{3})(\d{3})(\d{1,3})/,'$1.$2.$3');
+  else if(v.length>3) v=v.replace(/(\d{3})(\d{1,3})/,'$1.$2');
+  this.value=v;
+});
+document.getElementById('f-tel').addEventListener('input', function(){
+  let v=this.value.replace(/\D/g,'').substring(0,11);
+  if(v.length>10) v=v.replace(/(\d{2})(\d{5})(\d{4})/,'($1) $2-$3');
+  else if(v.length>6) v=v.replace(/(\d{2})(\d{4})(\d{1,4})/,'($1) $2-$3');
+  else if(v.length>2) v=v.replace(/(\d{2})(\d{1,4})/,'($1) $2');
+  this.value=v;
+});
+
+/* ────────────────────────────────────────────────
+   FORM VALIDATIONS
+─────────────────────────────────────────────────*/
+function showErr(id,msg,show){ const el=document.getElementById(id); el.textContent=msg; el.classList.toggle('show',show); }
+
+function validateForm1(){
+  const nome=document.getElementById('f-nome').value.trim();
+  const cpf=document.getElementById('f-cpf').value.replace(/\D/g,'');
+  const tel=document.getElementById('f-tel').value.replace(/\D/g,'');
+  const email=document.getElementById('f-email').value.trim();
+  let ok=true;
+  if(nome.length<3){ showErr('err-nome','Por favor, informe seu nome completo.',true); document.getElementById('f-nome').classList.add('err'); ok=false; }
+  else { showErr('err-nome','',false); document.getElementById('f-nome').classList.remove('err'); }
+  if(cpf.length!==11){ showErr('err-cpf','CPF inválido. Verifique e tente novamente.',true); document.getElementById('f-cpf').classList.add('err'); ok=false; }
+  else { showErr('err-cpf','',false); document.getElementById('f-cpf').classList.remove('err'); }
+  if(tel.length<10){ showErr('err-tel','Por favor, informe um telefone válido.',true); document.getElementById('f-tel').classList.add('err'); ok=false; }
+  else { showErr('err-tel','',false); document.getElementById('f-tel').classList.remove('err'); }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showErr('err-email','Por favor, informe um e-mail válido.',true); document.getElementById('f-email').classList.add('err'); ok=false; }
+  else { showErr('err-email','',false); document.getElementById('f-email').classList.remove('err'); }
+  if(ok){ state.nome=nome; state.cpf=cpf; state.tel=tel; state.email=email; goTo('form-2'); }
+}
+
+function toggleIntencao(el) {
+  const val = el.dataset.val;
+  if (el.classList.contains('sel')) {
+    el.classList.remove('sel');
+    state.intencao = state.intencao.filter(v => v !== val);
+  } else {
+    el.classList.add('sel');
+    state.intencao.push(val);
+  }
+  if (state.intencao.length > 0) showErr('err-intencao', '', false);
+}
+
+function validateForm2(){
+  if(state.intencao.length === 0){ showErr('err-intencao','Selecione ao menos uma opção para continuar.',true); return; }
+  showErr('err-intencao','',false); goTo('form-3');
+}
+function validateForm3(){
+  if(!state.perfil){ showErr('err-perfil','Selecione uma opção para continuar.',true); return; }
+  showErr('err-perfil','',false); goTo('form-4');
+}
+function validateForm4(){
+  const cidade=document.getElementById('f-cidade').value.trim();
+  if(cidade.length<2){ showErr('err-cidade','Por favor, informe sua cidade.',true); document.getElementById('f-cidade').classList.add('err'); return; }
+  showErr('err-cidade','',false); document.getElementById('f-cidade').classList.remove('err');
+  state.cidade=cidade;
+  state.estado=document.getElementById('f-estado').value;
+  state.idade=document.getElementById('f-idade').value;
+  goTo('form-5');
+}
+function validateForm5(){
+  if(!state.papel){ showErr('err-papel','Selecione uma opção para continuar.',true); return; }
+  showErr('err-papel','',false); goTo('form-6');
+}
+function validateForm6(){
+  if(!state.lgpd){ showErr('err-lgpd','Você precisa aceitar os termos para continuar.',true); return; }
+  showErr('err-lgpd','',false);
+  saveLead();
+  goTo('choose');
+}
+
+/* ────────────────────────────────────────────────
+   CHOICE CARDS
+─────────────────────────────────────────────────*/
+function selectChoice(el, group) {
+  document.querySelectorAll(`[data-group="${group}"]`).forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  state[group] = el.dataset.val;
+  showErr('err-'+group,'',false);
+}
+
+function toggleLgpd(){
+  state.lgpd=!state.lgpd;
+  document.getElementById('ck-lgpd').classList.toggle('ck-on',state.lgpd);
+  if(state.lgpd) showErr('err-lgpd','',false);
+}
+
+/* ────────────────────────────────────────────────
+   LOCALSTORAGE
+─────────────────────────────────────────────────*/
+/* ── GOOGLE SHEETS SYNC ── */
+// Cole aqui a URL gerada no Google Apps Script após implantar
+const SHEETS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbzcoLNKTCMWjBNu3jiIRU4GP5kk48NYwyM-vxYdEUOahFLUaYBw3rEZ_jZih-54Jj1N1g/exec';
+
+function saveLead(){
+  const lead={
+    id: Date.now(),
+    timestamp: new Date().toISOString(),
+    nome: state.nome, cpf: state.cpf, tel: state.tel, email: state.email,
+    intencao: state.intencao.join(', '), perfil: state.perfil,
+    cidade: state.cidade, estado: state.estado, idade: state.idade,
+    papel: state.papel,
+    path: state.path, score: state.score, total: state.total
+  };
+  try {
+    const leads = JSON.parse(localStorage.getItem('expousipa_leads')||'[]');
+    leads.push(lead);
+    localStorage.setItem('expousipa_leads', JSON.stringify(leads));
+  } catch(e){ console.warn('localStorage error',e); }
+  // Tenta enviar para Sheets; se falhar, enfileira
+  sendToSheets(lead);
+}
+
+function sendToSheets(lead){
+  if(!SHEETS_WEBHOOK_URL || SHEETS_WEBHOOK_URL.startsWith('COLE')) return;
+  fetch(SHEETS_WEBHOOK_URL, {
+    method: 'POST',
+    mode: 'no-cors',      // evita bloqueio de CORS no file://
+    redirect: 'follow',   // segue o redirect 302 do Apps Script
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify(lead)
+  })
+  .then(() => {
+    // no-cors retorna resposta opaca — sem erro = enviado
+    removePendingLead(lead.id);
+  })
+  .catch(() => queuePendingLead(lead));
+}
+
+function queuePendingLead(lead){
+  try {
+    const q = JSON.parse(localStorage.getItem('expousipa_queue')||'[]');
+    if(!q.find(l=>l.id===lead.id)) q.push(lead);
+    localStorage.setItem('expousipa_queue', JSON.stringify(q));
+  } catch(e){}
+}
+
+function removePendingLead(id){
+  try {
+    const q = JSON.parse(localStorage.getItem('expousipa_queue')||'[]');
+    localStorage.setItem('expousipa_queue', JSON.stringify(q.filter(l=>l.id!==id)));
+  } catch(e){}
+}
+
+function flushPendingLeads(){
+  if(!SHEETS_WEBHOOK_URL || SHEETS_WEBHOOK_URL.startsWith('COLE')) return;
+  try {
+    const q = JSON.parse(localStorage.getItem('expousipa_queue')||'[]');
+    q.forEach(lead => sendToSheets(lead));
+  } catch(e){}
+}
+
+// Tenta reenviar pendentes a cada 30 segundos
+setInterval(flushPendingLeads, 30000);
+
+function updateLeadScore(){
+  try {
+    const leads = JSON.parse(localStorage.getItem('expousipa_leads')||'[]');
+    const last = leads[leads.length-1];
+    if(last){ last.path=state.path; last.score=state.score; last.total=state.total; }
+    localStorage.setItem('expousipa_leads', JSON.stringify(leads));
+  } catch(e){}
+}
+
+/* ────────────────────────────────────────────────
+   GAME ROUTER
+─────────────────────────────────────────────────*/
+function startGame(path){
+  state.path=path;
+  if(path==='senac') initSenac();
+  else if(path==='sesc') initSesc();
+  else if(path==='sindicato') initSind();
+  goTo(path);
+}
+
+/* ────────────────────────────────────────────────
+   SENAC: VERDADEIRO OU FALSO
+─────────────────────────────────────────────────*/
+const senacQs = [
+  {
+    q: 'O MBA em Gestão Inovadora de Negócios do Senac prepara profissionais para liderar processos de inovação e tomada de decisão estratégica nas organizações.',
+    ans: true,
+    ok_msg: 'Exato! O MBA do Senac forma líderes capazes de transformar negócios com visão inovadora e estratégica.',
+    err_msg: 'Na verdade é Verdadeiro! O Senac oferece um MBA completo para quem quer se destacar no mercado.'
+  },
+  {
+    q: 'O Senac oferece apenas cursos pagos, sem nenhuma opção gratuita para a comunidade.',
+    ans: false,
+    ok_msg: 'Correto! O Senac possui cursos gratuitos pelo Programa Senac de Gratuidade (PSG) e pelo Senac+.',
+    err_msg: 'Quase... É Falso! O Senac possui um extenso portfólio com cursos gratuitos pelo PSG e Senac+.'
+  },
+  {
+    q: 'A Rede de Carreiras do Senac é uma plataforma on-line que conecta alunos e empresas a oportunidades do mercado de trabalho.',
+    ans: true,
+    ok_msg: 'Perfeito! A Rede de Carreiras conecta talentos formados pelo Senac ao mercado de trabalho.',
+    err_msg: 'Na verdade é Verdadeiro! A Rede de Carreiras é uma plataforma digital que conecta alunos e empresas.'
+  }
+];
+
+function initSenac(){
+  state.senacIdx=0; state.senacScore=0;
+  renderSenacDots();
+  renderSenacQ();
+  document.getElementById('senac-feedback').classList.remove('show');
+}
+
+function renderSenacDots(){
+  const c=document.getElementById('senac-dots');
+  c.innerHTML='';
+  senacQs.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='q-dot'+(i<state.senacIdx?' done-ok':i===state.senacIdx?' current':'');
+    c.appendChild(d);
+  });
+}
+
+function renderSenacQ(){
+  document.getElementById('senac-q').textContent = senacQs[state.senacIdx].q;
+}
+
+function answerVF(ans){
+  const q=senacQs[state.senacIdx];
+  const correct=(ans===q.ans);
+  if(correct) state.senacScore++;
+  const fb=document.getElementById('senac-feedback');
+  document.getElementById('senac-fb-icon').textContent = correct?'🎉':'💡';
+  document.getElementById('senac-fb-title').textContent = correct?'Acertou!':'Quase lá!';
+  document.getElementById('senac-fb-text').textContent = correct?q.ok_msg:q.err_msg;
+  fb.className='feedback show '+(correct?'ok':'err');
+}
+
+function nextSenac(){
+  document.getElementById('senac-feedback').classList.remove('show');
+  state.senacIdx++;
+  if(state.senacIdx>=senacQs.length){
+    state.score=state.senacScore; state.total=senacQs.length;
+    updateLeadScore();
+    showResult('senac');
+  } else {
+    renderSenacDots(); renderSenacQ();
+  }
+}
+
+/* ────────────────────────────────────────────────
+   SESC: DESCUBRA DESTINOS (tap-to-match)
+─────────────────────────────────────────────────*/
+const sescPairs = [
+  { id:0, tourist:'🏛️', tName:'Museu da Inconfidência', hotel:'🏨', hName:'Sesc Ouro Preto' },
+  { id:1, tourist:'💧', tName:'Fonte dos Amores', hotel:'🏨', hName:'Sesc Poços de Caldas' },
+  { id:2, tourist:'♨️', tName:'Fonte Dona Beja', hotel:'🏨', hName:'Sesc Araxá' },
+  { id:3, tourist:'⛪', tName:'Igrejinha da Pampulha', hotel:'🏨', hName:'Sesc Venda Nova (BH)' },
+  { id:4, tourist:'⛪', tName:'Praça N. Sra. da Glória/Igreja Matriz', hotel:'🏨', hName:'Sesc Contagem' },
+  { id:5, tourist:'🏫', tName:'Museu da Loucura', hotel:'🎓', hName:'Senac Grogotó (Barbacena)' }
+];
+
+// Fixed hotel display order — row position → hotel id (none aligned with its tourist)
+// Tourists: 0=Ouro Preto, 1=Poços, 2=Araxá, 3=BH, 4=Contagem, 5=Barbacena
+const sescHotelOrder = [2, 4, 5, 0, 1, 3];
+
+function initSesc(){
+  state.sescMatches={}; state.sescSel=null; state.sescCorrect=0;
+  renderSescGrid();
+  updateSescProgress();
+  document.getElementById('sesc-next-btn').classList.add('btn-disabled');
+  document.getElementById('sesc-feedback').classList.remove('show');
+}
+
+function shuffle(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+
+function renderSescGrid(){
+  const grid=document.getElementById('sesc-grid');
+  grid.innerHTML='';
+  // Tourist spots on the left (fixed order), hotels on the right (shuffled)
+  sescPairs.forEach((pair, rowIdx)=>{
+    const hotelId = sescHotelOrder[rowIdx];
+    const hotel = sescPairs[hotelId];
+
+    const row=document.createElement('div');
+    row.className='match-row';
+
+    // Tourist item (left)
+    const tItem=document.createElement('div');
+    const tMatched = Object.values(state.sescMatches).some(m=>m===pair.id && Object.keys(state.sescMatches).find(k=>state.sescMatches[k]===pair.id)==pair.id);
+    const tMatchedById = state.sescMatches[pair.id]!==undefined;
+    tItem.className='match-item'+(tMatchedById?' ok':'')+(state.sescSel===pair.id&&!tMatchedById?' sel':'');
+    tItem.dataset.id=pair.id;
+    tItem.innerHTML=`<div class="mi-emoji">${pair.tourist}</div><div class="mi-name">${pair.tName}</div>`;
+    if(!tMatchedById) tItem.onclick=()=>selectTourist(pair.id);
+
+    // Connector (hidden when matched – visual line takes over)
+    const conn=document.createElement('div');
+    conn.className='match-conn';
+    conn.textContent=tMatchedById?'':'→';
+
+    // Hotel drop zone (right) – shows shuffled hotel at this row
+    const dz=document.createElement('div');
+    const dzMatched = state.sescMatches[hotel.id]!==undefined;
+    dz.className='drop-z'+(dzMatched?' ok':'');
+    dz.dataset.hid=hotel.id;
+    if(dzMatched){
+      dz.innerHTML=`<div class="dz-emoji">${hotel.hotel}</div><div class="dz-name">${hotel.hName}</div>`;
+    } else {
+      dz.innerHTML=`<div class="dz-emoji">${hotel.hotel}</div><div class="dz-name">${hotel.hName}</div>`;
+      dz.onclick=()=>tryMatch(hotel.id);
+    }
+
+    row.appendChild(tItem); row.appendChild(conn); row.appendChild(dz);
+    grid.appendChild(row);
+  });
+}
+
+function drawSescLines(){
+  const grid=document.getElementById('sesc-grid');
+  let svg=document.getElementById('sesc-lines-svg');
+  if(!svg){
+    svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.id='sesc-lines-svg';
+    svg.style.cssText='position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:10';
+    grid.appendChild(svg);
+  }
+  svg.innerHTML='';
+  const gridRect=grid.getBoundingClientRect();
+  Object.keys(state.sescMatches).forEach(tid=>{
+    const hid=state.sescMatches[tid];
+    const tEl=grid.querySelector(`.match-item[data-id="${tid}"]`);
+    const hEl=grid.querySelector(`.drop-z[data-hid="${hid}"]`);
+    if(!tEl||!hEl) return;
+    const tr=tEl.getBoundingClientRect();
+    const hr=hEl.getBoundingClientRect();
+    const x1=tr.right-gridRect.left;
+    const y1=tr.top+tr.height/2-gridRect.top;
+    const x2=hr.left-gridRect.left;
+    const y2=hr.top+hr.height/2-gridRect.top;
+    const cx=(x1+x2)/2;
+    const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+    path.setAttribute('d',`M${x1},${y1} C${cx},${y1} ${cx},${y2} ${x2},${y2}`);
+    path.setAttribute('stroke','#00A651');
+    path.setAttribute('stroke-width','5');
+    path.setAttribute('fill','none');
+    path.setAttribute('stroke-linecap','round');
+    svg.appendChild(path);
+  });
+}
+
+function selectTourist(id){
+  if(state.sescMatches[id]!==undefined) return;
+  state.sescSel = (state.sescSel===id) ? null : id;
+  renderSescGrid();
+}
+
+function tryMatch(hotelId){
+  if(state.sescSel===null) return;
+  const sel=state.sescSel;
+  const correct=(sel===hotelId);
+  if(correct){
+    state.sescMatches[sel]=hotelId;
+    state.sescCorrect++;
+    state.sescSel=null;
+    renderSescGrid();
+    updateSescProgress();
+    if(state.sescCorrect>=sescPairs.length){
+      setTimeout(()=>{ state.score=sescPairs.length; state.total=sescPairs.length; updateLeadScore(); showResult('sesc'); },800);
+    } else if(state.sescCorrect>=3){
+      document.getElementById('sesc-next-btn').classList.remove('btn-disabled');
+    }
+  } else {
+    // Wrong match – brief shake and flash
+    const fb=document.getElementById('sesc-feedback');
+    document.getElementById('sesc-fb-icon').textContent='🤔';
+    document.getElementById('sesc-fb-title').textContent='Não é esse!';
+    document.getElementById('sesc-fb-text').textContent='Pense bem… qual ponto turístico combina com essa unidade Sesc?';
+    fb.className='feedback show err';
+    setTimeout(()=>{ fb.classList.remove('show'); },1400);
+  }
+}
+
+function closeSescFeedback(){ document.getElementById('sesc-feedback').classList.remove('show'); }
+
+function updateSescProgress(){
+  const pct=(state.sescCorrect/sescPairs.length)*100;
+  document.getElementById('sesc-prog').style.width=pct+'%';
+}
+
+function skipSesc(){
+  state.score=state.sescCorrect; state.total=sescPairs.length; updateLeadScore();
+  showResult('sesc');
+}
+
+function finishSesc(){
+  state.score=state.sescCorrect; state.total=sescPairs.length; updateLeadScore();
+  showResult('sesc');
+}
+
+/* ────────────────────────────────────────────────
+   SINDICATO: QUIZ
+─────────────────────────────────────────────────*/
+const sindQs = [
+  {
+    q: 'A Fecomércio MG representa os interesses dos empresários do setor comercial de Minas Gerais.',
+    correct: true,
+    ok: 'Correto! A Fecomércio MG é a federação que representa os sindicatos patronais do comércio no estado.',
+    err: 'Na verdade é Verdadeiro! A Fecomércio MG representa os empresários do comércio em Minas Gerais.'
+  },
+  {
+    q: 'O Sindicato do Comércio oferece assessoria jurídica e trabalhista exclusivamente para grandes empresas.',
+    correct: false,
+    ok: 'Isso mesmo! O sindicato atende empresas de qualquer porte, desde microempreendedores até grandes redes.',
+    err: 'É Falso! O sindicato atende empresas de todos os portes, incluindo pequenos e microempreendedores.'
+  },
+  {
+    q: 'A Fecomércio MG coordena o Sesc e o Senac em Minas Gerais.',
+    correct: true,
+    ok: 'Exato! A Fecomércio MG coordena o Sistema Fecomércio, que engloba o Sesc e o Senac no estado.',
+    err: 'Na verdade é Verdadeiro! A Fecomércio MG é responsável por coordenar o Sesc e o Senac em Minas Gerais.'
+  },
+  {
+    q: 'O trabalhador do comércio pode acessar os serviços do Sesc independentemente do porte da empresa onde trabalha.',
+    correct: true,
+    ok: 'Perfeito! Qualquer trabalhador do comércio, independente do tamanho da empresa, pode usar o Sesc.',
+    err: 'É Verdadeiro! Todos os trabalhadores do comércio têm direito aos serviços do Sesc.'
+  },
+  {
+    q: 'O Sindicato do Comércio pode auxiliar empresas com negociações coletivas e mediação de conflitos trabalhistas.',
+    correct: true,
+    ok: 'Correto! O sindicato patronal atua em negociações coletivas e mediação entre empresas e trabalhadores.',
+    err: 'É Verdadeiro! O sindicato desempenha papel fundamental em negociações e mediação de conflitos.'
+  }
+];
+
+function initSind(){
+  state.sindIdx=0; state.sindScore=0;
+  renderSindDots(); renderSindQ();
+  document.getElementById('sind-feedback').classList.remove('show');
+}
+
+function renderSindDots(){
+  const c=document.getElementById('sind-dots');
+  c.innerHTML='';
+  sindQs.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='q-dot'+(i<state.sindIdx?' done-ok':i===state.sindIdx?' current':'');
+    c.appendChild(d);
+  });
+}
+
+function renderSindQ(){
+  const q=sindQs[state.sindIdx];
+  document.getElementById('sind-q').textContent=`${state.sindIdx+1}. ${q.q}`;
+  document.getElementById('sind-btn-t').disabled=false;
+  document.getElementById('sind-btn-f').disabled=false;
+  document.getElementById('sind-btn-t').style.opacity='';
+  document.getElementById('sind-btn-f').style.opacity='';
+}
+
+function answerSind(answer){
+  const q=sindQs[state.sindIdx];
+  const correct=(answer===q.correct);
+  if(correct) state.sindScore++;
+  document.getElementById('sind-btn-t').disabled=true;
+  document.getElementById('sind-btn-f').disabled=true;
+  document.getElementById('sind-btn-t').style.opacity='0.5';
+  document.getElementById('sind-btn-f').style.opacity='0.5';
+  const fb=document.getElementById('sind-feedback');
+  document.getElementById('sind-fb-icon').textContent=correct?'🎉':'💡';
+  document.getElementById('sind-fb-title').textContent=correct?'Acertou!':'Quase!';
+  document.getElementById('sind-fb-text').textContent=correct?q.ok:q.err;
+  fb.className='feedback show '+(correct?'ok':'err');
+}
+
+function nextSind(){
+  document.getElementById('sind-feedback').classList.remove('show');
+  state.sindIdx++;
+  if(state.sindIdx>=sindQs.length){
+    state.score=state.sindScore; state.total=sindQs.length;
+    updateLeadScore(); showResult('sindicato');
+  } else {
+    renderSindDots(); renderSindQ();
+  }
+}
+
+/* ────────────────────────────────────────────────
+   RESULT SCREEN
+─────────────────────────────────────────────────*/
+function showResult(path){
+  const box=document.getElementById('result-box');
+  const pct=state.total>0?(state.score/state.total):0;
+  const win=pct>=0.5;
+
+  box.className='result-box '+(win?'win':'lose');
+  document.getElementById('res-icon').textContent=win?'🏆':'💪';
+  document.getElementById('res-title').textContent=win?'Parabéns!':'Não foi dessa vez!';
+
+  if(path==='sesc'){
+    document.getElementById('res-score').textContent=`${state.score} de ${state.total} pares acertados`;
+    document.getElementById('res-score').style.display='block';
+  } else if(path==='sindicato' || path==='senac'){
+    document.getElementById('res-score').textContent=`${state.score} de ${state.total} respostas corretas`;
+    document.getElementById('res-score').style.display='block';
+  }
+
+  const resultTexts = {
+    sesc: {
+      win: 'Você acabou de descobrir alguns destinos e experiências em Minas Gerais. E isso é só uma parte do que o Sistema Fecomércio MG oferece para você e sua família.',
+      lose: 'Mas você já conheceu alguns destinos e experiências que o Sesc oferece em Minas Gerais. E isso é só uma parte do que o Sistema Fecomércio MG oferece para você e sua família.',
+      sub: 'Conheça mais sobre a Credencial Sesc →'
+    },
+    senac: {
+      win: 'Você demonstrou que já conhece o potencial do Senac! Temos cursos, especializações e programas de qualificação profissional para impulsionar ainda mais a sua carreira.',
+      lose: 'Agora você já sabe mais sobre o que o Senac oferece! Cursos técnicos, livres e de graduação para quem quer crescer profissionalmente em Minas Gerais.',
+      sub: 'Descubra os cursos do Senac MG →'
+    },
+    sindicato: {
+      win: 'Parabéns! Você conhece bem o papel do Sistema Fecomércio MG. Estamos aqui para fortalecer o comércio de bens, serviços e turismo em todo o estado.',
+      lose: 'Agora você conhece melhor o que o Sindicato do Comércio oferece para os empresários e colaboradores do setor em Minas Gerais.',
+      sub: 'Saiba mais sobre o Sindicato do Comércio →'
+    }
+  };
+  const rt = resultTexts[path] || resultTexts.sesc;
+  document.getElementById('res-text').textContent = win ? rt.win : rt.lose;
+  document.getElementById('res-sub').textContent = rt.sub;
+
+  goTo('result');
+
+  // Auto advance to CTA after 10s (cancelável)
+  resultTimer = setTimeout(()=>goTo('cta'), 15000);
+}
+/* ── ESTADO PICKER ── */
+const ESTADOS = [
+  ['MG','Minas Gerais'],['AC','Acre'],['AL','Alagoas'],['AP','Amapá'],
+  ['AM','Amazonas'],['BA','Bahia'],['CE','Ceará'],['DF','Distrito Federal'],
+  ['ES','Espírito Santo'],['GO','Goiás'],['MA','Maranhão'],['MT','Mato Grosso'],
+  ['MS','Mato Grosso do Sul'],['PA','Pará'],['PB','Paraíba'],['PR','Paraná'],
+  ['PE','Pernambuco'],['PI','Piauí'],['RJ','Rio de Janeiro'],['RN','Rio Grande do Norte'],
+  ['RS','Rio Grande do Sul'],['RO','Rondônia'],['RR','Roraima'],['SC','Santa Catarina'],
+  ['SP','São Paulo'],['SE','Sergipe'],['TO','Tocantins']
+];
+
+function openEstadoPicker() {
+  const overlay = document.getElementById('estado-picker');
+  const list = document.getElementById('estado-picker-list');
+  const cur = document.getElementById('f-estado').value;
+  list.innerHTML = ESTADOS.map(([uf, nome]) =>
+    `<div class="picker-item ${uf===cur?'active':''}" onclick="selectEstado('${uf}','${nome}')">
+      ${nome} <span class="pi-check">${uf===cur?'✓':''}</span>
+    </div>`
+  ).join('');
+  overlay.classList.add('open');
+}
+
+function selectEstado(uf, nome) {
+  document.getElementById('f-estado').value = uf;
+  document.getElementById('f-estado-display').value = nome;
+  document.getElementById('estado-picker').classList.remove('open');
+  state.estado = uf;
+}
+
+function closeEstadoPicker() {
+  document.getElementById('estado-picker').classList.remove('open');
+}
+</script>
+
+<!-- PICKER ESTADO -->
+<div class="picker-overlay" id="estado-picker" onclick="if(event.target===this)closeEstadoPicker()">
+  <div class="picker-sheet">
+    <div class="picker-header">
+      <h3>Selecione o Estado</h3>
+      <button class="picker-close" onclick="closeEstadoPicker()">✕</button>
+    </div>
+    <div class="picker-list" id="estado-picker-list"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════ MENU FLUTUANTE ═══════════════════ -->
+<div id="float-menu-btn" onclick="toggleFloatMenu()" title="Menu">⋮</div>
+
+<div id="float-menu-overlay" onclick="closeFloatMenu()"></div>
+<div id="float-menu">
+  <div class="float-menu-item" onclick="closeFloatMenu();resetAll();goTo('splash')">🏠 Tela inicial</div>
+  <div class="float-menu-item" onclick="closeFloatMenu();goTo('choose')">🎮 Seleção de jogos</div>
+  <div class="float-menu-divider"></div>
+  <div class="float-menu-item float-menu-admin" onclick="closeFloatMenu();openAdmin()">🔐 Área Admin</div>
+</div>
+
+</div><!-- #app-root -->
+</body>
+</html>
