@@ -8,22 +8,22 @@
 /* ═══════════════════ RESET & TOKENS ═══════════════════ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  /* ── Paleta oficial Manual da Marca SESC ── */
-  --sesc-blue:   #004C99;   /* Azul SESC – Pantone 288 C – cor principal */
-  --sesc-blue-dk:#003A75;   /* Azul escuro para hover/dark */
-  --sesc-yellow: #F6BE00;   /* Amarelo SESC – Pantone 7408 C */
-  --sesc-gray-md:#747678;   /* Cinza médio – Pantone Cool Gray 9 C */
-  --sesc-gray-lt:#D0D0CE;   /* Cinza claro – Pantone Cool Gray 2 C */
+  /* ── Paleta EXPOUSIPA 2026 – Jornada Gamificada ── */
+  --expo-yellow: #F5B800;   /* Amarelo dourado principal */
+  --expo-blue:   #1A4E9E;   /* Azul institucional */
+  --expo-blue-dk:#0F3578;   /* Azul escuro hover */
+  --sesc-blue:   #004C99;
+  --sesc-yellow: #F5B800;
   --white:       #FFFFFF;
-  --gray-lt:     #F4F4F4;
-  --gray-dk:     #3C3C3B;
-  --gray-md:     #747678;
+  --gray-lt:     #F4F6FA;
+  --gray-dk:     #1F2937;
+  --gray-md:     #6B7280;
 
-  /* Aliases para compat. com o código existente */
-  --red:         #004C99;   /* azul assume papel do "red" (primário) */
-  --dark-red:    #003A75;
+  /* Aliases para compat. */
+  --red:         #1A4E9E;
+  --dark-red:    #0F3578;
   --green:       #00A651;
-  --blue:        #004C99;
+  --blue:        #1A4E9E;
   --senac:       #003E8E;
   --sind:        #1F2937;
 
@@ -165,36 +165,88 @@ select.inp { appearance: none; cursor: pointer; }
 }
 .choice-card.sel .choice-check { background: var(--red); border-color: var(--red); color: white; }
 
+/* ═══════════════════ RÉGUA DE MARCAS ═══════════════════ */
+.brand-bar {
+  flex-shrink: 0;
+  background: var(--expo-blue);
+  display: flex; align-items: center; justify-content: center;
+  gap: 0; height: 100px;
+  padding: 0 48px;
+}
+.brand-bar-item {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 0 32px; border-right: 1px solid rgba(255,255,255,.25);
+  height: 100%;
+}
+.brand-bar-item:last-child { border-right: none; }
+.brand-bar-name {
+  font-size: 20px; font-weight: 800; color: white;
+  text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.1;
+  text-align: center;
+}
+.brand-bar-sub {
+  font-size: 14px; color: rgba(255,255,255,.65); text-align: center;
+}
+.brand-bar-sm {
+  height: 72px;
+}
+.brand-bar-sm .brand-bar-name { font-size: 17px; }
+.brand-bar-sm .brand-bar-item { padding: 0 24px; }
+
 /* ═══════════════════ SPLASH ═══════════════════ */
 #screen-splash {
-  background: var(--red);
-  align-items: center; justify-content: center;
+  background: var(--expo-yellow);
   cursor: pointer;
+  overflow: hidden;
+}
+.splash-bg {
+  position: absolute; inset: 0; pointer-events: none;
+}
+.splash-bg-blue {
+  position: absolute;
+  top: -200px; right: -200px;
+  width: 860px; height: 1300px;
+  background: var(--expo-blue);
+  border-radius: 60% 0 0 60%;
+  opacity: .95;
+}
+.splash-content {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column;
+  width: 100%; height: 100%;
 }
 .splash-inner {
-  display: flex; flex-direction: column; align-items: center;
-  gap: 56px; text-align: center; padding: 80px;
+  flex: 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 52px; text-align: center; padding: 80px 100px;
 }
-.splash-logo-big {
-  width: 320px; height: 210px; background: white; border-radius: 28px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 74px; font-weight: 900; color: var(--red); letter-spacing: -5px;
+.splash-event-badge {
+  background: white; color: var(--expo-blue);
+  font-size: 32px; font-weight: 800;
+  border-radius: 50px; padding: 14px 52px;
+  letter-spacing: 1px;
 }
-.splash-title { font-size: 90px; font-weight: 900; color: white; line-height: 1.1; }
-.splash-sub   { font-size: 44px; color: rgba(255,255,255,.85); line-height: 1.45; }
-.splash-event {
-  font-size: 36px; color: var(--sesc-blue);
-  background: var(--sesc-yellow);
-  border-radius: 50px; padding: 16px 52px;
-  font-weight: 800;
+.splash-title {
+  font-size: 108px; font-weight: 900; color: white;
+  line-height: 1.0; text-shadow: 0 4px 24px rgba(0,0,0,.25);
+  letter-spacing: -2px;
+}
+.splash-sub {
+  font-size: 48px; font-weight: 700;
+  color: var(--expo-yellow);
+  background: var(--expo-blue);
+  border-radius: 50px; padding: 18px 60px;
 }
 .splash-cta {
-  font-size: 52px; font-weight: 800; color: var(--sesc-yellow);
+  font-size: 50px; font-weight: 800; color: var(--expo-blue);
+  background: var(--expo-yellow);
+  border-radius: 50px; padding: 22px 80px;
   animation: pulse 1.8s ease-in-out infinite;
+  box-shadow: 0 8px 32px rgba(0,0,0,.15);
 }
 .splash-dots { display: flex; gap: 18px; align-items: center; }
 .dot { width: 14px; height: 14px; border-radius: 50%; background: rgba(255,255,255,.45); }
-.dot.big { background: var(--sesc-yellow); width: 44px; border-radius: 7px; }
+.dot.big { background: var(--expo-yellow); width: 44px; border-radius: 7px; }
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.55;transform:scale(.93)} }
 
 /* ═══════════════════ PATH SELECTION ═══════════════════ */
@@ -212,9 +264,9 @@ select.inp { appearance: none; cursor: pointer; }
 .path-title { font-size: 48px; font-weight: 900; line-height: 1.2; }
 .path-desc  { font-size: 34px; opacity: .88; line-height: 1.4; }
 .path-arrow { font-size: 44px; margin-top: auto; }
-.pc-sesc  { background: var(--red); color: white; }
-.pc-senac { background: var(--senac); color: white; }
-.pc-sind  { background: var(--sind); color: white; }
+.pc-sesc  { background: var(--expo-yellow); color: var(--expo-blue); }
+.pc-senac { background: var(--expo-blue); color: white; }
+.pc-sind  { background: var(--gray-dk); color: white; }
 
 /* ═══════════════════ SENAC V/F GAME ═══════════════════ */
 .q-counter { font-size: 28px; color: rgba(255,255,255,.7); margin-top: 12px; }
@@ -351,18 +403,18 @@ select.inp { appearance: none; cursor: pointer; }
 .reveal .opt-letter{ background: var(--green); color: white; }
 
 /* ═══════════════════ RESULT ═══════════════════ */
-#screen-result { align-items: center; justify-content: center; background: var(--gray-lt); }
+#screen-result { align-items: center; justify-content: center; background: var(--expo-yellow); }
 .result-box {
   display: flex; flex-direction: column; align-items: center;
-  text-align: center; gap: 44px; padding: 80px 80px;
-  background: white; margin: 60px; border-radius: 40px;
+  text-align: center; gap: 44px; padding: 60px 80px;
+  background: white; margin: 40px; border-radius: 40px;
   box-shadow: var(--shadow);
 }
-.res-icon  { font-size: 200px; }
+.res-icon  { font-size: 180px; }
 .res-title { font-size: 86px; font-weight: 900; line-height: 1; }
 .res-score { font-size: 50px; font-weight: 700; padding: 18px 60px; border-radius: 20px; }
-.res-text  { font-size: 38px; color: var(--gray-dk); line-height: 1.65; max-width: 820px; }
-.res-sub   { font-size: 30px; color: var(--gray-md); }
+.res-text  { font-size: 36px; color: var(--gray-dk); line-height: 1.65; max-width: 820px; }
+.res-sub   { font-size: 28px; color: var(--expo-blue); font-weight: 600; }
 .win .res-title { color: var(--green); }
 .win .res-score { background: #F0FAF4; color: var(--green); }
 .lose .res-title { color: var(--gray-dk); }
@@ -370,20 +422,20 @@ select.inp { appearance: none; cursor: pointer; }
 .res-continue { margin-top: 8px; }
 
 /* ═══════════════════ CTA ═══════════════════ */
-#screen-cta { background: var(--red); align-items: center; justify-content: center; }
+#screen-cta { background: var(--expo-blue); align-items: center; justify-content: center; }
 .cta-inner {
   display: flex; flex-direction: column; align-items: center;
-  text-align: center; gap: 48px; padding: 100px 80px;
+  text-align: center; gap: 48px; padding: 80px 80px;
 }
 .cta-icon  { font-size: 160px; }
 .cta-title { font-size: 76px; font-weight: 900; color: white; line-height: 1.2; }
 .cta-text  { font-size: 40px; color: rgba(255,255,255,.9); line-height: 1.65; max-width: 860px; }
 .cta-badge {
-  background: var(--sesc-yellow); color: var(--sesc-blue);
+  background: var(--expo-yellow); color: var(--expo-blue);
   font-size: 44px; font-weight: 800; padding: 24px 64px; border-radius: 20px;
 }
 .cta-btn {
-  background: var(--sesc-yellow); color: var(--sesc-blue); font-size: 44px; font-weight: 800;
+  background: var(--expo-yellow); color: var(--expo-blue); font-size: 44px; font-weight: 800;
   padding: 44px 88px; border-radius: 24px; border: none; cursor: pointer;
   transition: transform .12s; touch-action: manipulation;
 }
@@ -497,14 +549,21 @@ select.inp { appearance: none; cursor: pointer; }
 
 <!-- ═══════════════════ SPLASH ═══════════════════ -->
 <div id="screen-splash" class="screen active" onclick="goTo('form-1')">
-  <div class="splash-inner">
-    <div class="splash-title">Sistema<br>Fecomércio MG</div>
-    <div class="splash-sub">Bem-estar, Capacitação<br>e Desenvolvimento</div>
-    <div class="splash-event">⭐ EXPOUSIPA 2026 ⭐</div>
-    <div class="splash-dots">
-      <div class="dot"></div><div class="dot big"></div><div class="dot"></div>
+  <div class="splash-bg"><div class="splash-bg-blue"></div></div>
+  <div class="splash-content">
+    <div class="brand-bar">
+      <div class="brand-bar-item"><div class="brand-bar-name">Fecomércio</div><div class="brand-bar-sub">MG</div></div>
+      <div class="brand-bar-item"><div class="brand-bar-name">CNC</div></div>
+      <div class="brand-bar-item"><div class="brand-bar-name">Sindicatos</div><div class="brand-bar-sub">Empresariais</div></div>
+      <div class="brand-bar-item"><div class="brand-bar-name">SESC</div></div>
+      <div class="brand-bar-item"><div class="brand-bar-name">SENAC</div></div>
     </div>
-    <div class="splash-cta">👆 Toque para começar</div>
+    <div class="splash-inner">
+      <div class="splash-event-badge">⭐ EXPOUSIPA 2026 ⭐</div>
+      <div class="splash-title">JORNADA<br>GAMIFICADA</div>
+      <div class="splash-sub">Desafio Fecomércio</div>
+      <div class="splash-cta">👆 Toque para começar</div>
+    </div>
   </div>
 </div>
 
@@ -777,11 +836,11 @@ select.inp { appearance: none; cursor: pointer; }
 
 <!-- ═══════════════════ ESCOLHA DO CAMINHO ═══════════════════ -->
 <div id="screen-choose" class="screen">
-  <div class="hdr hdr-red" style="padding-bottom:48px">
+  <div class="hdr hdr-red" style="padding-bottom:48px;background:var(--expo-blue)">
     <div class="hdr-logo">
       <div>
-        <div class="hdr-title">Vamos jogar!</div>
-        <div class="hdr-sub">Sistema Fecomércio MG</div>
+        <div class="hdr-title">Jornada Gamificada</div>
+        <div class="hdr-sub">Desafio Fecomércio — EXPOUSIPA 2026</div>
       </div>
     </div>
   </div>
@@ -989,6 +1048,20 @@ function scaleToFit() {
 }
 scaleToFit();
 window.addEventListener('resize', scaleToFit);
+
+/* Injeta régua de marcas em todas as telas (exceto splash que já tem) */
+(function injectBrandBar(){
+  const html = `<div class="brand-bar brand-bar-sm">
+    <div class="brand-bar-item"><div class="brand-bar-name">Fecomércio MG</div></div>
+    <div class="brand-bar-item"><div class="brand-bar-name">CNC</div></div>
+    <div class="brand-bar-item"><div class="brand-bar-name">Sindicatos Empresariais</div></div>
+    <div class="brand-bar-item"><div class="brand-bar-name">SESC</div></div>
+    <div class="brand-bar-item"><div class="brand-bar-name">SENAC</div></div>
+  </div>`;
+  document.querySelectorAll('.screen:not(#screen-splash)').forEach(s => {
+    s.insertAdjacentHTML('afterbegin', html);
+  });
+})();
 
 /* ────────────────────────────────────────────────
    STATE
