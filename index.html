@@ -758,14 +758,10 @@ select.inp { appearance: none; cursor: pointer; }
     </div>
     <div class="inp-group">
       <label class="inp-label">Faixa etária</label>
-      <select id="f-idade" class="inp">
-        <option value="">Prefiro não informar</option>
-        <option value="18-25">18 a 25 anos</option>
-        <option value="26-35">26 a 35 anos</option>
-        <option value="36-45">36 a 45 anos</option>
-        <option value="46-55">46 a 55 anos</option>
-        <option value="56+">56 anos ou mais</option>
-      </select>
+      <input id="f-idade-display" class="inp" type="text" readonly
+        value="Prefiro não informar" onclick="openIdadePicker()"
+        style="cursor:pointer;background:white" autocomplete="off">
+      <input type="hidden" id="f-idade" value="">
     </div>
   </div>
   <div class="bnav">
@@ -1777,7 +1773,50 @@ function selectEstado(uf, nome) {
 function closeEstadoPicker() {
   document.getElementById('estado-picker').classList.remove('open');
 }
+
+const FAIXAS = [
+  ['', 'Prefiro não informar'],
+  ['18-25', '18 a 25 anos'],
+  ['26-35', '26 a 35 anos'],
+  ['36-45', '36 a 45 anos'],
+  ['46-55', '46 a 55 anos'],
+  ['56+', '56 anos ou mais'],
+];
+
+function openIdadePicker() {
+  const overlay = document.getElementById('idade-picker');
+  const list = document.getElementById('idade-picker-list');
+  const cur = document.getElementById('f-idade').value;
+  list.innerHTML = FAIXAS.map(([val, label]) =>
+    `<div class="picker-item ${val===cur?'active':''}" onclick="selectIdade('${val}','${label}')">
+      ${label} <span class="pi-check">${val===cur?'✓':''}</span>
+    </div>`
+  ).join('');
+  overlay.classList.add('open');
+}
+
+function selectIdade(val, label) {
+  document.getElementById('f-idade').value = val;
+  document.getElementById('f-idade-display').value = label;
+  document.getElementById('idade-picker').classList.remove('open');
+  state.idade = val;
+}
+
+function closeIdadePicker() {
+  document.getElementById('idade-picker').classList.remove('open');
+}
 </script>
+
+<!-- PICKER FAIXA ETÁRIA -->
+<div class="picker-overlay" id="idade-picker" onclick="if(event.target===this)closeIdadePicker()">
+  <div class="picker-sheet">
+    <div class="picker-header">
+      <h3>Faixa etária</h3>
+      <button class="picker-close" onclick="closeIdadePicker()">✕</button>
+    </div>
+    <div class="picker-list" id="idade-picker-list"></div>
+  </div>
+</div>
 
 <!-- PICKER ESTADO -->
 <div class="picker-overlay" id="estado-picker" onclick="if(event.target===this)closeEstadoPicker()">
