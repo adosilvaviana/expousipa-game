@@ -566,22 +566,25 @@ select.inp { appearance: none; cursor: pointer; }
 
 <!-- ═══════════════════ SPLASH ═══════════════════ -->
 <div id="screen-splash" class="screen active" onclick="goTo('form-1')">
-  <div class="splash-bg">
-    <img src="deco-retangulos.png" class="splash-deco-svg" alt="">
-  </div>
   <div class="splash-content">
+    <!-- TOPO: Régua de marcas -->
+    <div style="flex-shrink:0;background:white;padding:48px 60px;display:flex;align-items:center;justify-content:center;border-bottom:2px solid #e5e7eb;">
+      <img src="regua-marcas.png" alt="Sistema Comércio" style="height:120px;object-fit:contain;max-width:980px;">
+    </div>
+
+    <!-- CENTRO: Logo + CTA -->
     <div class="splash-inner">
-      <!-- Logo EXPO USIPA oficial -->
       <div class="splash-logo-circle">
-        <img src="logo-expousipa.png" alt="EXPO USIPA" style="width:220px;height:220px;object-fit:contain;">
+        <img src="logo-expousipa.png" alt="EXPO USIPA" style="width:420px;height:420px;object-fit:contain;">
       </div>
       <div class="splash-event-badge">36ª Edição · 8 a 10 de julho · Ipatinga MG</div>
-      <div class="splash-title">Game<br>Fecomércio MG</div>
       <div class="splash-sub">Teste seus conhecimentos sobre o Sistema Fecomércio</div>
-      <div class="splash-cta">👆 Toque para começar</div>
+      <div class="splash-cta">Toque para começar</div>
     </div>
-    <div class="brand-bar">
-      <img src="regua-marcas.png" alt="Sistema Comércio" style="height:60px;object-fit:contain;max-width:960px;">
+
+    <!-- BOTTOM: Decoração retângulos largura total -->
+    <div style="flex-shrink:0;width:100%;overflow:hidden;line-height:0;max-height:380px;">
+      <img src="deco-retangulos.png" alt="" style="width:100%;display:block;object-fit:cover;object-position:left bottom;">
     </div>
   </div>
 </div>
