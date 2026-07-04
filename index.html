@@ -1079,6 +1079,29 @@ window.addEventListener('resize', scaleToFit);
   });
 })();
 
+/* Injeta elementos decorativos por tela */
+(function injectDecos(){
+  const decos = {
+    // Formulários: faixa diagonal no canto inferior esquerdo
+    'screen-form-1': `<img src="deco-strip.png"   style="position:absolute;bottom:120px;right:0;height:600px;opacity:.18;pointer-events:none;z-index:0;">`,
+    'screen-form-2': `<img src="deco-diagonal.png" style="position:absolute;bottom:110px;left:-60px;width:380px;opacity:.15;pointer-events:none;z-index:0;">`,
+    'screen-form-3': `<img src="deco-strip.png"   style="position:absolute;bottom:120px;right:0;height:600px;opacity:.18;pointer-events:none;z-index:0;">`,
+    'screen-form-4': `<img src="deco-diagonal.png" style="position:absolute;bottom:110px;left:-60px;width:380px;opacity:.15;pointer-events:none;z-index:0;">`,
+    'screen-form-5': `<img src="deco-strip.png"   style="position:absolute;bottom:120px;right:0;height:600px;opacity:.18;pointer-events:none;z-index:0;">`,
+    'screen-form-6': `<img src="deco-diagonal.png" style="position:absolute;bottom:110px;left:-60px;width:380px;opacity:.15;pointer-events:none;z-index:0;">`,
+    // Escolha: faixa landscape acima da brand bar
+    'screen-choose':  `<img src="deco-landscape.png" style="position:absolute;bottom:110px;left:0;width:100%;opacity:.13;pointer-events:none;z-index:0;">`,
+    // Resultado: diagonal no canto inferior direito atrás do card
+    'screen-result':  `<img src="deco-crop.png"    style="position:absolute;bottom:110px;right:-80px;width:600px;opacity:.12;pointer-events:none;z-index:0;">`,
+    // CTA: landscape na parte inferior
+    'screen-cta':     `<img src="deco-landscape.png" style="position:absolute;bottom:110px;left:0;width:100%;opacity:.13;pointer-events:none;z-index:0;">`,
+  };
+  Object.entries(decos).forEach(([id, html]) => {
+    const el = document.getElementById(id);
+    if (el) el.insertAdjacentHTML('beforeend', html);
+  });
+})();
+
 /* ────────────────────────────────────────────────
    STATE
 ─────────────────────────────────────────────────*/
