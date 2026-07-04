@@ -439,14 +439,14 @@ select.inp { appearance: none; cursor: pointer; }
 .res-continue { margin-top: 8px; }
 
 /* ═══════════════════ CTA ═══════════════════ */
-#screen-cta { background: var(--expo-blue); align-items: center; justify-content: center; }
+#screen-cta { background: white; align-items: center; justify-content: center; }
 .cta-inner {
   display: flex; flex-direction: column; align-items: center;
   text-align: center; gap: 48px; padding: 80px 80px;
 }
-.cta-icon  { font-size: 160px; }
-.cta-title { font-size: 76px; font-weight: 900; color: white; line-height: 1.2; }
-.cta-text  { font-size: 40px; color: rgba(255,255,255,.9); line-height: 1.65; max-width: 860px; }
+.cta-icon  { display: none; }
+.cta-title { font-size: 76px; font-weight: 900; color: var(--expo-blue); line-height: 1.2; }
+.cta-text  { font-size: 40px; color: #333; line-height: 1.65; max-width: 860px; }
 .cta-badge {
   background: var(--expo-yellow); color: var(--expo-blue);
   font-size: 44px; font-weight: 800; padding: 24px 64px; border-radius: 20px;
@@ -1157,22 +1157,21 @@ const ctaContent = {
 
 function renderCta(path) {
   const c = ctaContent[path] || ctaContent.sesc;
-  document.getElementById('screen-cta').style.background = c.bg;
+  document.getElementById('screen-cta').style.background = 'white';
   document.getElementById('cta-inner').innerHTML = `
-    <div class="cta-icon">${c.icon}</div>
     <div class="cta-title">${c.title}</div>
     <div class="cta-badge">${c.badge}</div>
     <div class="cta-text">${c.text}</div>
     <div class="cta-text" style="font-size:36px">${c.sub}</div>
     <div style="display:flex;gap:24px;width:100%;margin-top:8px">
-      <button class="cta-btn" style="flex:1;background:rgba(255,255,255,.2);color:white;border:3px solid rgba(255,255,255,.5);font-size:36px;padding:36px 40px" onclick="resetAll();goTo('splash')">
+      <button class="cta-btn" style="flex:1;background:white;color:var(--expo-blue);border:3px solid var(--expo-blue);font-size:36px;padding:36px 40px" onclick="resetAll();goTo('splash')">
         Encerrar experiência
       </button>
       <button class="cta-btn" style="flex:1;font-size:36px;padding:36px 40px" onclick="goTo('choose')">
         🔄 Jogar outros jogos
       </button>
     </div>
-    <div class="cta-timer">Encerrando em <span id="cta-count">15</span>s</div>
+    <div class="cta-timer" style="color:#555">Encerrando em <span id="cta-count">15</span>s</div>
   `;
 }
 
