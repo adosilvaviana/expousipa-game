@@ -1102,8 +1102,11 @@ window.addEventListener('resize', scaleToFit);
     'screen-cta':     ``,
   };
   Object.entries(decos).forEach(([id, html]) => {
-    const el = document.getElementById(id);
-    if (el) el.insertAdjacentHTML('beforeend', html);
+    const screen = document.getElementById(id);
+    if (!screen || !html) return;
+    const target = screen.querySelector('.content') || screen;
+    target.style.position = 'relative';
+    target.insertAdjacentHTML('beforeend', html);
   });
 })();
 
