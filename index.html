@@ -1704,7 +1704,7 @@ function showResult(path){
   const win=pct>=0.5;
 
   box.className='result-box '+(win?'win':'lose');
-  document.getElementById('res-icon').textContent=win?'🏆':'💪';
+  document.getElementById('res-icon').textContent='';
   document.getElementById('res-title').textContent=win?'Parabéns!':'Não foi dessa vez!';
 
   if(path==='sesc'){
