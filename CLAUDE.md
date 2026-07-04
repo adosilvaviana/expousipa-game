@@ -1,6 +1,46 @@
 # CLAUDE.md — EXPOUSIPA 2026 Gamification App
 
-Instruções para o Claude Code trabalhar neste projeto.
+> **Para o Claude Code:** leia este arquivo inteiro antes de qualquer ação. Ele contém tudo para deixar o ambiente pronto e responder a qualquer pedido de alteração no app.
+
+---
+
+## SETUP INICIAL — execute isso na primeira vez
+
+Se o repositório ainda não estiver clonado localmente, faça agora:
+
+```bash
+git clone https://github.com/adosilvaviana/expousipa-game.git
+cd expousipa-game
+```
+
+Para rodar o servidor local de desenvolvimento:
+
+```bash
+python3 -m http.server 8765
+```
+
+Acesse em: `http://localhost:8765`
+
+Para navegar direto para uma tela específica: `http://localhost:8765/#result`, `/#cta`, `/#choose`, etc.
+
+Após o setup, confirme para o usuário (Rafael) que o ambiente está pronto e pergunte o que ele quer alterar.
+
+---
+
+## Como publicar qualquer alteração
+
+```bash
+git add index.html
+git commit -m "descrição da mudança"
+git push origin main
+```
+
+GitHub Pages publica automaticamente em ~1 minuto em:
+**`https://adosilvaviana.github.io/expousipa-game/`**
+
+Após o push, avisar Rafael para fazer `Ctrl+Shift+R` (ou `Cmd+Shift+R` no Mac) no navegador.
+
+Se alterar também `admin.html`, incluir no `git add`.
 
 ---
 
@@ -12,41 +52,29 @@ O app captura leads e oferece três mini-jogos temáticos (Sesc, Senac, Sindicat
 
 ---
 
+## Credenciais e acessos
+
+| O quê | Valor |
+|---|---|
+| Repositório GitHub | `https://github.com/adosilvaviana/expousipa-game` |
+| GitHub Pages (URL pública) | `https://adosilvaviana.github.io/expousipa-game/` |
+| Senha do painel Admin | `sesc2026` |
+| Google Sheets Webhook URL | `https://script.google.com/macros/s/AKfycbzcoLNKTCMWjBNu3jiIRU4GP5kk48NYwyM-vxYdEUOahFLUaYBw3rEZ_jZih-54Jj1N1g/exec` |
+
+O painel Admin é acessado pelo botão ⋮ discreto no canto inferior direito de qualquer tela do app.
+
+---
+
 ## Stack e arquitetura
 
-- **Um único arquivo**: `index.html` — zero dependências, zero build step.
+- **Dois arquivos principais**: `index.html` (app) e `admin.html` (painel admin) — zero dependências, zero build step.
 - **Navegação**: `location.hash` (`#splash`, `#form-1`, `#choose`, `#game-sesc`, etc.).
 - **Persistência**: `localStorage` (chave `nxp_leads`). Retry automático a cada 30s para leads offline.
 - **Totem**: 1080×1920px. CSS `transform: scale()` adapta para qualquer tela via `scaleToFit()`.
-- **Deploy**: GitHub Pages — `git push origin main` publica em ~1 min em `https://adosilvaviana.github.io/expousipa-game/`.
 
 ---
 
-## Como rodar localmente
-
-```bash
-cd expousipa-game
-python3 -m http.server 8765
-# Abrir: http://localhost:8765
-```
-
-Para ver uma tela específica direto: `http://localhost:8765/#result`, `/#cta`, `/#choose`, etc.
-
----
-
-## Como publicar alterações
-
-```bash
-git add index.html
-git commit -m "descrição da mudança"
-git push origin main
-```
-
-GitHub Pages atualiza em ~1 minuto. Hard refresh no navegador: `Cmd+Shift+R`.
-
----
-
-## Identidade visual
+## Identidade visual — regras obrigatórias
 
 | Variável CSS | Valor | Uso |
 |---|---|---|
@@ -55,7 +83,7 @@ GitHub Pages atualiza em ~1 minuto. Hard refresh no navegador: `Cmd+Shift+R`.
 | Fundo cream | `#ece4d0` | Cards de resultado e conteúdo destacado |
 | Fundo splash | `#ece4d0` | Tela de abertura |
 
-**Regra**: nunca recriar os elementos visuais como SVG ou CSS. Sempre usar os PNGs oficiais:
+**IMPORTANTE:** nunca recriar os elementos visuais como SVG ou CSS puro. Usar sempre os PNGs oficiais que estão na pasta do projeto:
 
 | Arquivo | Uso |
 |---|---|
@@ -68,7 +96,7 @@ A régua de marcas é injetada automaticamente no bottom de todas as telas (exce
 
 ---
 
-## Estrutura de telas (hash → screen id)
+## Estrutura de telas
 
 | Hash | Tela |
 |---|---|
@@ -80,7 +108,7 @@ A régua de marcas é injetada automaticamente no bottom de todas as telas (exce
 | `#game-sindicato` | Quiz Sindicato / Fecomércio MG |
 | `#result` | Resultado do jogo |
 | `#cta` | Call to action final (Credencial Sesc / Senac / Fecomércio) |
-| `#admin` | Painel admin (lista de leads, exportação CSV) |
+| `#admin` | Painel admin — abre `admin.html` numa nova aba |
 
 Navegação: `goTo('nome-da-tela')`. Reset completo: `resetAll()`.
 
@@ -92,62 +120,39 @@ Navegação: `goTo('nome-da-tela')`. Reset completo: `resetAll()`.
 |---|---|
 | `goTo(screen)` | Troca a tela ativa pelo hash |
 | `resetAll()` | Limpa o estado e volta para a splash |
-| `showResult(path)` | Renderiza a tela de resultado para `'sesc'`, `'senac'` ou `'sindicato'` |
+| `showResult(path)` | Renderiza resultado para `'sesc'`, `'senac'` ou `'sindicato'` |
 | `renderCta(path)` | Renderiza o CTA final conforme o caminho |
 | `scaleToFit()` | Escala o app para a tela atual |
 | `syncLead(lead)` | Envia lead para Google Sheets (no-cors) |
 | `saveLead(data)` | Salva lead no localStorage e tenta sync |
-| `openAdmin()` | Abre o painel admin com senha |
+| `openAdmin()` | Abre o painel admin (`admin.html`) numa nova aba |
 | `openEstadoPicker()` | Bottom sheet de seleção de estado |
 | `openIdadePicker()` | Bottom sheet de seleção de faixa etária |
+| `escHtml(str)` | Sanitiza string para inserção no DOM — usar sempre que renderizar input do usuário |
 
 ---
 
 ## Jogo SESC — pares
 
-Associa pontos turísticos de MG a unidades Sesc. Todas as unidades usam o emoji 🏫.
+Todas as unidades Sesc usam o emoji 🏫 (inclusive Senac Grogotó).
 
 ```javascript
 const sescPairs = [
-  { id:0, tourist:'🏛️', tName:'Museu da Inconfidência',           hotel:'🏫', hName:'Sesc Ouro Preto' },
-  { id:1, tourist:'💧', tName:'Fonte dos Amores',                 hotel:'🏫', hName:'Sesc Poços de Caldas' },
-  { id:2, tourist:'♨️', tName:'Fonte Dona Beja',                  hotel:'🏫', hName:'Sesc Araxá' },
-  { id:3, tourist:'⛪', tName:'Igrejinha da Pampulha',            hotel:'🏫', hName:'Sesc Venda Nova (BH)' },
+  { id:0, tourist:'🏛️', tName:'Museu da Inconfidência',                hotel:'🏫', hName:'Sesc Ouro Preto' },
+  { id:1, tourist:'💧', tName:'Fonte dos Amores',                      hotel:'🏫', hName:'Sesc Poços de Caldas' },
+  { id:2, tourist:'♨️', tName:'Fonte Dona Beja',                       hotel:'🏫', hName:'Sesc Araxá' },
+  { id:3, tourist:'⛪', tName:'Igrejinha da Pampulha',                 hotel:'🏫', hName:'Sesc Venda Nova (BH)' },
   { id:4, tourist:'⛪', tName:'Praça N. Sra. da Glória/Igreja Matriz', hotel:'🏫', hName:'Sesc Contagem' },
-  { id:5, tourist:'🏫', tName:'Museu da Loucura',                 hotel:'🏫', hName:'Senac Grogotó (Barbacena)' },
+  { id:5, tourist:'🏫', tName:'Museu da Loucura',                      hotel:'🏫', hName:'Senac Grogotó (Barbacena)' },
 ];
 ```
-
----
-
-## Google Sheets
-
-Webhook configurado no Google Apps Script. O arquivo `google-apps-script.gs` na raiz do projeto contém o código do script.
-
-```javascript
-const SHEETS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbzcoLNKTCMWjBNu3jiIRU4GP5kk48NYwyM-vxYdEUOahFLUaYBw3rEZ_jZih-54Jj1N1g/exec';
-```
-
-Envio com `mode: 'no-cors'` e `redirect: 'follow'` para funcionar offline-first (sem bloquear a UX).
-
----
-
-## Painel Admin
-
-Acesso: botão ⋮ discreto no canto inferior direito de qualquer tela → "Área Admin". Senha configurada na variável `ADMIN_PASSWORD` no JS.
-
-Funcionalidades:
-- Listagem de todos os leads capturados
-- Soft delete (marca como deletado, não apaga do storage)
-- Exportação CSV
-- Indicador de leads pendentes de sync
 
 ---
 
 ## O que NÃO fazer
 
 - Não recriar os PNGs como SVG ou CSS — usar sempre os arquivos `.png` da pasta.
-- Não dividir em múltiplos arquivos HTML/JS/CSS — tudo fica em `index.html`.
-- Não adicionar frameworks ou dependências externas — o app precisa funcionar offline.
-- Não usar `onclick` inline no HTML para novos elementos — usar event listeners ou funções nomeadas já existentes.
+- Não dividir em múltiplos arquivos HTML/JS/CSS — tudo fica em `index.html` e `admin.html`.
+- Não adicionar frameworks ou dependências externas — o app precisa funcionar 100% offline.
 - Toda string de usuário renderizada no DOM deve passar por `escHtml()` para evitar XSS.
+- Não usar `onclick` inline no HTML para novos elementos — usar funções nomeadas já existentes.
