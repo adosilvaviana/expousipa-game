@@ -267,20 +267,20 @@ select.inp { appearance: none; cursor: pointer; }
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.55;transform:scale(.93)} }
 
 /* ═══════════════════ PATH SELECTION ═══════════════════ */
-.path-cards { display: flex; flex-direction: column; gap: 36px; }
+.path-cards { display: flex; flex-direction: column; gap: 20px; flex: 1; }
 .path-card {
-  width: 100%; min-height: 260px; border-radius: 28px;
-  display: flex; flex-direction: column; padding: 52px 60px;
-  cursor: pointer; box-shadow: var(--shadow); gap: 14px;
+  width: 100%; flex: 1; border-radius: 28px;
+  display: flex; flex-direction: column; padding: 36px 52px;
+  cursor: pointer; box-shadow: var(--shadow); gap: 10px;
   transition: transform .15s;
   touch-action: manipulation;
 }
 .path-card:active { transform: scale(.97); }
-.path-icon  { font-size: 72px; }
-.path-org   { font-size: 26px; font-weight: 700; opacity: .75; text-transform: uppercase; letter-spacing: 2px; }
-.path-title { font-size: 48px; font-weight: 900; line-height: 1.2; }
-.path-desc  { font-size: 34px; opacity: .88; line-height: 1.4; }
-.path-arrow { font-size: 44px; margin-top: auto; }
+.path-icon  { font-size: 56px; }
+.path-org   { font-size: 24px; font-weight: 700; opacity: .75; text-transform: uppercase; letter-spacing: 2px; }
+.path-title { font-size: 42px; font-weight: 900; line-height: 1.15; }
+.path-desc  { font-size: 30px; opacity: .88; line-height: 1.35; }
+.path-arrow { font-size: 40px; margin-top: auto; }
 .pc-sesc  { background: var(--expo-yellow); color: var(--expo-blue); }
 .pc-senac { background: var(--expo-blue); color: white; }
 .pc-sind  { background: var(--gray-dk); color: white; }
@@ -862,9 +862,9 @@ select.inp { appearance: none; cursor: pointer; }
       </div>
     </div>
   </div>
-  <div class="content content-lt">
-    <div class="sec-title">O Sistema Fecomércio atua em diferentes áreas da vida das pessoas.</div>
-    <div class="sec-sub">Escolha a opção que mais faz sentido para você neste momento:</div>
+  <div class="content content-lt" style="overflow:hidden;gap:20px">
+    <div class="sec-title" style="font-size:46px">O Sistema Fecomércio atua em diferentes áreas da vida das pessoas.</div>
+    <div class="sec-sub" style="font-size:30px">Escolha a opção que mais faz sentido para você:</div>
 
     <div class="path-cards">
       <div class="path-card pc-sesc" onclick="startGame('sesc')">
