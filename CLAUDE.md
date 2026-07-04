@@ -161,7 +161,21 @@ const sescPairs = [
 
 ---
 
-## O que NÃO fazer
+## Escopo do trabalho em campo
+
+O app está **pronto e finalizado**. O papel do técnico em Ipatinga é fazer ajustes pontuais caso a cliente solicite no dia do evento — textos, cores, pequenas correções visuais. Nada além disso.
+
+**Não fazer sem autorização explícita da cliente:**
+- Criar novos jogos ou novas telas
+- Alterar o fluxo de navegação
+- Mudar perguntas ou pares do jogo sem ser pedido
+- Refatorar ou reorganizar o código
+
+Qualquer pedido que pareça grande demais, consultar o responsável pelo projeto antes de executar.
+
+---
+
+## O que NÃO fazer (técnico)
 
 - Não recriar os PNGs como SVG ou CSS — usar sempre os arquivos `.png` da pasta.
 - Não dividir em múltiplos arquivos HTML/JS/CSS — tudo fica em `index.html` e `admin.html`.
