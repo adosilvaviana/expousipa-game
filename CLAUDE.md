@@ -8,10 +8,11 @@
 
 ### 1. Autenticação GitHub
 
-Para dar `git push`, é necessário estar autenticado no GitHub com a conta **adosilvaviana**. O Rafael deve fazer login em [github.com](https://github.com) no navegador com as credenciais desta conta antes de rodar os comandos abaixo. Na primeira vez que o terminal pedir usuário/senha, usar:
+O login e senha do GitHub já foram repassados pessoalmente pelo responsável do projeto. Use-os para entrar em [github.com](https://github.com) no navegador.
 
-- **Usuário:** `adosilvaviana`
-- **Senha:** usar um Personal Access Token (PAT) gerado em github.com → Settings → Developer settings → Personal access tokens (a senha normal do GitHub não funciona no terminal)
+Na hora que o terminal pedir autenticação para dar `git push`, usar:
+- **Usuário:** o login recebido
+- **Senha:** a senha recebida (se o terminal rejeitar a senha, será necessário um Personal Access Token — gerar em github.com → Settings → Developer settings → Personal access tokens, escopo `repo`)
 
 Se já estiver autenticado no terminal (de uma sessão anterior), pular direto para o clone.
 
