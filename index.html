@@ -533,20 +533,20 @@ select.inp { appearance: none; cursor: pointer; }
 .sec-sub    { font-size: 34px; color: var(--gray-md); line-height: 1.45; }
 /* ── MENU FLUTUANTE ── */
 #float-menu-btn {
-  position: absolute; top: 24px; right: 24px; z-index: 200;
-  width: 72px; height: 72px; border-radius: 50%;
-  background: rgba(0,0,0,0.08); color: #333;
+  position: absolute; bottom: 28px; right: 28px; z-index: 200;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: rgba(0,0,0,0.06); color: rgba(0,0,0,0.25);
   display: flex; align-items: center; justify-content: center;
-  font-size: 48px; font-weight: 900; cursor: pointer;
+  font-size: 34px; font-weight: 900; cursor: pointer;
   letter-spacing: -2px; user-select: none;
-  transition: background .15s;
+  transition: background .15s, color .15s;
 }
-#float-menu-btn:active { background: rgba(0,0,0,0.18); }
+#float-menu-btn:active { background: rgba(0,0,0,0.15); color: #333; }
 #float-menu-overlay {
   display: none; position: absolute; inset: 0; z-index: 198;
 }
 #float-menu {
-  display: none; position: absolute; top: 108px; right: 24px; z-index: 199;
+  display: none; position: absolute; bottom: 88px; right: 28px; z-index: 199;
   background: white; border-radius: 20px;
   box-shadow: 0 8px 40px rgba(0,0,0,0.18);
   min-width: 380px; overflow: hidden;
