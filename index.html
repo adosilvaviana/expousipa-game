@@ -101,7 +101,7 @@ html, body {
 /* ═══════════════════ BOTTOM NAV ═══════════════════ */
 .bnav {
   flex-shrink: 0; padding: 32px 60px; display: flex; gap: 24px;
-  background: white; border-top: 2px solid #eee;
+  background: #ece4d0; border-top: 2px solid rgba(0,0,0,.08);
 }
 .bnav .btn { flex: 1; }
 
@@ -168,8 +168,8 @@ select.inp { appearance: none; cursor: pointer; }
 /* ═══════════════════ RÉGUA DE MARCAS ═══════════════════ */
 .brand-bar {
   flex-shrink: 0;
-  background: white;
-  border-top: 2px solid #e5e7eb;
+  background: #ece4d0;
+  border-top: 1px solid rgba(0,0,0,.08);
   display: flex; align-items: center; justify-content: center;
   gap: 0; height: 100px;
   padding: 0 48px;
@@ -1083,12 +1083,12 @@ window.addEventListener('resize', scaleToFit);
 (function injectDecos(){
   const decos = {
     // Formulários: faixa diagonal no canto inferior esquerdo
-    'screen-form-1': `<img src="deco-landscape.png" style="position:absolute;bottom:110px;left:0;width:100%;opacity:.18;pointer-events:none;z-index:0;">`,
-    'screen-form-2': `<img src="deco-landscape.png" style="position:absolute;bottom:110px;left:0;width:100%;opacity:.18;pointer-events:none;z-index:0;">`,
-    'screen-form-3': `<img src="deco-landscape.png" style="position:absolute;bottom:110px;left:0;width:100%;opacity:.18;pointer-events:none;z-index:0;">`,
-    'screen-form-4': `<img src="deco-landscape.png" style="position:absolute;bottom:110px;left:0;width:100%;opacity:.18;pointer-events:none;z-index:0;">`,
-    'screen-form-5': `<img src="deco-landscape.png" style="position:absolute;bottom:110px;left:0;width:100%;opacity:.18;pointer-events:none;z-index:0;">`,
-    'screen-form-6': `<img src="deco-landscape.png" style="position:absolute;bottom:110px;left:0;width:100%;opacity:.18;pointer-events:none;z-index:0;">`,
+    'screen-form-1': `<img src="deco-diagonal.png" style="position:absolute;bottom:100px;right:-40px;width:300px;opacity:.10;pointer-events:none;z-index:0;">`,
+    'screen-form-2': `<img src="deco-diagonal.png" style="position:absolute;bottom:100px;right:-40px;width:300px;opacity:.10;pointer-events:none;z-index:0;">`,
+    'screen-form-3': `<img src="deco-diagonal.png" style="position:absolute;bottom:100px;right:-40px;width:300px;opacity:.10;pointer-events:none;z-index:0;">`,
+    'screen-form-4': `<img src="deco-diagonal.png" style="position:absolute;bottom:100px;right:-40px;width:300px;opacity:.10;pointer-events:none;z-index:0;">`,
+    'screen-form-5': `<img src="deco-diagonal.png" style="position:absolute;bottom:100px;right:-40px;width:300px;opacity:.10;pointer-events:none;z-index:0;">`,
+    'screen-form-6': `<img src="deco-diagonal.png" style="position:absolute;bottom:100px;right:-40px;width:300px;opacity:.10;pointer-events:none;z-index:0;">`,
     // Escolha: faixa landscape acima da brand bar
     'screen-choose':  `<img src="deco-landscape.png" style="position:absolute;bottom:110px;left:0;width:100%;opacity:.13;pointer-events:none;z-index:0;">`,
     // Resultado: diagonal no canto inferior direito atrás do card
