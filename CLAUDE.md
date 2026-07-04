@@ -6,6 +6,17 @@
 
 ## SETUP INICIAL — execute isso na primeira vez
 
+### 1. Autenticação GitHub
+
+Para dar `git push`, é necessário estar autenticado no GitHub com a conta **adosilvaviana**. O Rafael deve fazer login em [github.com](https://github.com) no navegador com as credenciais desta conta antes de rodar os comandos abaixo. Na primeira vez que o terminal pedir usuário/senha, usar:
+
+- **Usuário:** `adosilvaviana`
+- **Senha:** usar um Personal Access Token (PAT) gerado em github.com → Settings → Developer settings → Personal access tokens (a senha normal do GitHub não funciona no terminal)
+
+Se já estiver autenticado no terminal (de uma sessão anterior), pular direto para o clone.
+
+### 2. Clonar o repositório
+
 Se o repositório ainda não estiver clonado localmente, faça agora:
 
 ```bash
