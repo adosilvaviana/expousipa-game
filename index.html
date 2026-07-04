@@ -10,9 +10,9 @@
 :root {
   /* ── Paleta EXPOUSIPA 2026 – Jornada Gamificada ── */
   --expo-yellow: #F5B800;   /* Amarelo dourado principal */
-  --expo-blue:   #1A4E9E;   /* Azul institucional */
-  --expo-blue-dk:#0F3578;   /* Azul escuro hover */
-  --sesc-blue:   #004C99;
+  --expo-blue:   #004587;   /* Azul institucional EXPOUSIPA */
+  --expo-blue-dk:#003068;   /* Azul escuro hover */
+  --sesc-blue:   #004587;
   --sesc-yellow: #F5B800;
   --white:       #FFFFFF;
   --gray-lt:     #F4F6FA;
@@ -168,47 +168,47 @@ select.inp { appearance: none; cursor: pointer; }
 /* ═══════════════════ RÉGUA DE MARCAS ═══════════════════ */
 .brand-bar {
   flex-shrink: 0;
-  background: var(--expo-blue);
+  background: white;
+  border-top: 2px solid #e5e7eb;
   display: flex; align-items: center; justify-content: center;
   gap: 0; height: 100px;
   padding: 0 48px;
 }
 .brand-bar-item {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: 0 32px; border-right: 1px solid rgba(255,255,255,.25);
+  padding: 0 28px; border-right: 1px solid #e5e7eb;
   height: 100%;
 }
 .brand-bar-item:last-child { border-right: none; }
 .brand-bar-name {
-  font-size: 20px; font-weight: 800; color: white;
+  font-size: 19px; font-weight: 800; color: var(--expo-blue);
   text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.1;
   text-align: center;
 }
 .brand-bar-sub {
-  font-size: 14px; color: rgba(255,255,255,.65); text-align: center;
+  font-size: 13px; color: var(--gray-md); text-align: center;
 }
 .brand-bar-sm {
-  height: 72px;
+  height: 76px;
 }
-.brand-bar-sm .brand-bar-name { font-size: 17px; }
-.brand-bar-sm .brand-bar-item { padding: 0 24px; }
+.brand-bar-sm .brand-bar-name { font-size: 16px; }
+.brand-bar-sm .brand-bar-item { padding: 0 22px; }
 
 /* ═══════════════════ SPLASH ═══════════════════ */
 #screen-splash {
-  background: var(--expo-yellow);
+  background: #ece4d0;
   cursor: pointer;
   overflow: hidden;
 }
 .splash-bg {
   position: absolute; inset: 0; pointer-events: none;
+  overflow: hidden;
 }
-.splash-bg-blue {
+.splash-deco-svg {
   position: absolute;
-  top: -200px; right: -200px;
-  width: 860px; height: 1300px;
-  background: var(--expo-blue);
-  border-radius: 60% 0 0 60%;
-  opacity: .95;
+  top: -60px; left: -120px;
+  width: 900px; height: 700px;
+  opacity: .55;
 }
 .splash-content {
   position: relative; z-index: 2;
@@ -220,32 +220,49 @@ select.inp { appearance: none; cursor: pointer; }
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 52px; text-align: center; padding: 80px 100px;
 }
+/* Logo EXPO USIPA — fiel ao original */
+.splash-logo-circle {
+  width: 320px; height: 320px; border-radius: 50%;
+  background: white;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  box-shadow: 0 12px 60px rgba(0,0,0,.18);
+  gap: 0;
+}
+.splash-logo-expo {
+  font-size: 68px; font-weight: 900; color: var(--expo-blue);
+  letter-spacing: -1px; line-height: 1;
+}
+.splash-logo-icon {
+  width: 72px; height: 72px; margin: 2px 0;
+}
+.splash-logo-usipa {
+  font-size: 46px; font-weight: 800; color: var(--expo-blue);
+  letter-spacing: 6px; line-height: 1;
+}
 .splash-event-badge {
-  background: white; color: var(--expo-blue);
+  background: var(--expo-blue); color: white;
   font-size: 32px; font-weight: 800;
   border-radius: 50px; padding: 14px 52px;
   letter-spacing: 1px;
 }
 .splash-title {
-  font-size: 108px; font-weight: 900; color: white;
-  line-height: 1.0; text-shadow: 0 4px 24px rgba(0,0,0,.25);
-  letter-spacing: -2px;
+  font-size: 72px; font-weight: 800; color: var(--expo-blue);
+  line-height: 1.2;
 }
 .splash-sub {
-  font-size: 48px; font-weight: 700;
-  color: var(--expo-yellow);
-  background: var(--expo-blue);
-  border-radius: 50px; padding: 18px 60px;
+  font-size: 38px; font-weight: 600;
+  color: var(--gray-md);
+  line-height: 1.4;
 }
 .splash-cta {
-  font-size: 50px; font-weight: 800; color: var(--expo-blue);
-  background: var(--expo-yellow);
+  font-size: 46px; font-weight: 800; color: white;
+  background: var(--expo-blue);
   border-radius: 50px; padding: 22px 80px;
   animation: pulse 1.8s ease-in-out infinite;
   box-shadow: 0 8px 32px rgba(0,0,0,.15);
 }
 .splash-dots { display: flex; gap: 18px; align-items: center; }
-.dot { width: 14px; height: 14px; border-radius: 50%; background: rgba(255,255,255,.45); }
+.dot { width: 14px; height: 14px; border-radius: 50%; background: rgba(0,0,0,.2); }
 .dot.big { background: var(--expo-yellow); width: 44px; border-radius: 7px; }
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.55;transform:scale(.93)} }
 
@@ -549,20 +566,22 @@ select.inp { appearance: none; cursor: pointer; }
 
 <!-- ═══════════════════ SPLASH ═══════════════════ -->
 <div id="screen-splash" class="screen active" onclick="goTo('form-1')">
-  <div class="splash-bg"><div class="splash-bg-blue"></div></div>
+  <div class="splash-bg">
+    <img src="deco-retangulos.png" class="splash-deco-svg" alt="">
+  </div>
   <div class="splash-content">
-    <div class="brand-bar">
-      <div class="brand-bar-item"><div class="brand-bar-name">Fecomércio</div><div class="brand-bar-sub">MG</div></div>
-      <div class="brand-bar-item"><div class="brand-bar-name">CNC</div></div>
-      <div class="brand-bar-item"><div class="brand-bar-name">Sindicatos</div><div class="brand-bar-sub">Empresariais</div></div>
-      <div class="brand-bar-item"><div class="brand-bar-name">SESC</div></div>
-      <div class="brand-bar-item"><div class="brand-bar-name">SENAC</div></div>
-    </div>
     <div class="splash-inner">
-      <div class="splash-event-badge">⭐ EXPOUSIPA 2026 ⭐</div>
-      <div class="splash-title">JORNADA<br>GAMIFICADA</div>
-      <div class="splash-sub">Desafio Fecomércio</div>
+      <!-- Logo EXPO USIPA oficial -->
+      <div class="splash-logo-circle">
+        <img src="logo-expousipa.png" alt="EXPO USIPA" style="width:220px;height:220px;object-fit:contain;">
+      </div>
+      <div class="splash-event-badge">36ª Edição · 8 a 10 de julho · Ipatinga MG</div>
+      <div class="splash-title">Game<br>Fecomércio MG</div>
+      <div class="splash-sub">Teste seus conhecimentos sobre o Sistema Fecomércio</div>
       <div class="splash-cta">👆 Toque para começar</div>
+    </div>
+    <div class="brand-bar">
+      <img src="regua-marcas.png" alt="Sistema Comércio" style="height:60px;object-fit:contain;max-width:960px;">
     </div>
   </div>
 </div>
@@ -839,8 +858,8 @@ select.inp { appearance: none; cursor: pointer; }
   <div class="hdr hdr-red" style="padding-bottom:48px;background:var(--expo-blue)">
     <div class="hdr-logo">
       <div>
-        <div class="hdr-title">Jornada Gamificada</div>
-        <div class="hdr-sub">Desafio Fecomércio — EXPOUSIPA 2026</div>
+        <div class="hdr-title">Escolha sua área</div>
+        <div class="hdr-sub">EXPOUSIPA 2026 — Sistema Fecomércio MG</div>
       </div>
     </div>
   </div>
@@ -1052,14 +1071,10 @@ window.addEventListener('resize', scaleToFit);
 /* Injeta régua de marcas em todas as telas (exceto splash que já tem) */
 (function injectBrandBar(){
   const html = `<div class="brand-bar brand-bar-sm">
-    <div class="brand-bar-item"><div class="brand-bar-name">Fecomércio MG</div></div>
-    <div class="brand-bar-item"><div class="brand-bar-name">CNC</div></div>
-    <div class="brand-bar-item"><div class="brand-bar-name">Sindicatos Empresariais</div></div>
-    <div class="brand-bar-item"><div class="brand-bar-name">SESC</div></div>
-    <div class="brand-bar-item"><div class="brand-bar-name">SENAC</div></div>
+    <img src="regua-marcas.png" alt="CNC · Fecomércio MG · Sesc · Senac · Sindcomércio MG" style="height:56px;object-fit:contain;max-width:960px;">
   </div>`;
   document.querySelectorAll('.screen:not(#screen-splash)').forEach(s => {
-    s.insertAdjacentHTML('afterbegin', html);
+    s.insertAdjacentHTML('beforeend', html);
   });
 })();
 
