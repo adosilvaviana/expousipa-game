@@ -189,7 +189,7 @@ select.inp { appearance: none; cursor: pointer; }
   font-size: 13px; color: var(--gray-md); text-align: center;
 }
 .brand-bar-sm {
-  height: 76px;
+  height: 110px;
 }
 .brand-bar-sm .brand-bar-name { font-size: 16px; }
 .brand-bar-sm .brand-bar-item { padding: 0 22px; }
@@ -1074,7 +1074,7 @@ window.addEventListener('resize', scaleToFit);
 /* Injeta régua de marcas em todas as telas (exceto splash que já tem) */
 (function injectBrandBar(){
   const html = `<div class="brand-bar brand-bar-sm">
-    <img src="regua-marcas.png" alt="CNC · Fecomércio MG · Sesc · Senac · Sindcomércio MG" style="height:56px;object-fit:contain;max-width:960px;">
+    <img src="regua-marcas.png" alt="CNC · Fecomércio MG · Sesc · Senac · Sindcomércio MG" style="height:90px;object-fit:contain;max-width:1020px;">
   </div>`;
   document.querySelectorAll('.screen:not(#screen-splash)').forEach(s => {
     s.insertAdjacentHTML('beforeend', html);
