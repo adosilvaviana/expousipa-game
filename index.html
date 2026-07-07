@@ -1168,7 +1168,7 @@ function answerVF(ans){
   const correct=(ans===q.ans);
   if(correct) state.senacScore++;
   const fb=document.getElementById('senac-feedback');
-  document.getElementById('senac-fb-icon').textContent = correct?'✓':'!';
+  document.getElementById('senac-fb-icon').textContent = '';
   document.getElementById('senac-fb-title').textContent = correct?'Acertou!':'Quase lá!';
   document.getElementById('senac-fb-text').textContent = correct?q.ok_msg:q.err_msg;
   fb.className='feedback show '+(correct?'ok':'err');
@@ -1307,7 +1307,7 @@ function tryMatch(hotelId){
   } else {
     // Wrong match – brief shake and flash
     const fb=document.getElementById('sesc-feedback');
-    document.getElementById('sesc-fb-icon').textContent='🤔';
+    document.getElementById('sesc-fb-icon').textContent='';
     document.getElementById('sesc-fb-title').textContent='Não é esse!';
     document.getElementById('sesc-fb-text').textContent='Pense bem… qual ponto turístico combina com essa unidade Sesc?';
     fb.className='feedback show err';
@@ -1400,7 +1400,7 @@ function answerSind(answer){
   document.getElementById('sind-btn-t').style.opacity='0.5';
   document.getElementById('sind-btn-f').style.opacity='0.5';
   const fb=document.getElementById('sind-feedback');
-  document.getElementById('sind-fb-icon').textContent=correct?'✓':'!';
+  document.getElementById('sind-fb-icon').textContent='';
   document.getElementById('sind-fb-title').textContent=correct?'Acertou!':'Quase!';
   document.getElementById('sind-fb-text').textContent=correct?q.ok:q.err;
   fb.className='feedback show '+(correct?'ok':'err');
