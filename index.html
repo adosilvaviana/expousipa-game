@@ -1150,6 +1150,7 @@ function initSenac(){
 
 function renderSenacDots(){
   const c=document.getElementById('senac-dots');
+  if(!c) return;
   c.innerHTML='';
   senacQs.forEach((_,i)=>{
     const d=document.createElement('div');
@@ -1372,6 +1373,7 @@ function initSind(){
 
 function renderSindDots(){
   const c=document.getElementById('sind-dots');
+  if(!c) return;
   c.innerHTML='';
   sindQs.forEach((_,i)=>{
     const d=document.createElement('div');
