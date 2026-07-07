@@ -428,10 +428,11 @@ select.inp { appearance: none; cursor: pointer; }
 #screen-result { align-items: center; justify-content: center; background: #ece4d0; }
 .result-box {
   display: flex; flex-direction: column; align-items: center;
-  text-align: center; gap: 44px; padding: 60px 80px;
+  text-align: center; gap: 44px; padding: 80px 100px;
   background: #ece4d0; margin: 40px; border-radius: 40px;
-  border: 4px solid var(--expo-blue);
+  border: 8px solid var(--expo-blue);
   box-shadow: var(--shadow);
+  position: relative; z-index: 1;
 }
 .res-icon  { display: none; }
 .res-title { font-size: 86px; font-weight: 900; line-height: 1; }
@@ -448,7 +449,11 @@ select.inp { appearance: none; cursor: pointer; }
 #screen-cta { background: #ece4d0; align-items: center; justify-content: center; }
 .cta-inner {
   display: flex; flex-direction: column; align-items: center;
-  text-align: center; gap: 48px; padding: 80px 80px;
+  text-align: center; gap: 48px; padding: 80px 100px;
+  background: #ece4d0; margin: 40px; border-radius: 40px;
+  border: 8px solid var(--expo-blue);
+  box-shadow: var(--shadow);
+  position: relative; z-index: 1; width: calc(100% - 80px); box-sizing: border-box;
 }
 .cta-icon  { display: none; }
 .cta-title { font-size: 76px; font-weight: 900; color: var(--expo-blue); line-height: 1.2; }
@@ -871,8 +876,8 @@ window.addEventListener('resize', scaleToFit);
   const decos = {
     'screen-form-1': deco('deco-landscape.png'),
     'screen-choose':  ``,
-    'screen-result':  ``,
-    'screen-cta':     ``,
+    'screen-result':  `<img src="deco-retangulos.png" style="position:absolute;bottom:120px;right:-80px;width:600px;opacity:.22;pointer-events:none;z-index:0;">`,
+    'screen-cta':     `<img src="deco-retangulos.png" style="position:absolute;bottom:120px;left:-80px;width:600px;opacity:.22;pointer-events:none;z-index:0;transform:scaleX(-1)">`,
   };
   Object.entries(decos).forEach(([id, html]) => {
     const screen = document.getElementById(id);
@@ -960,7 +965,9 @@ const ctaContent = {
 
 function renderCta(path) {
   const c = ctaContent[path] || ctaContent.sesc;
+  const borderColor = path==='senac' ? 'var(--senac)' : path==='sindicato' ? 'var(--sind)' : 'var(--expo-blue)';
   document.getElementById('screen-cta').style.background = '#ece4d0';
+  document.getElementById('cta-inner').style.borderColor = borderColor;
   document.getElementById('cta-inner').innerHTML = `
     <div class="cta-title">${c.title}</div>
     <div class="cta-badge">${c.badge}</div>
