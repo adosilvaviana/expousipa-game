@@ -725,7 +725,17 @@ select.inp { appearance: none; cursor: pointer; }
 
 <!-- ═══════════════════ JOGO SESC: DESCUBRA DESTINOS ═══════════════════ -->
 <div id="screen-sesc" class="screen" style="background:#ece4d0">
-  <div class="content" style="padding:36px 48px;gap:20px;justify-content:center">
+  <div class="content" style="padding:36px 48px;gap:20px">
+    <div class="match-instr">
+      <strong>Toque em um ponto turístico</strong> (esquerda) e depois toque na <strong>unidade Sesc</strong> correspondente (direita).
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 40px 1fr;gap:10px;margin-bottom:8px">
+      <div style="font-size:26px;font-weight:700;color:var(--gray-md);text-align:center">PONTO TURÍSTICO</div>
+      <div></div>
+      <div style="font-size:26px;font-weight:700;color:var(--gray-md);text-align:center">UNIDADE SESC</div>
+    </div>
+
     <div class="match-grid" id="sesc-grid"></div>
   </div>
 
@@ -1235,7 +1245,7 @@ function renderSescGrid(){
     const tMatchedById = state.sescMatches[pair.id]!==undefined;
     tItem.className='match-item'+(tMatchedById?' ok':'')+(state.sescSel===pair.id&&!tMatchedById?' sel':'');
     tItem.dataset.id=pair.id;
-    tItem.innerHTML=`<div class="mi-icon" style="background:${pair.tColor}"></div><div class="mi-name">${pair.tName}</div>`;
+    tItem.innerHTML=`<div class="mi-name">${pair.tName}</div>`;
     if(!tMatchedById) tItem.onclick=()=>selectTourist(pair.id);
 
     // Connector (hidden when matched – visual line takes over)
@@ -1249,9 +1259,9 @@ function renderSescGrid(){
     dz.className='drop-z'+(dzMatched?' ok':'');
     dz.dataset.hid=hotel.id;
     if(dzMatched){
-      dz.innerHTML=`<div class="dz-icon" style="background:${hotel.hColor}"></div><div class="dz-name">${hotel.hName}</div>`;
+      dz.innerHTML=`<div class="dz-name">${hotel.hName}</div>`;
     } else {
-      dz.innerHTML=`<div class="dz-icon" style="background:${hotel.hColor}"></div><div class="dz-name">${hotel.hName}</div>`;
+      dz.innerHTML=`<div class="dz-name">${hotel.hName}</div>`;
       dz.onclick=()=>tryMatch(hotel.id);
     }
 
