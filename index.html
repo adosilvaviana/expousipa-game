@@ -319,8 +319,8 @@ select.inp { appearance: none; cursor: pointer; }
   transition: transform .12s; touch-action: manipulation;
 }
 .vf-btn:active { transform: scale(.95); }
-.vf-t  { background: var(--green); color: white; }
-.vf-f  { background: #dc2626; color: white; }
+.vf-t  { background: var(--expo-blue); color: white; }
+.vf-f  { background: var(--expo-yellow); color: var(--expo-blue); }
 .vf-icon { font-size: 52px; }
 .vf-label { font-size: 44px; font-weight: 900; color: white; }
 
@@ -687,16 +687,6 @@ select.inp { appearance: none; cursor: pointer; }
 <!-- ═══════════════════ JOGO SENAC: V/F ═══════════════════ -->
 <div id="screen-senac" class="screen" style="background:#ece4d0">
   <img src="deco-strip.png" style="position:absolute;top:200px;left:-20px;height:500px;opacity:.25;pointer-events:none;z-index:0;">
-  <div class="hdr hdr-senac">
-    <div class="hdr-logo">
-      <div class="logo-box logo-box-dark" style="color:white;background:var(--senac)">SN</div>
-      <div>
-        <div class="hdr-title">Verdadeiro ou Falso?</div>
-        <div class="hdr-sub">Quanto você sabe sobre o Senac?</div>
-      </div>
-    </div>
-    <div class="q-dots" id="senac-dots"></div>
-  </div>
 
   <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:44px 60px;gap:48px">
     <div class="q-box" style="text-align:center;align-items:center">
@@ -751,16 +741,6 @@ select.inp { appearance: none; cursor: pointer; }
 <!-- ═══════════════════ JOGO SINDICATO: QUIZ ═══════════════════ -->
 <div id="screen-sindicato" class="screen" style="background:#ece4d0">
   <img src="deco-strip.png" style="position:absolute;top:200px;left:-20px;height:500px;opacity:.25;pointer-events:none;z-index:0;">
-  <div class="hdr hdr-sind">
-    <div class="hdr-logo">
-      <div class="logo-box logo-box-dark" style="background:#374151;color:white">FC</div>
-      <div>
-        <div class="hdr-title">Quiz Fecomércio</div>
-        <div class="hdr-sub">Teste seus conhecimentos!</div>
-      </div>
-    </div>
-    <div class="q-dots" id="sind-dots"></div>
-  </div>
 
   <div class="content" style="gap:36px;justify-content:center">
     <div class="quiz-q-box" id="sind-q"></div>
