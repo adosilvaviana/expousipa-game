@@ -132,13 +132,13 @@ html, body {
 .req { color: var(--red); }
 .inp {
   width: 100%; height: 92px;
-  border: 3px solid #ddd; border-radius: 16px;
+  border: 3px solid var(--expo-blue); border-radius: 16px;
   padding: 0 30px; font-size: 34px; color: var(--gray-dk);
   background: white; outline: none;
   transition: border-color .2s;
   font-family: var(--font);
 }
-.inp:focus { border-color: var(--red); }
+.inp:focus { border-color: var(--expo-blue); box-shadow: 0 0 0 3px rgba(0,69,135,.15); }
 .inp::placeholder { color: #bbb; font-style: italic; opacity: 1; }
 ::-webkit-input-placeholder { color: #bbb; font-style: italic; }
 ::-moz-placeholder { color: #bbb; font-style: italic; }
@@ -260,11 +260,11 @@ select.inp { appearance: none; cursor: pointer; }
   line-height: 1.4;
 }
 .splash-cta {
-  font-size: 46px; font-weight: 800; color: white;
+  font-size: 54px; font-weight: 800; color: white;
   background: var(--expo-blue);
-  border-radius: 50px; padding: 22px 80px;
+  border-radius: 50px; padding: 30px 100px;
   animation: pulse 1.8s ease-in-out infinite;
-  box-shadow: 0 8px 32px rgba(0,0,0,.15);
+  box-shadow: 0 8px 32px rgba(0,0,0,.25);
 }
 .splash-dots { display: flex; gap: 18px; align-items: center; }
 .dot { width: 14px; height: 14px; border-radius: 50%; background: rgba(0,0,0,.2); }
@@ -375,6 +375,7 @@ select.inp { appearance: none; cursor: pointer; }
 .mi-icon { width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:white;flex-shrink:0; }
 .mi-name  { font-size: 26px; font-weight: 700; color: var(--gray-dk); line-height: 1.25; }
 .mi-sub   { font-size: 22px; color: var(--gray-md); }
+.mi-photo { width:100%;height:100px;object-fit:cover;border-radius:12px;display:block;flex-shrink:0; }
 .match-conn { display: flex; align-items: center; justify-content: center; font-size: 36px; color: #ccc; }
 .drop-z {
   background: #F9FAFB; border: 3px dashed #d1d5db; border-radius: 18px;
@@ -576,23 +577,20 @@ select.inp { appearance: none; cursor: pointer; }
 <div id="app-root">
 
 <!-- ═══════════════════ SPLASH ═══════════════════ -->
-<div id="screen-splash" class="screen active" onclick="goTo('form-1')">
-  <div class="splash-content">
+<div id="screen-splash" class="screen active" onclick="goTo('form-1')" style="cursor:pointer">
+  <div style="display:flex;flex-direction:column;width:100%;height:100%">
     <!-- TOPO: Régua de marcas -->
     <div style="flex-shrink:0;background:white;padding:48px 60px;display:flex;align-items:center;justify-content:center;border-bottom:2px solid #e5e7eb;">
       <img src="regua-marcas.png" alt="Sistema Comércio" style="height:120px;object-fit:contain;max-width:980px;">
     </div>
 
-    <!-- CENTRO: Logo + CTA -->
-    <div class="splash-inner">
-      <img src="logo-expousipa.png" alt="EXPO USIPA" style="width:560px;height:560px;object-fit:contain;">
-      <div class="splash-sub">Teste seus conhecimentos sobre o Sistema Fecomércio</div>
-      <div class="splash-cta">Toque para começar</div>
-    </div>
-
-    <!-- BOTTOM: Decoração retângulos largura total -->
-    <div style="flex-shrink:0;width:100%;overflow:hidden;line-height:0;max-height:380px;">
-      <img src="deco-retangulos.png" alt="" style="width:100%;display:block;object-fit:cover;object-position:left bottom;">
+    <!-- CENTRO: Imagem de fundo ocupando o restante -->
+    <div style="flex:1;position:relative;overflow:hidden">
+      <img src="splash-bg.png" alt="" style="width:100%;height:110%;object-fit:cover;object-position:center top;display:block;margin-top:-80px;">
+      <!-- CTA fixo no bottom -->
+      <div style="position:absolute;bottom:220px;left:0;right:0;display:flex;justify-content:center;">
+        <div class="splash-cta">Toque para começar</div>
+      </div>
     </div>
   </div>
 </div>
@@ -600,60 +598,74 @@ select.inp { appearance: none; cursor: pointer; }
 <!-- ═══════════════════ FORM ÚNICO ═══════════════════ -->
 <div id="screen-form-1" class="screen" style="background:#ece4d0">
   <div class="content content-lt" style="gap:36px;padding-top:48px;padding-bottom:48px">
-    <div class="sec-title" onclick="fillMockData()" style="cursor:default">Preencha seus dados para participar.</div>
+    <div class="sec-title" onclick="fillMockData()" style="cursor:default;text-align:center;color:var(--expo-blue)">Cadastre-se para participar.</div>
 
-    <div class="inp-group">
-      <label class="inp-label">Nome</label>
-      <input id="f-nome" class="inp" type="text" placeholder="NOME" autocomplete="off">
-      <span id="err-nome" class="err-msg">Por favor, informe seu nome completo.</span>
-    </div>
+    <div style="border:3px solid var(--expo-blue);border-radius:24px;padding:40px 44px;display:flex;flex-direction:column;gap:36px;background:white">
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
       <div class="inp-group">
-        <label class="inp-label">CPF ou CNPJ</label>
-        <input id="f-cpf" class="inp" type="tel" placeholder="00000000000" maxlength="18" autocomplete="off">
-        <span id="err-cpf" class="err-msg">CPF/CNPJ inválido.</span>
+        <label class="inp-label">Nome</label>
+        <input id="f-nome" class="inp" type="text" placeholder="NOME" autocomplete="off">
+        <span id="err-nome" class="err-msg">Por favor, informe seu nome completo.</span>
       </div>
-      <div class="inp-group">
-        <label class="inp-label">Data de nascimento</label>
-        <input id="f-nasc" class="inp" type="tel" placeholder="00/00/0000" maxlength="10" autocomplete="off">
-        <span id="err-nasc" class="err-msg">Data inválida.</span>
-      </div>
-    </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
-      <div class="inp-group">
-        <label class="inp-label">E-mail</label>
-        <input id="f-email" class="inp" type="email" placeholder="EMAIL@EMAIL.COM" autocomplete="off">
-        <span id="err-email" class="err-msg">E-mail inválido.</span>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+        <div class="inp-group">
+          <label class="inp-label">CPF ou CNPJ</label>
+          <input id="f-cpf" class="inp" type="tel" placeholder="00000000000" maxlength="18" autocomplete="off">
+          <span id="err-cpf" class="err-msg">CPF/CNPJ inválido.</span>
+        </div>
+        <div class="inp-group">
+          <label class="inp-label">Data de nascimento</label>
+          <input id="f-nasc" class="inp" type="tel" placeholder="00/00/0000" maxlength="10" autocomplete="off">
+          <span id="err-nasc" class="err-msg">Data inválida.</span>
+        </div>
       </div>
-      <div class="inp-group">
-        <label class="inp-label">Telefone</label>
-        <input id="f-tel" class="inp" type="tel" placeholder="(00)00000-0000" maxlength="15" autocomplete="off">
-        <span id="err-tel" class="err-msg">Telefone inválido.</span>
-      </div>
-    </div>
 
-    <div class="inp-group">
-      <div style="font-size:30px;color:var(--gray-dk);margin-bottom:24px;line-height:1.4">
-        Deseja receber comunicações e acionamentos institucionais da Fecomércio, Sesc e Senac?
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+        <div class="inp-group">
+          <label class="inp-label">E-mail</label>
+          <input id="f-email" class="inp" type="email" placeholder="EMAIL@EMAIL.COM" autocomplete="off">
+          <span id="err-email" class="err-msg">E-mail inválido.</span>
+        </div>
+        <div class="inp-group">
+          <label class="inp-label">Telefone</label>
+          <input id="f-tel" class="inp" type="tel" placeholder="(00)00000-0000" maxlength="15" autocomplete="off">
+          <span id="err-tel" class="err-msg">Telefone inválido.</span>
+        </div>
       </div>
-      <div style="display:flex;gap:60px;align-items:center">
-        <label style="display:flex;align-items:center;gap:20px;font-size:36px;font-weight:600;cursor:pointer;color:var(--gray-dk)">
-          <input type="radio" name="lgpd" value="sim" id="lgpd-sim" style="width:48px;height:48px;cursor:pointer;accent-color:var(--expo-blue)">
-          Sim
-        </label>
-        <label style="display:flex;align-items:center;gap:20px;font-size:36px;font-weight:600;cursor:pointer;color:var(--gray-dk)">
-          <input type="radio" name="lgpd" value="nao" id="lgpd-nao" style="width:48px;height:48px;cursor:pointer;accent-color:var(--expo-blue)">
-          Não
-        </label>
-      </div>
-      <span id="err-lgpd" class="err-msg">Selecione uma opção para continuar.</span>
+
     </div>
   </div>
   <div class="bnav">
     <button class="btn btn-ghost" onclick="goTo('splash')">← Início</button>
-    <button class="btn btn-red" onclick="validateForm1()">Jogar →</button>
+    <button class="btn btn-red" onclick="validateForm1()">Avançar →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ LGPD ═══════════════════ -->
+<div id="screen-lgpd" class="screen" style="background:#ece4d0">
+  <div class="content content-lt" style="gap:32px;padding-top:48px;padding-bottom:48px">
+    <div class="sec-title">Política de Privacidade.</div>
+
+    <div class="lgpd-box">
+      <p>O <strong>Sistema Fecomércio MG</strong> (Fecomércio, Sesc e Senac Minas Gerais) coleta os dados pessoais informados neste formulário com a finalidade de enviar informações sobre nossos produtos, serviços, eventos e promoções.</p>
+      <br>
+      <p>Seus dados serão tratados de acordo com a <strong>Lei Geral de Proteção de Dados Pessoais (LGPD – Lei nº 13.709/2018)</strong> e utilizados exclusivamente para comunicação com você sobre nossos serviços.</p>
+      <br>
+      <p>Você poderá solicitar o acesso, correção ou exclusão de seus dados a qualquer momento pelo e-mail <strong>lgpd@sescmg.com.br</strong> ou pelos canais oficiais do Sesc Minas.</p>
+      <br>
+      <p>Ao marcar a opção abaixo, você declara ter lido e concordar com a coleta e uso dos seus dados pessoais conforme descrito nesta política.</p>
+    </div>
+
+    <div class="ck-row" id="ck-lgpd" onclick="toggleLgpd()">
+      <div class="ck-box" id="ck-box">✓</div>
+      <div class="ck-text">Li e <strong>concordo</strong> com a coleta e uso dos meus dados pessoais pelo Sistema Fecomércio MG para fins de comunicação e marketing.</div>
+    </div>
+    <span id="err-lgpd" class="err-msg">Você precisa aceitar os termos para continuar.</span>
+  </div>
+  <div class="bnav">
+    <button class="btn btn-ghost" onclick="goTo('form-1')">← Voltar</button>
+    <button class="btn btn-red" onclick="validateLgpd()">Jogar →</button>
   </div>
 </div>
 
@@ -836,6 +848,7 @@ window.addEventListener('resize', scaleToFit);
     `<img src="${src}" style="position:absolute;bottom:300px;left:0;width:100%;opacity:.18;pointer-events:none;z-index:0;${extra}">`;
   const decos = {
     'screen-form-1': deco('deco-landscape.png'),
+    'screen-lgpd':   deco('deco-landscape.png'),
     'screen-choose':  ``,
     'screen-result':  `<img src="deco-retangulos.png" style="position:absolute;bottom:0;right:0;width:100%;opacity:.22;pointer-events:none;z-index:0;">`,
     'screen-cta':     `<img src="deco-retangulos.png" style="position:absolute;bottom:0;left:0;width:100%;opacity:.22;pointer-events:none;z-index:0;transform:scaleX(-1)">`,
@@ -967,7 +980,7 @@ function resetAll() {
   });
   document.querySelectorAll('.choice-card').forEach(c=>c.classList.remove('sel'));
   document.querySelectorAll('.inp').forEach(i=>{ if(i.tagName==='INPUT') i.value=''; });
-  document.querySelectorAll('input[name="lgpd"]').forEach(r=>r.checked=false);
+  document.getElementById('ck-lgpd')?.classList.remove('ck-on');
   document.querySelectorAll('.err-msg').forEach(e=>e.classList.remove('show'));
   document.querySelectorAll('.inp').forEach(i=>i.classList.remove('err'));
   document.querySelectorAll('.feedback').forEach(f=>f.classList.remove('show'));
@@ -977,10 +990,19 @@ function resetAll() {
    INPUT MASKS
 ─────────────────────────────────────────────────*/
 document.getElementById('f-cpf').addEventListener('input', function(){
-  let v=this.value.replace(/\D/g,'').substring(0,11);
-  if(v.length>9) v=v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/,'$1.$2.$3-$4');
-  else if(v.length>6) v=v.replace(/(\d{3})(\d{3})(\d{1,3})/,'$1.$2.$3');
-  else if(v.length>3) v=v.replace(/(\d{3})(\d{1,3})/,'$1.$2');
+  let v=this.value.replace(/\D/g,'').substring(0,14);
+  if(v.length>11){
+    // CNPJ: 00.000.000/0000-00
+    if(v.length>12) v=v.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{1,2})/,'$1.$2.$3/$4-$5');
+    else if(v.length>8) v=v.replace(/(\d{2})(\d{3})(\d{3})(\d{1,4})/,'$1.$2.$3/$4');
+    else if(v.length>5) v=v.replace(/(\d{2})(\d{3})(\d{1,3})/,'$1.$2.$3');
+    else v=v.replace(/(\d{2})(\d{1,3})/,'$1.$2');
+  } else {
+    // CPF: 000.000.000-00
+    if(v.length>9) v=v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/,'$1.$2.$3-$4');
+    else if(v.length>6) v=v.replace(/(\d{3})(\d{3})(\d{1,3})/,'$1.$2.$3');
+    else if(v.length>3) v=v.replace(/(\d{3})(\d{1,3})/,'$1.$2');
+  }
   this.value=v;
 });
 document.getElementById('f-tel').addEventListener('input', function(){
@@ -1002,11 +1024,10 @@ function validateForm1(){
   const nasc=document.getElementById('f-nasc').value.trim();
   const email=document.getElementById('f-email').value.trim();
   const tel=document.getElementById('f-tel').value.replace(/\D/g,'');
-  const lgpdVal=document.querySelector('input[name="lgpd"]:checked')?.value;
   let ok=true;
   if(nome.length<3){ showErr('err-nome','Por favor, informe seu nome completo.',true); document.getElementById('f-nome').classList.add('err'); ok=false; }
   else { showErr('err-nome','',false); document.getElementById('f-nome').classList.remove('err'); }
-  if(cpf.length<11){ showErr('err-cpf','CPF/CNPJ inválido.',true); document.getElementById('f-cpf').classList.add('err'); ok=false; }
+  if(cpf.length!==11&&cpf.length!==14){ showErr('err-cpf','CPF/CNPJ inválido.',true); document.getElementById('f-cpf').classList.add('err'); ok=false; }
   else { showErr('err-cpf','',false); document.getElementById('f-cpf').classList.remove('err'); }
   if(nasc.length<8){ showErr('err-nasc','Data inválida.',true); document.getElementById('f-nasc').classList.add('err'); ok=false; }
   else { showErr('err-nasc','',false); document.getElementById('f-nasc').classList.remove('err'); }
@@ -1014,13 +1035,23 @@ function validateForm1(){
   else { showErr('err-email','',false); document.getElementById('f-email').classList.remove('err'); }
   if(tel.length<10){ showErr('err-tel','Telefone inválido.',true); document.getElementById('f-tel').classList.add('err'); ok=false; }
   else { showErr('err-tel','',false); document.getElementById('f-tel').classList.remove('err'); }
-  if(!lgpdVal){ showErr('err-lgpd','Selecione uma opção para continuar.',true); ok=false; }
-  else { showErr('err-lgpd','',false); }
   if(ok){
     state.nome=nome; state.cpf=cpf; state.nasc=nasc;
-    state.email=email; state.tel=tel; state.lgpd=lgpdVal==='sim';
-    saveLead(); goTo('choose');
+    state.email=email; state.tel=tel;
+    goTo('lgpd');
   }
+}
+
+function toggleLgpd(){
+  state.lgpd=!state.lgpd;
+  document.getElementById('ck-lgpd').classList.toggle('ck-on', state.lgpd);
+  if(state.lgpd) showErr('err-lgpd','',false);
+}
+
+function validateLgpd(){
+  if(!state.lgpd){ showErr('err-lgpd','Você precisa aceitar os termos para continuar.',true); return; }
+  showErr('err-lgpd','',false);
+  saveLead(); goTo('choose');
 }
 
 /* ────────────────────────────────────────────────
@@ -1230,7 +1261,7 @@ function renderSescGrid(){
     const tMatchedById = state.sescMatches[pair.id]!==undefined;
     tItem.className='match-item'+(tMatchedById?' ok':'')+(state.sescSel===pair.id&&!tMatchedById?' sel':'');
     tItem.dataset.id=pair.id;
-    tItem.innerHTML=`<div class="mi-name">${pair.tName}</div>`;
+    tItem.innerHTML=`<img class="mi-photo" src="tourist-${pair.id}.jpg" alt="${pair.tName}" onerror="this.style.display='none'"><div class="mi-name">${pair.tName}</div>`;
     if(!tMatchedById) tItem.onclick=()=>selectTourist(pair.id);
 
     // Connector (hidden when matched – visual line takes over)
@@ -1244,9 +1275,9 @@ function renderSescGrid(){
     dz.className='drop-z'+(dzMatched?' ok':'');
     dz.dataset.hid=hotel.id;
     if(dzMatched){
-      dz.innerHTML=`<div class="dz-name">${hotel.hName}</div>`;
+      dz.innerHTML=`<img class="mi-photo" src="sesc-${hotel.id}.jpg" alt="${hotel.hName}" onerror="this.style.display='none'"><div class="dz-name">${hotel.hName}</div>`;
     } else {
-      dz.innerHTML=`<div class="dz-name">${hotel.hName}</div>`;
+      dz.innerHTML=`<img class="mi-photo" src="sesc-${hotel.id}.jpg" alt="${hotel.hName}" onerror="this.style.display='none'"><div class="dz-name">${hotel.hName}</div>`;
       dz.onclick=()=>tryMatch(hotel.id);
     }
 
