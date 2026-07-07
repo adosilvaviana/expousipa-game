@@ -1324,10 +1324,7 @@ function tryMatch(hotelId){
 
 function closeSescFeedback(){ document.getElementById('sesc-feedback').classList.remove('show'); }
 
-function updateSescProgress(){
-  const pct=(state.sescCorrect/sescPairs.length)*100;
-  document.getElementById('sesc-prog').style.width=pct+'%';
-}
+function updateSescProgress(){}
 
 function skipSesc(){
   state.score=state.sescCorrect; state.total=sescPairs.length; updateLeadScore();
