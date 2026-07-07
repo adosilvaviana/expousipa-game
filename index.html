@@ -595,269 +595,67 @@ select.inp { appearance: none; cursor: pointer; }
   </div>
 </div>
 
-<!-- ═══════════════════ FORM 1: DADOS OBRIGATÓRIOS ═══════════════════ -->
-<div id="screen-form-1" class="screen">
-  <div class="hdr hdr-red">
-    <div class="hdr-logo">
-      <div>
-        <div class="hdr-title">Cadastro</div>
-        <div class="hdr-sub">Seus dados • Etapa 1 de 6</div>
-      </div>
-    </div>
-    <div class="progress-bar"><div class="progress-fill" style="width:16.6%"></div></div>
-    <div class="progress-label">Dados pessoais</div>
-  </div>
-  <div class="content content-lt" style="gap:32px">
-    <div class="sec-title">Vamos nos conhecer! <span onclick="fillMockData()" style="cursor:pointer" title="Preencher com dados de teste"></span></div>
-    <div class="sec-sub">Preencha seus dados para participar.</div>
+<!-- ═══════════════════ FORM ÚNICO ═══════════════════ -->
+<div id="screen-form-1" class="screen" style="background:#ece4d0">
+  <div class="content content-lt" style="gap:36px;padding-top:48px;padding-bottom:48px">
+    <div class="sec-title" onclick="fillMockData()" style="cursor:default">Preencha seus dados para participar.</div>
 
     <div class="inp-group">
-      <label class="inp-label">Nome completo <span class="req">*</span></label>
-      <input id="f-nome" class="inp" type="text" placeholder="Toque e escreva seu nome completo…" autocomplete="off">
+      <label class="inp-label">Nome</label>
+      <input id="f-nome" class="inp" type="text" placeholder="NOME" autocomplete="off">
       <span id="err-nome" class="err-msg">Por favor, informe seu nome completo.</span>
     </div>
-    <div class="inp-group">
-      <label class="inp-label">CPF <span class="req">*</span></label>
-      <input id="f-cpf" class="inp" type="tel" placeholder="Toque e escreva seu CPF…" maxlength="14" autocomplete="off">
-      <span id="err-cpf" class="err-msg">CPF inválido. Verifique e tente novamente.</span>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+      <div class="inp-group">
+        <label class="inp-label">CPF ou CNPJ</label>
+        <input id="f-cpf" class="inp" type="tel" placeholder="00000000000" maxlength="18" autocomplete="off">
+        <span id="err-cpf" class="err-msg">CPF/CNPJ inválido.</span>
+      </div>
+      <div class="inp-group">
+        <label class="inp-label">Data de nascimento</label>
+        <input id="f-nasc" class="inp" type="tel" placeholder="00/00/0000" maxlength="10" autocomplete="off">
+        <span id="err-nasc" class="err-msg">Data inválida.</span>
+      </div>
     </div>
-    <div class="inp-group">
-      <label class="inp-label">Telefone / WhatsApp <span class="req">*</span></label>
-      <input id="f-tel" class="inp" type="tel" placeholder="Toque e escreva seu telefone…" maxlength="15" autocomplete="off">
-      <span id="err-tel" class="err-msg">Por favor, informe um telefone válido.</span>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+      <div class="inp-group">
+        <label class="inp-label">E-mail</label>
+        <input id="f-email" class="inp" type="email" placeholder="EMAIL@EMAIL.COM" autocomplete="off">
+        <span id="err-email" class="err-msg">E-mail inválido.</span>
+      </div>
+      <div class="inp-group">
+        <label class="inp-label">Telefone</label>
+        <input id="f-tel" class="inp" type="tel" placeholder="(00)00000-0000" maxlength="15" autocomplete="off">
+        <span id="err-tel" class="err-msg">Telefone inválido.</span>
+      </div>
     </div>
+
     <div class="inp-group">
-      <label class="inp-label">E-mail <span class="req">*</span></label>
-      <input id="f-email" class="inp" type="email" placeholder="Toque e escreva seu e-mail…" autocomplete="off">
-      <span id="err-email" class="err-msg">Por favor, informe um e-mail válido.</span>
+      <div style="font-size:30px;color:var(--gray-dk);margin-bottom:24px;line-height:1.4">
+        Deseja receber comunicações e acionamentos institucionais da Fecomércio, Sesc e Senac?
+      </div>
+      <div style="display:flex;gap:60px;align-items:center">
+        <label style="display:flex;align-items:center;gap:20px;font-size:36px;font-weight:600;cursor:pointer;color:var(--gray-dk)">
+          <input type="radio" name="lgpd" value="sim" id="lgpd-sim" style="width:48px;height:48px;cursor:pointer;accent-color:var(--expo-blue)">
+          Sim
+        </label>
+        <label style="display:flex;align-items:center;gap:20px;font-size:36px;font-weight:600;cursor:pointer;color:var(--gray-dk)">
+          <input type="radio" name="lgpd" value="nao" id="lgpd-nao" style="width:48px;height:48px;cursor:pointer;accent-color:var(--expo-blue)">
+          Não
+        </label>
+      </div>
+      <span id="err-lgpd" class="err-msg">Selecione uma opção para continuar.</span>
     </div>
   </div>
   <div class="bnav">
     <button class="btn btn-ghost" onclick="goTo('splash')">← Início</button>
-    <button class="btn btn-red" onclick="validateForm1()">Próximo →</button>
+    <button class="btn btn-red" onclick="validateForm1()">Jogar →</button>
   </div>
 </div>
 
-<!-- ═══════════════════ FORM 2: INTENÇÃO ═══════════════════ -->
-<div id="screen-form-2" class="screen">
-  <div class="hdr hdr-red">
-    <div class="hdr-logo">
-      <div>
-        <div class="hdr-title">Sua intenção</div>
-        <div class="hdr-sub">O que você busca • Etapa 2 de 6</div>
-      </div>
-    </div>
-    <div class="progress-bar"><div class="progress-fill" style="width:33.3%"></div></div>
-    <div class="progress-label">Intenção de visita</div>
-  </div>
-  <div class="content content-lt">
-    <div class="sec-title">O que você busca neste momento?</div>
-    <div style="background:var(--sesc-yellow);color:var(--sesc-blue);font-size:28px;font-weight:700;padding:18px 30px;border-radius:16px;display:flex;align-items:center;gap:14px">
-      ☑️ Selecione <strong>uma ou mais</strong> opções
-    </div>
-
-    <div class="choice-list" id="inten-list">
-      <div class="choice-card multi" data-val="bem-estar" onclick="toggleIntencao(this)">
-        <span class="choice-icon">🏊</span>Bem-estar e lazer para mim e minha família
-        <span class="choice-check">✓</span>
-      </div>
-      <div class="choice-card multi" data-val="capacitacao" onclick="toggleIntencao(this)">
-        <span class="choice-icon">🎓</span>Capacitação profissional
-        <span class="choice-check">✓</span>
-      </div>
-      <div class="choice-card multi" data-val="saude" onclick="toggleIntencao(this)">
-        <span class="choice-icon">🏥</span>Serviços de saúde e odontologia
-        <span class="choice-check">✓</span>
-      </div>
-      <div class="choice-card multi" data-val="negocio" onclick="toggleIntencao(this)">
-        <span class="choice-icon">💼</span>Fortalecer meu negócio ou empresa
-        <span class="choice-check">✓</span>
-      </div>
-      <div class="choice-card multi" data-val="informacoes" onclick="toggleIntencao(this)">
-        <span class="choice-icon">ℹ️</span>Informações gerais sobre o Sistema Fecomércio
-        <span class="choice-check">✓</span>
-      </div>
-    </div>
-    <span id="err-intencao" class="err-msg">Selecione ao menos uma opção para continuar.</span>
-  </div>
-  <div class="bnav">
-    <button class="btn btn-ghost" onclick="goTo('form-1')">← Voltar</button>
-    <button class="btn btn-red" onclick="validateForm2()">Próximo →</button>
-  </div>
-</div>
-
-<!-- ═══════════════════ FORM 3: PERFIL PROFISSIONAL ═══════════════════ -->
-<div id="screen-form-3" class="screen">
-  <div class="hdr hdr-red">
-    <div class="hdr-logo">
-      <div>
-        <div class="hdr-title">Perfil profissional</div>
-        <div class="hdr-sub">Sua atuação • Etapa 3 de 6</div>
-      </div>
-    </div>
-    <div class="progress-bar"><div class="progress-fill" style="width:50%"></div></div>
-    <div class="progress-label">Perfil profissional</div>
-  </div>
-  <div class="content content-lt">
-    <div class="sec-title">Qual é o seu perfil profissional?</div>
-
-    <div class="choice-list">
-      <div class="choice-card" data-group="perfil" data-val="empregado" onclick="selectChoice(this,'perfil')">
-        <span class="choice-icon">👷</span>Empregado(a) CLT
-        <span class="choice-check">✓</span>
-      </div>
-      <div class="choice-card" data-group="perfil" data-val="empresario" onclick="selectChoice(this,'perfil')">
-        <span class="choice-icon">🏢</span>Empresário(a) / Comerciante
-        <span class="choice-check">✓</span>
-      </div>
-      <div class="choice-card" data-group="perfil" data-val="autonomo" onclick="selectChoice(this,'perfil')">
-        <span class="choice-icon">🔧</span>Autônomo(a) / Freelancer
-        <span class="choice-check">✓</span>
-      </div>
-      <div class="choice-card" data-group="perfil" data-val="estudante" onclick="selectChoice(this,'perfil')">
-        <span class="choice-icon">📚</span>Estudante
-        <span class="choice-check">✓</span>
-      </div>
-      <div class="choice-card" data-group="perfil" data-val="aposentado" onclick="selectChoice(this,'perfil')">
-        <span class="choice-icon">🌿</span>Aposentado(a)
-        <span class="choice-check">✓</span>
-      </div>
-      <div class="choice-card" data-group="perfil" data-val="outro" onclick="selectChoice(this,'perfil')">
-        <span class="choice-icon">🙋</span>Outro
-        <span class="choice-check">✓</span>
-      </div>
-    </div>
-    <span id="err-perfil" class="err-msg">Selecione uma opção para continuar.</span>
-  </div>
-  <div class="bnav">
-    <button class="btn btn-ghost" onclick="goTo('form-2')">← Voltar</button>
-    <button class="btn btn-red" onclick="validateForm3()">Próximo →</button>
-  </div>
-</div>
-
-<!-- ═══════════════════ FORM 4: DADOS ADICIONAIS ═══════════════════ -->
-<div id="screen-form-4" class="screen">
-  <div class="hdr hdr-red">
-    <div class="hdr-logo">
-      <div>
-        <div class="hdr-title">Dados adicionais</div>
-        <div class="hdr-sub">Onde você está • Etapa 4 de 6</div>
-      </div>
-    </div>
-    <div class="progress-bar"><div class="progress-fill" style="width:66.6%"></div></div>
-    <div class="progress-label">Localização</div>
-  </div>
-  <div class="content content-lt" style="gap:32px">
-    <div class="sec-title">Onde você mora?</div>
-
-    <div class="inp-group">
-      <label class="inp-label">Cidade <span class="req">*</span></label>
-      <input id="f-cidade" class="inp" type="text" placeholder="Toque e escreva sua cidade…" autocomplete="off">
-      <span id="err-cidade" class="err-msg">Por favor, informe sua cidade.</span>
-    </div>
-    <div class="inp-group">
-      <label class="inp-label">Estado <span class="req">*</span></label>
-      <input id="f-estado-display" class="inp" type="text" readonly
-        value="Minas Gerais" onclick="openEstadoPicker()"
-        style="cursor:pointer;background:white" autocomplete="off">
-      <input type="hidden" id="f-estado" value="MG">
-    </div>
-    <div class="inp-group">
-      <label class="inp-label">Faixa etária</label>
-      <input id="f-idade-display" class="inp" type="text" readonly
-        value="Prefiro não informar" onclick="openIdadePicker()"
-        style="cursor:pointer;background:white" autocomplete="off">
-      <input type="hidden" id="f-idade" value="">
-    </div>
-  </div>
-  <div class="bnav">
-    <button class="btn btn-ghost" onclick="goTo('form-3')">← Voltar</button>
-    <button class="btn btn-red" onclick="validateForm4()">Próximo →</button>
-  </div>
-</div>
-
-<!-- ═══════════════════ FORM 5: PAPEL NA EMPRESA ═══════════════════ -->
-<div id="screen-form-5" class="screen">
-  <div class="hdr hdr-red">
-    <div class="hdr-logo">
-      <div>
-        <div class="hdr-title">Papel na empresa</div>
-        <div class="hdr-sub">Sua posição • Etapa 5 de 6</div>
-      </div>
-    </div>
-    <div class="progress-bar"><div class="progress-fill" style="width:83.3%"></div></div>
-    <div class="progress-label">Posição profissional</div>
-  </div>
-  <div class="content content-lt">
-    <div class="sec-title">Qual é seu papel na empresa?</div>
-
-    <div class="choice-list">
-      <div class="choice-card" data-group="papel" data-val="funcionario" onclick="selectChoice(this,'papel')">
-        <span class="choice-icon">👤</span>Funcionário(a)
-        <span class="choice-check">✓</span>
-      </div>
-      <div class="choice-card" data-group="papel" data-val="gestor" onclick="selectChoice(this,'papel')">
-        <span class="choice-icon">📋</span>Gestor(a) / Supervisor(a)
-        <span class="choice-check">✓</span>
-      </div>
-      <div class="choice-card" data-group="papel" data-val="diretor" onclick="selectChoice(this,'papel')">
-        Diretor(a) / Gerente
-        <span class="choice-check">✓</span>
-      </div>
-      <div class="choice-card" data-group="papel" data-val="proprietario" onclick="selectChoice(this,'papel')">
-        <span class="choice-icon">🔑</span>Proprietário(a) / Sócio(a)
-        <span class="choice-check">✓</span>
-      </div>
-      <div class="choice-card" data-group="papel" data-val="outro-nao-se-aplica" onclick="selectChoice(this,'papel')">
-        <span class="choice-icon">🙋</span>Outro / Não se aplica
-        <span class="choice-check">✓</span>
-      </div>
-    </div>
-    <span id="err-papel" class="err-msg">Selecione uma opção para continuar.</span>
-  </div>
-  <div class="bnav">
-    <button class="btn btn-ghost" onclick="goTo('form-4')">← Voltar</button>
-    <button class="btn btn-red" onclick="validateForm5()">Próximo →</button>
-  </div>
-</div>
-
-<!-- ═══════════════════ FORM 6: LGPD ═══════════════════ -->
-<div id="screen-form-6" class="screen">
-  <div class="hdr hdr-red">
-    <div class="hdr-logo">
-      <div>
-        <div class="hdr-title">Consentimento</div>
-        <div class="hdr-sub">LGPD • Etapa 6 de 6</div>
-      </div>
-    </div>
-    <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
-    <div class="progress-label">Quase lá! ✓</div>
-  </div>
-  <div class="content content-lt">
-    <div class="sec-title">Política de Privacidade</div>
-
-    <div class="lgpd-box">
-      <p>O <strong>Sistema Fecomércio MG</strong> (Fecomércio, Sesc e Senac Minas Gerais) coleta os dados pessoais informados neste formulário com a finalidade de enviar informações sobre nossos produtos, serviços, eventos e promoções.</p>
-      <br>
-      <p>Seus dados serão tratados de acordo com a <strong>Lei Geral de Proteção de Dados Pessoais (LGPD – Lei nº 13.709/2018)</strong> e utilizados exclusivamente para comunicação com você sobre nossos serviços.</p>
-      <br>
-      <p>Você poderá solicitar o acesso, correção ou exclusão de seus dados a qualquer momento pelo e-mail <strong>lgpd@sescmg.com.br</strong> ou pelos canais oficiais do Sesc Minas.</p>
-      <br>
-      <p>Ao marcar a opção abaixo, você declara ter lido e concordar com a coleta e uso dos seus dados pessoais conforme descrito nesta política.</p>
-    </div>
-
-    <div class="ck-row" id="ck-lgpd" onclick="toggleLgpd()">
-      <div class="ck-box" id="ck-box">✓</div>
-      <div class="ck-text">Li e <strong>concordo</strong> com a coleta e uso dos meus dados pessoais pelo Sistema Fecomércio MG para fins de comunicação e marketing.</div>
-    </div>
-    <span id="err-lgpd" class="err-msg">Você precisa aceitar os termos para continuar.</span>
-  </div>
-  <div class="bnav">
-    <button class="btn btn-ghost" onclick="goTo('form-5')">← Voltar</button>
-    <button class="btn btn-red" onclick="validateForm6()">Jogar! 🎮</button>
-  </div>
-</div>
-
+<!-- FORMS 2-6 REMOVIDOS — formulário unificado em screen-form-1 -->
 <!-- ═══════════════════ ESCOLHA DO CAMINHO ═══════════════════ -->
 <div id="screen-choose" class="screen">
   <div class="hdr hdr-red" style="padding-bottom:48px;background:var(--expo-blue)">
@@ -1038,28 +836,17 @@ let resultTimer = null;
 /* ── MOCK DATA (dev shortcut) ── */
 function fillMockData() {
   const nomes = ['Ana Lima','Carlos Souza','Beatriz Ferreira','Rafael Oliveira','Juliana Costa','Marcos Pereira'];
-  const cidades = ['Ipatinga','Belo Horizonte','Contagem','Uberlândia','Montes Claros','Juiz de Fora'];
   const emails = ['ana.lima','carlos.souza','beatriz.f','rafael.o','ju.costa','marcos.p'];
   const idx = Math.floor(Math.random() * nomes.length);
   const cpfN = String(Math.floor(Math.random()*99999999999)).padStart(11,'0');
   const telN = '119' + String(Math.floor(Math.random()*99999999)).padStart(8,'0');
-
-  const nomeComTeste = nomes[idx] + ' (teste)';
-  document.getElementById('f-nome').value  = nomeComTeste;
+  document.getElementById('f-nome').value  = nomes[idx] + ' (teste)';
   document.getElementById('f-cpf').value   = cpfN.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,'$1.$2.$3-$4');
-  document.getElementById('f-tel').value   = telN.replace(/(\d{2})(\d{5})(\d{4})/,'($1) $2-$3');
+  document.getElementById('f-nasc').value  = '01/01/1990';
   document.getElementById('f-email').value = emails[idx] + Math.floor(Math.random()*99) + '@email.com';
-
-  // limpa erros visuais
-  ['f-nome','f-cpf','f-tel','f-email'].forEach(id => document.getElementById(id).classList.remove('err'));
-  ['err-nome','err-cpf','err-tel','err-email'].forEach(id => document.getElementById(id).classList.remove('show'));
-
-  state.nome  = document.getElementById('f-nome').value;
-  state.cpf   = cpfN;
-  state.tel   = telN;
-  state.email = document.getElementById('f-email').value;
-
-  document.getElementById('f-cidade').value = cidades[Math.floor(Math.random()*cidades.length)];
+  document.getElementById('f-tel').value   = telN.replace(/(\d{2})(\d{5})(\d{4})/,'($1) $2-$3');
+  document.getElementById('lgpd-sim').checked = true;
+  ['f-nome','f-cpf','f-nasc','f-email','f-tel'].forEach(id => document.getElementById(id).classList.remove('err'));
 }
 
 /* ── SCALE TO FIT VIEWPORT ── */
@@ -1092,11 +879,6 @@ window.addEventListener('resize', scaleToFit);
     `<img src="${src}" style="position:absolute;bottom:300px;left:0;width:100%;opacity:.18;pointer-events:none;z-index:0;${extra}">`;
   const decos = {
     'screen-form-1': deco('deco-landscape.png'),
-    'screen-form-2': deco('deco-landscape.png'),
-    'screen-form-3': deco('deco-landscape.png'),
-    'screen-form-4': deco('deco-landscape.png'),
-    'screen-form-5': deco('deco-landscape.png'),
-    'screen-form-6': deco('deco-landscape.png'),
     'screen-choose':  ``,
     'screen-result':  ``,
     'screen-cta':     ``,
@@ -1112,9 +894,8 @@ window.addEventListener('resize', scaleToFit);
    STATE
 ─────────────────────────────────────────────────*/
 const state = {
-  nome:'', cpf:'', tel:'', email:'',
-  intencao:[], perfil:'', cidade:'', estado:'MG', idade:'',
-  papel:'', lgpd: false,
+  nome:'', cpf:'', nasc:'', tel:'', email:'',
+  lgpd: false,
   path:'', score:0, total:0,
   senacIdx:0, senacScore:0,
   sindIdx:0, sindScore:0,
@@ -1220,16 +1001,14 @@ function startCtaTimer() {
 function resetAll() {
   clearAllTimers();
   Object.assign(state,{
-    intencao:[], perfil:'', cidade:'', estado:'MG', idade:'',
-    papel:'', lgpd:false, path:'', score:0, total:0,
+    nome:'', cpf:'', nasc:'', tel:'', email:'',
+    lgpd:false, path:'', score:0, total:0,
     senacIdx:0, senacScore:0, sindIdx:0, sindScore:0,
     sescMatches:{}, sescSel:null, sescCorrect:0
   });
-  state.intencao = [];
   document.querySelectorAll('.choice-card').forEach(c=>c.classList.remove('sel'));
   document.querySelectorAll('.inp').forEach(i=>{ if(i.tagName==='INPUT') i.value=''; });
-  document.querySelectorAll('select').forEach(s=>{ s.value = s.id==='f-estado' ? 'MG' : ''; });
-  document.getElementById('ck-lgpd')?.classList.remove('ck-on');
+  document.querySelectorAll('input[name="lgpd"]').forEach(r=>r.checked=false);
   document.querySelectorAll('.err-msg').forEach(e=>e.classList.remove('show'));
   document.querySelectorAll('.inp').forEach(i=>i.classList.remove('err'));
   document.querySelectorAll('.feedback').forEach(f=>f.classList.remove('show'));
@@ -1261,58 +1040,28 @@ function showErr(id,msg,show){ const el=document.getElementById(id); el.textCont
 function validateForm1(){
   const nome=document.getElementById('f-nome').value.trim();
   const cpf=document.getElementById('f-cpf').value.replace(/\D/g,'');
-  const tel=document.getElementById('f-tel').value.replace(/\D/g,'');
+  const nasc=document.getElementById('f-nasc').value.trim();
   const email=document.getElementById('f-email').value.trim();
+  const tel=document.getElementById('f-tel').value.replace(/\D/g,'');
+  const lgpdVal=document.querySelector('input[name="lgpd"]:checked')?.value;
   let ok=true;
   if(nome.length<3){ showErr('err-nome','Por favor, informe seu nome completo.',true); document.getElementById('f-nome').classList.add('err'); ok=false; }
   else { showErr('err-nome','',false); document.getElementById('f-nome').classList.remove('err'); }
-  if(cpf.length!==11){ showErr('err-cpf','CPF inválido. Verifique e tente novamente.',true); document.getElementById('f-cpf').classList.add('err'); ok=false; }
+  if(cpf.length<11){ showErr('err-cpf','CPF/CNPJ inválido.',true); document.getElementById('f-cpf').classList.add('err'); ok=false; }
   else { showErr('err-cpf','',false); document.getElementById('f-cpf').classList.remove('err'); }
-  if(tel.length<10){ showErr('err-tel','Por favor, informe um telefone válido.',true); document.getElementById('f-tel').classList.add('err'); ok=false; }
-  else { showErr('err-tel','',false); document.getElementById('f-tel').classList.remove('err'); }
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showErr('err-email','Por favor, informe um e-mail válido.',true); document.getElementById('f-email').classList.add('err'); ok=false; }
+  if(nasc.length<8){ showErr('err-nasc','Data inválida.',true); document.getElementById('f-nasc').classList.add('err'); ok=false; }
+  else { showErr('err-nasc','',false); document.getElementById('f-nasc').classList.remove('err'); }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showErr('err-email','E-mail inválido.',true); document.getElementById('f-email').classList.add('err'); ok=false; }
   else { showErr('err-email','',false); document.getElementById('f-email').classList.remove('err'); }
-  if(ok){ state.nome=nome; state.cpf=cpf; state.tel=tel; state.email=email; goTo('form-2'); }
-}
-
-function toggleIntencao(el) {
-  const val = el.dataset.val;
-  if (el.classList.contains('sel')) {
-    el.classList.remove('sel');
-    state.intencao = state.intencao.filter(v => v !== val);
-  } else {
-    el.classList.add('sel');
-    state.intencao.push(val);
+  if(tel.length<10){ showErr('err-tel','Telefone inválido.',true); document.getElementById('f-tel').classList.add('err'); ok=false; }
+  else { showErr('err-tel','',false); document.getElementById('f-tel').classList.remove('err'); }
+  if(!lgpdVal){ showErr('err-lgpd','Selecione uma opção para continuar.',true); ok=false; }
+  else { showErr('err-lgpd','',false); }
+  if(ok){
+    state.nome=nome; state.cpf=cpf; state.nasc=nasc;
+    state.email=email; state.tel=tel; state.lgpd=lgpdVal==='sim';
+    saveLead(); goTo('choose');
   }
-  if (state.intencao.length > 0) showErr('err-intencao', '', false);
-}
-
-function validateForm2(){
-  if(state.intencao.length === 0){ showErr('err-intencao','Selecione ao menos uma opção para continuar.',true); return; }
-  showErr('err-intencao','',false); goTo('form-3');
-}
-function validateForm3(){
-  if(!state.perfil){ showErr('err-perfil','Selecione uma opção para continuar.',true); return; }
-  showErr('err-perfil','',false); goTo('form-4');
-}
-function validateForm4(){
-  const cidade=document.getElementById('f-cidade').value.trim();
-  if(cidade.length<2){ showErr('err-cidade','Por favor, informe sua cidade.',true); document.getElementById('f-cidade').classList.add('err'); return; }
-  showErr('err-cidade','',false); document.getElementById('f-cidade').classList.remove('err');
-  state.cidade=cidade;
-  state.estado=document.getElementById('f-estado').value;
-  state.idade=document.getElementById('f-idade').value;
-  goTo('form-5');
-}
-function validateForm5(){
-  if(!state.papel){ showErr('err-papel','Selecione uma opção para continuar.',true); return; }
-  showErr('err-papel','',false); goTo('form-6');
-}
-function validateForm6(){
-  if(!state.lgpd){ showErr('err-lgpd','Você precisa aceitar os termos para continuar.',true); return; }
-  showErr('err-lgpd','',false);
-  saveLead();
-  goTo('choose');
 }
 
 /* ────────────────────────────────────────────────
@@ -1323,12 +1072,6 @@ function selectChoice(el, group) {
   el.classList.add('sel');
   state[group] = el.dataset.val;
   showErr('err-'+group,'',false);
-}
-
-function toggleLgpd(){
-  state.lgpd=!state.lgpd;
-  document.getElementById('ck-lgpd').classList.toggle('ck-on',state.lgpd);
-  if(state.lgpd) showErr('err-lgpd','',false);
 }
 
 /* ────────────────────────────────────────────────
@@ -1342,10 +1085,8 @@ function saveLead(){
   const lead={
     id: Date.now(),
     timestamp: new Date().toISOString(),
-    nome: state.nome, cpf: state.cpf, tel: state.tel, email: state.email,
-    intencao: state.intencao.join(', '), perfil: state.perfil,
-    cidade: state.cidade, estado: state.estado, idade: state.idade,
-    papel: state.papel,
+    nome: state.nome, cpf: state.cpf, nasc: state.nasc,
+    tel: state.tel, email: state.email, lgpd: state.lgpd,
     path: state.path, score: state.score, total: state.total
   };
   try {
@@ -1781,83 +1522,7 @@ const ESTADOS = [
   ['SP','São Paulo'],['SE','Sergipe'],['TO','Tocantins']
 ];
 
-function openEstadoPicker() {
-  const overlay = document.getElementById('estado-picker');
-  const list = document.getElementById('estado-picker-list');
-  const cur = document.getElementById('f-estado').value;
-  list.innerHTML = ESTADOS.map(([uf, nome]) =>
-    `<div class="picker-item ${uf===cur?'active':''}" onclick="selectEstado('${uf}','${nome}')">
-      ${nome} <span class="pi-check">${uf===cur?'✓':''}</span>
-    </div>`
-  ).join('');
-  overlay.classList.add('open');
-}
-
-function selectEstado(uf, nome) {
-  document.getElementById('f-estado').value = uf;
-  document.getElementById('f-estado-display').value = nome;
-  document.getElementById('estado-picker').classList.remove('open');
-  state.estado = uf;
-}
-
-function closeEstadoPicker() {
-  document.getElementById('estado-picker').classList.remove('open');
-}
-
-const FAIXAS = [
-  ['', 'Prefiro não informar'],
-  ['18-25', '18 a 25 anos'],
-  ['26-35', '26 a 35 anos'],
-  ['36-45', '36 a 45 anos'],
-  ['46-55', '46 a 55 anos'],
-  ['56+', '56 anos ou mais'],
-];
-
-function openIdadePicker() {
-  const overlay = document.getElementById('idade-picker');
-  const list = document.getElementById('idade-picker-list');
-  const cur = document.getElementById('f-idade').value;
-  list.innerHTML = FAIXAS.map(([val, label]) =>
-    `<div class="picker-item ${val===cur?'active':''}" onclick="selectIdade('${val}','${label}')">
-      ${label} <span class="pi-check">${val===cur?'✓':''}</span>
-    </div>`
-  ).join('');
-  overlay.classList.add('open');
-}
-
-function selectIdade(val, label) {
-  document.getElementById('f-idade').value = val;
-  document.getElementById('f-idade-display').value = label;
-  document.getElementById('idade-picker').classList.remove('open');
-  state.idade = val;
-}
-
-function closeIdadePicker() {
-  document.getElementById('idade-picker').classList.remove('open');
-}
 </script>
-
-<!-- PICKER FAIXA ETÁRIA -->
-<div class="picker-overlay" id="idade-picker" onclick="if(event.target===this)closeIdadePicker()">
-  <div class="picker-sheet">
-    <div class="picker-header">
-      <h3>Faixa etária</h3>
-      <button class="picker-close" onclick="closeIdadePicker()">✕</button>
-    </div>
-    <div class="picker-list" id="idade-picker-list"></div>
-  </div>
-</div>
-
-<!-- PICKER ESTADO -->
-<div class="picker-overlay" id="estado-picker" onclick="if(event.target===this)closeEstadoPicker()">
-  <div class="picker-sheet">
-    <div class="picker-header">
-      <h3>Selecione o Estado</h3>
-      <button class="picker-close" onclick="closeEstadoPicker()">✕</button>
-    </div>
-    <div class="picker-list" id="estado-picker-list"></div>
-  </div>
-</div>
 
 <!-- ═══════════════════ MENU FLUTUANTE ═══════════════════ -->
 <div id="float-menu-btn" onclick="toggleFloatMenu()" title="Menu">⋮</div>
