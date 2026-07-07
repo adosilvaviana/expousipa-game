@@ -725,33 +725,8 @@ select.inp { appearance: none; cursor: pointer; }
 
 <!-- ═══════════════════ JOGO SESC: DESCUBRA DESTINOS ═══════════════════ -->
 <div id="screen-sesc" class="screen" style="background:#ece4d0">
-  <div class="hdr hdr-red">
-    <div class="hdr-logo">
-      <div>
-        <div class="hdr-title">Descubra Destinos!</div>
-        <div class="hdr-sub">Conecte os destinos às unidades Sesc</div>
-      </div>
-    </div>
-    <div class="match-prog-bar" style="margin-top:16px"><div class="match-prog-fill" id="sesc-prog" style="width:0%"></div></div>
-  </div>
-
-  <div class="content" style="padding:36px 48px;gap:20px">
-    <div class="match-instr">
-      👆 <strong>Toque em um ponto turístico</strong> (esquerda) e depois toque na <strong>unidade Sesc</strong> correspondente (direita).
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 40px 1fr;gap:10px;margin-bottom:8px">
-      <div style="font-size:26px;font-weight:700;color:var(--gray-md);text-align:center">🗺️ PONTO TURÍSTICO</div>
-      <div></div>
-      <div style="font-size:26px;font-weight:700;color:var(--gray-md);text-align:center">UNIDADE SESC</div>
-    </div>
-
+  <div class="content" style="padding:36px 48px;gap:20px;justify-content:center">
     <div class="match-grid" id="sesc-grid"></div>
-  </div>
-
-  <div class="bnav">
-    <button class="btn btn-ghost" onclick="skipSesc()">Pular jogo</button>
-    <button class="btn btn-red btn-disabled" id="sesc-next-btn" onclick="finishSesc()">Ver resultado →</button>
   </div>
 
   <!-- feedback overlay -->
@@ -1238,7 +1213,6 @@ function initSesc(){
   state.sescMatches={}; state.sescSel=null; state.sescCorrect=0;
   renderSescGrid();
   updateSescProgress();
-  document.getElementById('sesc-next-btn').classList.add('btn-disabled');
   document.getElementById('sesc-feedback').classList.remove('show');
 }
 
@@ -1261,7 +1235,7 @@ function renderSescGrid(){
     const tMatchedById = state.sescMatches[pair.id]!==undefined;
     tItem.className='match-item'+(tMatchedById?' ok':'')+(state.sescSel===pair.id&&!tMatchedById?' sel':'');
     tItem.dataset.id=pair.id;
-    tItem.innerHTML=`<div class="mi-icon" style="background:${pair.tColor}">${pair.tourist}</div><div class="mi-name">${pair.tName}</div>`;
+    tItem.innerHTML=`<div class="mi-icon" style="background:${pair.tColor}"></div><div class="mi-name">${pair.tName}</div>`;
     if(!tMatchedById) tItem.onclick=()=>selectTourist(pair.id);
 
     // Connector (hidden when matched – visual line takes over)
@@ -1275,9 +1249,9 @@ function renderSescGrid(){
     dz.className='drop-z'+(dzMatched?' ok':'');
     dz.dataset.hid=hotel.id;
     if(dzMatched){
-      dz.innerHTML=`<div class="dz-icon" style="background:${hotel.hColor}">${hotel.hotel}</div><div class="dz-name">${hotel.hName}</div>`;
+      dz.innerHTML=`<div class="dz-icon" style="background:${hotel.hColor}"></div><div class="dz-name">${hotel.hName}</div>`;
     } else {
-      dz.innerHTML=`<div class="dz-icon" style="background:${hotel.hColor}">${hotel.hotel}</div><div class="dz-name">${hotel.hName}</div>`;
+      dz.innerHTML=`<div class="dz-icon" style="background:${hotel.hColor}"></div><div class="dz-name">${hotel.hName}</div>`;
       dz.onclick=()=>tryMatch(hotel.id);
     }
 
@@ -1334,11 +1308,8 @@ function tryMatch(hotelId){
     state.sescCorrect++;
     state.sescSel=null;
     renderSescGrid();
-    updateSescProgress();
     if(state.sescCorrect>=sescPairs.length){
       setTimeout(()=>{ state.score=sescPairs.length; state.total=sescPairs.length; updateLeadScore(); showResult('sesc'); },800);
-    } else if(state.sescCorrect>=3){
-      document.getElementById('sesc-next-btn').classList.remove('btn-disabled');
     }
   } else {
     // Wrong match – brief shake and flash
