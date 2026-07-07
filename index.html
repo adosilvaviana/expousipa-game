@@ -425,7 +425,7 @@ select.inp { appearance: none; cursor: pointer; }
 .reveal .opt-letter{ background: var(--green); color: white; }
 
 /* ═══════════════════ RESULT ═══════════════════ */
-#screen-result { align-items: center; justify-content: center; background: #ece4d0; }
+#screen-result { align-items: center; justify-content: flex-start; background: #ece4d0; }
 .result-box {
   display: flex; flex-direction: column; align-items: center;
   text-align: center; gap: 44px; padding: 80px 100px;
@@ -765,6 +765,7 @@ select.inp { appearance: none; cursor: pointer; }
 
 <!-- ═══════════════════ RESULTADO ═══════════════════ -->
 <div id="screen-result" class="screen">
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;width:100%;position:relative;z-index:1;">
   <div class="result-box" id="result-box">
     <div class="res-icon" id="res-icon"></div>
     <div class="res-title" id="res-title"></div>
@@ -772,6 +773,7 @@ select.inp { appearance: none; cursor: pointer; }
     <div class="res-text" id="res-text"></div>
     <div class="res-sub" id="res-sub"></div>
     <button class="btn btn-red res-continue" style="min-width:500px" onclick="goTo('cta')">Continuar →</button>
+  </div>
   </div>
 </div>
 
@@ -833,8 +835,8 @@ window.addEventListener('resize', scaleToFit);
   const decos = {
     'screen-form-1': deco('deco-landscape.png'),
     'screen-choose':  ``,
-    'screen-result':  `<img src="deco-retangulos.png" style="position:absolute;bottom:120px;right:-80px;width:600px;opacity:.22;pointer-events:none;z-index:0;">`,
-    'screen-cta':     `<img src="deco-retangulos.png" style="position:absolute;bottom:120px;left:-80px;width:600px;opacity:.22;pointer-events:none;z-index:0;transform:scaleX(-1)">`,
+    'screen-result':  `<img src="deco-retangulos.png" style="position:absolute;bottom:0;right:0;width:100%;opacity:.22;pointer-events:none;z-index:0;">`,
+    'screen-cta':     `<img src="deco-retangulos.png" style="position:absolute;bottom:0;left:0;width:100%;opacity:.22;pointer-events:none;z-index:0;transform:scaleX(-1)">`,
   };
   Object.entries(decos).forEach(([id, html]) => {
     const screen = document.getElementById(id);
