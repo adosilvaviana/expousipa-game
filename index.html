@@ -372,7 +372,7 @@ select.inp { appearance: none; cursor: pointer; }
 .match-item.sel  { border-color: var(--red); background: #EEF3FF; box-shadow: 0 0 0 3px rgba(0,76,153,.25); }
 .match-item.ok   { border-color: var(--green); background: #F0FAF4; cursor: default; }
 .match-item.wrong { border-color: #dc2626; background: #EEF3FF; }
-.mi-emoji { font-size: 36px; }
+.mi-icon { width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:white;flex-shrink:0; }
 .mi-name  { font-size: 26px; font-weight: 700; color: var(--gray-dk); line-height: 1.25; }
 .mi-sub   { font-size: 22px; color: var(--gray-md); }
 .match-conn { display: flex; align-items: center; justify-content: center; font-size: 36px; color: #ccc; }
@@ -386,7 +386,7 @@ select.inp { appearance: none; cursor: pointer; }
 .drop-z.over  { border-color: var(--red); background: #EEF3FF; border-style: solid; }
 .drop-z.ok    { border-color: var(--green); background: #F0FAF4; border-style: solid; cursor: default; }
 .drop-z.wrong { border-color: #dc2626; background: #EEF3FF; border-style: solid; }
-.dz-emoji { font-size: 36px; }
+.dz-icon { width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:white;flex-shrink:0; }
 .dz-name  { font-size: 26px; font-weight: 700; color: var(--gray-dk); line-height: 1.25; }
 .dz-sub   { font-size: 22px; color: var(--gray-md); }
 .ok-badge { display: inline-flex; align-items: center; gap: 6px; color: var(--green); font-size: 24px; font-weight: 700; }
@@ -608,7 +608,7 @@ select.inp { appearance: none; cursor: pointer; }
     <div class="progress-label">Dados pessoais</div>
   </div>
   <div class="content content-lt" style="gap:32px">
-    <div class="sec-title">Vamos nos conhecer! <span onclick="fillMockData()" style="cursor:pointer" title="Preencher com dados de teste">👋</span></div>
+    <div class="sec-title">Vamos nos conhecer! <span onclick="fillMockData()" style="cursor:pointer" title="Preencher com dados de teste"></span></div>
     <div class="sec-sub">Preencha seus dados para participar.</div>
 
     <div class="inp-group">
@@ -801,7 +801,7 @@ select.inp { appearance: none; cursor: pointer; }
         <span class="choice-check">✓</span>
       </div>
       <div class="choice-card" data-group="papel" data-val="diretor" onclick="selectChoice(this,'papel')">
-        <span class="choice-icon">🏆</span>Diretor(a) / Gerente
+        Diretor(a) / Gerente
         <span class="choice-check">✓</span>
       </div>
       <div class="choice-card" data-group="papel" data-val="proprietario" onclick="selectChoice(this,'papel')">
@@ -957,7 +957,7 @@ select.inp { appearance: none; cursor: pointer; }
     <div style="display:grid;grid-template-columns:1fr 40px 1fr;gap:10px;margin-bottom:8px">
       <div style="font-size:26px;font-weight:700;color:var(--gray-md);text-align:center">🗺️ PONTO TURÍSTICO</div>
       <div></div>
-      <div style="font-size:26px;font-weight:700;color:var(--gray-md);text-align:center">🏫 UNIDADE SESC</div>
+      <div style="font-size:26px;font-weight:700;color:var(--gray-md);text-align:center">UNIDADE SESC</div>
     </div>
 
     <div class="match-grid" id="sesc-grid"></div>
@@ -1199,7 +1199,7 @@ function renderCta(path) {
         Encerrar experiência
       </button>
       <button class="cta-btn" style="flex:1;font-size:36px;padding:36px 40px" onclick="goTo('choose')">
-        🔄 Jogar outros jogos
+        Jogar outros jogos
       </button>
     </div>
     <div class="cta-timer" style="color:#555">Encerrando em <span id="cta-count">15</span>s</div>
@@ -1469,7 +1469,7 @@ function answerVF(ans){
   const correct=(ans===q.ans);
   if(correct) state.senacScore++;
   const fb=document.getElementById('senac-feedback');
-  document.getElementById('senac-fb-icon').textContent = correct?'🎉':'💡';
+  document.getElementById('senac-fb-icon').textContent = correct?'✓':'!';
   document.getElementById('senac-fb-title').textContent = correct?'Acertou!':'Quase lá!';
   document.getElementById('senac-fb-text').textContent = correct?q.ok_msg:q.err_msg;
   fb.className='feedback show '+(correct?'ok':'err');
@@ -1491,12 +1491,12 @@ function nextSenac(){
    SESC: DESCUBRA DESTINOS (tap-to-match)
 ─────────────────────────────────────────────────*/
 const sescPairs = [
-  { id:0, tourist:'🏛️', tName:'Museu da Inconfidência', hotel:'🏫', hName:'Sesc Ouro Preto' },
-  { id:1, tourist:'💧', tName:'Fonte dos Amores', hotel:'🏫', hName:'Sesc Poços de Caldas' },
-  { id:2, tourist:'♨️', tName:'Fonte Dona Beja', hotel:'🏫', hName:'Sesc Araxá' },
-  { id:3, tourist:'⛪', tName:'Igrejinha da Pampulha', hotel:'🏫', hName:'Sesc Venda Nova (BH)' },
-  { id:4, tourist:'⛪', tName:'Praça N. Sra. da Glória/Igreja Matriz', hotel:'🏫', hName:'Sesc Contagem' },
-  { id:5, tourist:'🏫', tName:'Museu da Loucura', hotel:'🏫', hName:'Senac Grogotó (Barbacena)' }
+  { id:0, tourist:'MU', tColor:'#004587', tName:'Museu da Inconfidência',                hotel:'OP', hColor:'#fbba00', hName:'Sesc Ouro Preto' },
+  { id:1, tourist:'FO', tColor:'#004587', tName:'Fonte dos Amores',                      hotel:'PC', hColor:'#fbba00', hName:'Sesc Poços de Caldas' },
+  { id:2, tourist:'FB', tColor:'#004587', tName:'Fonte Dona Beja',                       hotel:'AR', hColor:'#fbba00', hName:'Sesc Araxá' },
+  { id:3, tourist:'IG', tColor:'#004587', tName:'Igrejinha da Pampulha',                 hotel:'VN', hColor:'#fbba00', hName:'Sesc Venda Nova (BH)' },
+  { id:4, tourist:'PG', tColor:'#004587', tName:'Praça N. Sra. da Glória/Igreja Matriz', hotel:'CO', hColor:'#fbba00', hName:'Sesc Contagem' },
+  { id:5, tourist:'ML', tColor:'#004587', tName:'Museu da Loucura',                      hotel:'GR', hColor:'#5c1d8d', hName:'Senac Grogotó (Barbacena)' }
 ];
 
 // Fixed hotel display order — row position → hotel id (none aligned with its tourist)
@@ -1530,7 +1530,7 @@ function renderSescGrid(){
     const tMatchedById = state.sescMatches[pair.id]!==undefined;
     tItem.className='match-item'+(tMatchedById?' ok':'')+(state.sescSel===pair.id&&!tMatchedById?' sel':'');
     tItem.dataset.id=pair.id;
-    tItem.innerHTML=`<div class="mi-emoji">${pair.tourist}</div><div class="mi-name">${pair.tName}</div>`;
+    tItem.innerHTML=`<div class="mi-icon" style="background:${pair.tColor}">${pair.tourist}</div><div class="mi-name">${pair.tName}</div>`;
     if(!tMatchedById) tItem.onclick=()=>selectTourist(pair.id);
 
     // Connector (hidden when matched – visual line takes over)
@@ -1544,9 +1544,9 @@ function renderSescGrid(){
     dz.className='drop-z'+(dzMatched?' ok':'');
     dz.dataset.hid=hotel.id;
     if(dzMatched){
-      dz.innerHTML=`<div class="dz-emoji">${hotel.hotel}</div><div class="dz-name">${hotel.hName}</div>`;
+      dz.innerHTML=`<div class="dz-icon" style="background:${hotel.hColor}">${hotel.hotel}</div><div class="dz-name">${hotel.hName}</div>`;
     } else {
-      dz.innerHTML=`<div class="dz-emoji">${hotel.hotel}</div><div class="dz-name">${hotel.hName}</div>`;
+      dz.innerHTML=`<div class="dz-icon" style="background:${hotel.hColor}">${hotel.hotel}</div><div class="dz-name">${hotel.hName}</div>`;
       dz.onclick=()=>tryMatch(hotel.id);
     }
 
@@ -1707,7 +1707,7 @@ function answerSind(answer){
   document.getElementById('sind-btn-t').style.opacity='0.5';
   document.getElementById('sind-btn-f').style.opacity='0.5';
   const fb=document.getElementById('sind-feedback');
-  document.getElementById('sind-fb-icon').textContent=correct?'🎉':'💡';
+  document.getElementById('sind-fb-icon').textContent=correct?'✓':'!';
   document.getElementById('sind-fb-title').textContent=correct?'Acertou!':'Quase!';
   document.getElementById('sind-fb-text').textContent=correct?q.ok:q.err;
   fb.className='feedback show '+(correct?'ok':'err');
