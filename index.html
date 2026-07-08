@@ -760,8 +760,14 @@ select.inp { appearance: none; cursor: pointer; }
       </div>
       <div class="inp-group">
         <label class="inp-label">Faixa etária</label>
-        <input id="f-idade-display" class="inp" type="text" readonly value="" placeholder="Selecione…" onclick="openIdadePicker()" style="cursor:pointer;background:white" autocomplete="off">
-        <input type="hidden" id="f-idade" value="">
+        <select id="f-idade" class="inp" style="cursor:pointer">
+          <option value="">Prefiro não informar</option>
+          <option value="18-25">18 a 25 anos</option>
+          <option value="26-35">26 a 35 anos</option>
+          <option value="36-45">36 a 45 anos</option>
+          <option value="46-55">46 a 55 anos</option>
+          <option value="56+">56 anos ou mais</option>
+        </select>
       </div>
     </div>
   </div>
