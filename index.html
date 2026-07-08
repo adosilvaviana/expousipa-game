@@ -1164,6 +1164,23 @@ document.getElementById('f-tel').addEventListener('input', function(){
 ─────────────────────────────────────────────────*/
 function showErr(id,msg,show){ const el=document.getElementById(id); el.textContent=msg; el.classList.toggle('show',show); }
 
+function validarCPF(c){
+  if(c.length!==11||/^(\d)\1{10}$/.test(c)) return false;
+  let s=0; for(let i=0;i<9;i++) s+=+c[i]*(10-i);
+  let r=11-(s%11); if(r>=10) r=0; if(r!==+c[9]) return false;
+  s=0; for(let i=0;i<10;i++) s+=+c[i]*(11-i);
+  r=11-(s%11); if(r>=10) r=0; return r===+c[10];
+}
+function validarCNPJ(c){
+  if(c.length!==14||/^(\d)\1{13}$/.test(c)) return false;
+  const calc=(n,w)=>{ let s=0,p=w; for(let i=0;i<n;i++){s+=+c[i]*p--;if(p<2)p=9;} return s%11<2?0:11-(s%11); };
+  return calc(12,5)===+c[12] && calc(13,6)===+c[13];
+}
+function validarTel(t){
+  if(t.length<10||/^(\d)\1+$/.test(t)) return false;
+  return true;
+}
+
 function validateForm1(){
   const nome=document.getElementById('f-nome').value.trim();
   const cpf=document.getElementById('f-cpf').value.replace(/\D/g,'');
@@ -1173,13 +1190,14 @@ function validateForm1(){
   let ok=true;
   if(nome.length<3){ showErr('err-nome','Por favor, informe seu nome completo.',true); document.getElementById('f-nome').classList.add('err'); ok=false; }
   else { showErr('err-nome','',false); document.getElementById('f-nome').classList.remove('err'); }
-  if(cpf.length!==11&&cpf.length!==14){ showErr('err-cpf','CPF/CNPJ inválido.',true); document.getElementById('f-cpf').classList.add('err'); ok=false; }
+  const cpfOk=(cpf.length===11&&validarCPF(cpf))||(cpf.length===14&&validarCNPJ(cpf));
+  if(!cpfOk){ showErr('err-cpf','CPF ou CNPJ inválido.',true); document.getElementById('f-cpf').classList.add('err'); ok=false; }
   else { showErr('err-cpf','',false); document.getElementById('f-cpf').classList.remove('err'); }
   if(nasc.length<8){ showErr('err-nasc','Data inválida.',true); document.getElementById('f-nasc').classList.add('err'); ok=false; }
   else { showErr('err-nasc','',false); document.getElementById('f-nasc').classList.remove('err'); }
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showErr('err-email','E-mail inválido.',true); document.getElementById('f-email').classList.add('err'); ok=false; }
   else { showErr('err-email','',false); document.getElementById('f-email').classList.remove('err'); }
-  if(tel.length<10){ showErr('err-tel','Telefone inválido.',true); document.getElementById('f-tel').classList.add('err'); ok=false; }
+  if(!validarTel(tel)){ showErr('err-tel','Telefone inválido.',true); document.getElementById('f-tel').classList.add('err'); ok=false; }
   else { showErr('err-tel','',false); document.getElementById('f-tel').classList.remove('err'); }
   if(ok){
     state.nome=nome; state.cpf=cpf; state.nasc=nasc;
