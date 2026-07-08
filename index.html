@@ -838,16 +838,16 @@ select.inp { appearance: none; cursor: pointer; }
 <div id="screen-senac" class="screen" style="background:#ece4d0">
   <img src="deco-landscape.png" style="position:absolute;bottom:0;left:0;width:100%;opacity:.18;pointer-events:none;z-index:0;">
 
-  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 60px;gap:36px;padding-top:40px">
-    <div class="q-box" style="text-align:center;align-items:center">
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;padding:40px 60px;gap:36px;width:100%">
+    <div class="q-box" style="text-align:center;align-items:center;flex:1;width:85%">
       <div class="q-box-text" id="senac-q"></div>
     </div>
 
-    <div class="vf-btns" style="width:100%;padding:0">
-      <button class="vf-btn vf-t" onclick="answerVF(true)">
+    <div class="vf-btns" style="width:85%;padding:0;flex-shrink:0">
+      <button class="vf-btn vf-t" onclick="answerVF(true)" style="flex:1;height:auto;min-height:160px">
         <div class="vf-label">VERDADEIRO</div>
       </button>
-      <button class="vf-btn vf-f" onclick="answerVF(false)">
+      <button class="vf-btn vf-f" onclick="answerVF(false)" style="flex:1;height:auto;min-height:160px">
         <div class="vf-label">FALSO</div>
       </button>
     </div>
@@ -891,13 +891,13 @@ select.inp { appearance: none; cursor: pointer; }
 <div id="screen-sindicato" class="screen" style="background:#ece4d0">
   <img src="deco-landscape.png" style="position:absolute;bottom:0;left:0;width:100%;opacity:.18;pointer-events:none;z-index:0;">
 
-  <div class="content" style="gap:36px;justify-content:center;padding-top:40px">
-    <div class="quiz-q-box" id="sind-q"></div>
-    <div class="vf-btns" style="width:100%;padding:0">
-      <button class="vf-btn vf-t" id="sind-btn-t" onclick="answerSind(true)">
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;padding:40px 60px;gap:36px;width:100%">
+    <div class="quiz-q-box" id="sind-q" style="flex:1;width:85%;min-height:unset"></div>
+    <div class="vf-btns" style="width:85%;padding:0;flex-shrink:0">
+      <button class="vf-btn vf-t" id="sind-btn-t" onclick="answerSind(true)" style="flex:1;height:auto;min-height:160px">
         <span class="vf-label">Verdadeiro</span>
       </button>
-      <button class="vf-btn vf-f" id="sind-btn-f" onclick="answerSind(false)">
+      <button class="vf-btn vf-f" id="sind-btn-f" onclick="answerSind(false)" style="flex:1;height:auto;min-height:160px">
         <span class="vf-label">Falso</span>
       </button>
     </div>
