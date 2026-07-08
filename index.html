@@ -298,9 +298,10 @@ select.inp { appearance: none; cursor: pointer; }
 .q-dot.current   { background: white; }
 
 .q-box {
-  background: white; border-radius: 28px; padding: 44px 52px;
+  background: white; border-radius: 28px; padding: 80px 60px;
   box-shadow: var(--shadow);
   display: flex; flex-direction: column; gap: 20px; flex-shrink: 0;
+  width: 100%; min-height: 340px; justify-content: center;
 }
 .q-box-label {
   font-size: 24px; font-weight: 700; text-transform: uppercase;
@@ -398,9 +399,10 @@ select.inp { appearance: none; cursor: pointer; }
 
 /* ═══════════════════ SINDICATO QUIZ ═══════════════════ */
 .quiz-q-box {
-  background: white; border-radius: 24px; padding: 52px;
+  background: white; border-radius: 24px; padding: 80px 60px;
   font-size: 40px; font-weight: 600; color: var(--gray-dk); line-height: 1.55;
   box-shadow: var(--shadow); flex-shrink: 0;
+  width: 100%; min-height: 340px; display: flex; align-items: center;
 }
 .quiz-opts { display: flex; flex-direction: column; gap: 22px; }
 .quiz-opt {
@@ -1427,7 +1429,7 @@ function renderSindDots(){
 
 function renderSindQ(){
   const q=sindQs[state.sindIdx];
-  document.getElementById('sind-q').textContent=`${state.sindIdx+1}. ${q.q}`;
+  document.getElementById('sind-q').textContent=q.q;
   document.getElementById('sind-btn-t').disabled=false;
   document.getElementById('sind-btn-f').disabled=false;
   document.getElementById('sind-btn-t').style.opacity='';
