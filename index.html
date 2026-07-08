@@ -665,12 +665,146 @@ select.inp { appearance: none; cursor: pointer; }
     <span id="err-lgpd" class="err-msg">Você precisa aceitar os termos para continuar.</span>
   </div>
   <div class="bnav">
-    <button class="btn btn-ghost" onclick="goTo('form-1')">← Voltar</button>
+    <button class="btn btn-ghost" onclick="goTo('form-5')">← Voltar</button>
     <button class="btn btn-red" onclick="validateLgpd()">Jogar →</button>
   </div>
 </div>
 
-<!-- FORMS 2-6 REMOVIDOS — formulário unificado em screen-form-1 -->
+<!-- ═══════════════════ FORM 2: INTENÇÃO ═══════════════════ -->
+<div id="screen-form-2" class="screen" style="background:#ece4d0">
+  <div class="content content-lt" style="gap:36px;padding-top:48px;padding-bottom:48px">
+    <div class="sec-title" style="text-align:center;color:var(--expo-blue)">O que você busca neste momento?</div>
+    <div style="font-size:32px;text-align:center;color:var(--gray-md)">Selecione <strong>uma ou mais</strong> opções</div>
+    <div class="choice-list" id="inten-list">
+      <div class="choice-card multi" data-val="bem-estar" onclick="toggleIntencao(this)">
+        <span class="choice-icon">🏊</span>Bem-estar e lazer para mim e minha família
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card multi" data-val="capacitacao" onclick="toggleIntencao(this)">
+        <span class="choice-icon">🎓</span>Capacitação profissional
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card multi" data-val="saude" onclick="toggleIntencao(this)">
+        <span class="choice-icon">🏥</span>Serviços de saúde e odontologia
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card multi" data-val="negocio" onclick="toggleIntencao(this)">
+        <span class="choice-icon">💼</span>Fortalecer meu negócio ou empresa
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card multi" data-val="informacoes" onclick="toggleIntencao(this)">
+        <span class="choice-icon">ℹ️</span>Informações gerais sobre o Sistema Fecomércio
+        <span class="choice-check">✓</span>
+      </div>
+    </div>
+    <span id="err-intencao" class="err-msg">Selecione ao menos uma opção para continuar.</span>
+  </div>
+  <div class="bnav">
+    <button class="btn btn-ghost" onclick="goTo('form-1')">← Voltar</button>
+    <button class="btn btn-red" onclick="validateForm2()">Avançar →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ FORM 3: PERFIL PROFISSIONAL ═══════════════════ -->
+<div id="screen-form-3" class="screen" style="background:#ece4d0">
+  <div class="content content-lt" style="gap:36px;padding-top:48px;padding-bottom:48px">
+    <div class="sec-title" style="text-align:center;color:var(--expo-blue)">Qual é o seu perfil profissional?</div>
+    <div class="choice-list">
+      <div class="choice-card" data-group="perfil" data-val="empregado" onclick="selectChoice(this,'perfil')">
+        <span class="choice-icon">👷</span>Empregado(a) CLT
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card" data-group="perfil" data-val="empresario" onclick="selectChoice(this,'perfil')">
+        <span class="choice-icon">🏢</span>Empresário(a) / Comerciante
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card" data-group="perfil" data-val="autonomo" onclick="selectChoice(this,'perfil')">
+        <span class="choice-icon">🔧</span>Autônomo(a) / Freelancer
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card" data-group="perfil" data-val="estudante" onclick="selectChoice(this,'perfil')">
+        <span class="choice-icon">📚</span>Estudante
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card" data-group="perfil" data-val="aposentado" onclick="selectChoice(this,'perfil')">
+        <span class="choice-icon">🌿</span>Aposentado(a)
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card" data-group="perfil" data-val="outro" onclick="selectChoice(this,'perfil')">
+        <span class="choice-icon">🙋</span>Outro
+        <span class="choice-check">✓</span>
+      </div>
+    </div>
+    <span id="err-perfil" class="err-msg">Selecione uma opção para continuar.</span>
+  </div>
+  <div class="bnav">
+    <button class="btn btn-ghost" onclick="goTo('form-2')">← Voltar</button>
+    <button class="btn btn-red" onclick="validateForm3()">Avançar →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ FORM 4: DADOS ADICIONAIS ═══════════════════ -->
+<div id="screen-form-4" class="screen" style="background:#ece4d0">
+  <div class="content content-lt" style="gap:36px;padding-top:48px;padding-bottom:48px">
+    <div class="sec-title" style="text-align:center;color:var(--expo-blue)">Onde você mora?</div>
+    <div style="border:3px solid var(--expo-blue);border-radius:24px;padding:40px 44px;display:flex;flex-direction:column;gap:36px;background:white">
+      <div class="inp-group">
+        <label class="inp-label">Cidade <span class="req">*</span></label>
+        <input id="f-cidade" class="inp" type="text" placeholder="Sua cidade…" autocomplete="off">
+        <span id="err-cidade" class="err-msg">Por favor, informe sua cidade.</span>
+      </div>
+      <div class="inp-group">
+        <label class="inp-label">Estado <span class="req">*</span></label>
+        <input id="f-estado-display" class="inp" type="text" readonly value="Minas Gerais" onclick="openEstadoPicker()" style="cursor:pointer;background:white" autocomplete="off">
+        <input type="hidden" id="f-estado" value="MG">
+      </div>
+      <div class="inp-group">
+        <label class="inp-label">Faixa etária</label>
+        <input id="f-idade-display" class="inp" type="text" readonly value="" placeholder="Selecione…" onclick="openIdadePicker()" style="cursor:pointer;background:white" autocomplete="off">
+        <input type="hidden" id="f-idade" value="">
+      </div>
+    </div>
+  </div>
+  <div class="bnav">
+    <button class="btn btn-ghost" onclick="goTo('form-3')">← Voltar</button>
+    <button class="btn btn-red" onclick="validateForm4()">Avançar →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ FORM 5: PAPEL NA EMPRESA ═══════════════════ -->
+<div id="screen-form-5" class="screen" style="background:#ece4d0">
+  <div class="content content-lt" style="gap:36px;padding-top:48px;padding-bottom:48px">
+    <div class="sec-title" style="text-align:center;color:var(--expo-blue)">Qual é seu papel na empresa?</div>
+    <div class="choice-list">
+      <div class="choice-card" data-group="papel" data-val="funcionario" onclick="selectChoice(this,'papel')">
+        <span class="choice-icon">👤</span>Funcionário(a)
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card" data-group="papel" data-val="gestor" onclick="selectChoice(this,'papel')">
+        <span class="choice-icon">📋</span>Gestor(a) / Supervisor(a)
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card" data-group="papel" data-val="diretor" onclick="selectChoice(this,'papel')">
+        <span class="choice-icon">🏆</span>Diretor(a) / Gerente
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card" data-group="papel" data-val="proprietario" onclick="selectChoice(this,'papel')">
+        <span class="choice-icon">🔑</span>Proprietário(a) / Sócio(a)
+        <span class="choice-check">✓</span>
+      </div>
+      <div class="choice-card" data-group="papel" data-val="outro-nao-se-aplica" onclick="selectChoice(this,'papel')">
+        <span class="choice-icon">🙋</span>Outro / Não se aplica
+        <span class="choice-check">✓</span>
+      </div>
+    </div>
+    <span id="err-papel" class="err-msg">Selecione uma opção para continuar.</span>
+  </div>
+  <div class="bnav">
+    <button class="btn btn-ghost" onclick="goTo('form-4')">← Voltar</button>
+    <button class="btn btn-red" onclick="validateForm5()">Avançar →</button>
+  </div>
+</div>
+
 <!-- ═══════════════════ ESCOLHA DO CAMINHO ═══════════════════ -->
 <div id="screen-choose" class="screen">
   <div class="content content-lt" style="overflow:hidden;gap:20px">
@@ -848,6 +982,10 @@ window.addEventListener('resize', scaleToFit);
     `<img src="${src}" style="position:absolute;bottom:300px;left:0;width:100%;opacity:.18;pointer-events:none;z-index:0;${extra}">`;
   const decos = {
     'screen-form-1': deco('deco-landscape.png'),
+    'screen-form-2': deco('deco-landscape.png'),
+    'screen-form-3': deco('deco-landscape.png'),
+    'screen-form-4': deco('deco-landscape.png'),
+    'screen-form-5': deco('deco-landscape.png'),
     'screen-lgpd':   deco('deco-landscape.png'),
     'screen-choose':  ``,
     'screen-result':  `<img src="deco-retangulos.png" style="position:absolute;bottom:0;right:0;width:100%;opacity:.22;pointer-events:none;z-index:0;">`,
@@ -865,6 +1003,7 @@ window.addEventListener('resize', scaleToFit);
 ─────────────────────────────────────────────────*/
 const state = {
   nome:'', cpf:'', nasc:'', tel:'', email:'',
+  intencao:[], perfil:'', cidade:'', estado:'MG', idade:'', papel:'',
   lgpd: false,
   path:'', score:0, total:0,
   senacIdx:0, senacScore:0,
@@ -974,6 +1113,7 @@ function resetAll() {
   clearAllTimers();
   Object.assign(state,{
     nome:'', cpf:'', nasc:'', tel:'', email:'',
+    intencao:[], perfil:'', cidade:'', estado:'MG', idade:'', papel:'',
     lgpd:false, path:'', score:0, total:0,
     senacIdx:0, senacScore:0, sindIdx:0, sindScore:0,
     sescMatches:{}, sescSel:null, sescCorrect:0, sescErrors:0
@@ -1038,8 +1178,41 @@ function validateForm1(){
   if(ok){
     state.nome=nome; state.cpf=cpf; state.nasc=nasc;
     state.email=email; state.tel=tel;
-    goTo('lgpd');
+    goTo('form-2');
   }
+}
+
+function toggleIntencao(el){
+  const val=el.dataset.val;
+  if(el.classList.contains('sel')){
+    el.classList.remove('sel');
+    state.intencao=state.intencao.filter(v=>v!==val);
+  } else {
+    el.classList.add('sel');
+    state.intencao.push(val);
+  }
+  if(state.intencao.length>0) showErr('err-intencao','',false);
+}
+function validateForm2(){
+  if(state.intencao.length===0){ showErr('err-intencao','Selecione ao menos uma opção para continuar.',true); return; }
+  showErr('err-intencao','',false); goTo('form-3');
+}
+function validateForm3(){
+  if(!state.perfil){ showErr('err-perfil','Selecione uma opção para continuar.',true); return; }
+  showErr('err-perfil','',false); goTo('form-4');
+}
+function validateForm4(){
+  const cidade=document.getElementById('f-cidade').value.trim();
+  if(cidade.length<2){ showErr('err-cidade','Por favor, informe sua cidade.',true); document.getElementById('f-cidade').classList.add('err'); return; }
+  showErr('err-cidade','',false); document.getElementById('f-cidade').classList.remove('err');
+  state.cidade=cidade;
+  state.estado=document.getElementById('f-estado').value;
+  state.idade=document.getElementById('f-idade').value;
+  goTo('form-5');
+}
+function validateForm5(){
+  if(!state.papel){ showErr('err-papel','Selecione uma opção para continuar.',true); return; }
+  showErr('err-papel','',false); goTo('lgpd');
 }
 
 function toggleLgpd(){
@@ -1076,7 +1249,10 @@ function saveLead(){
     id: Date.now(),
     timestamp: new Date().toISOString(),
     nome: state.nome, cpf: state.cpf, nasc: state.nasc,
-    tel: state.tel, email: state.email, lgpd: state.lgpd,
+    tel: state.tel, email: state.email,
+    intencao: state.intencao.join(', '), perfil: state.perfil,
+    cidade: state.cidade, estado: state.estado, idade: state.idade, papel: state.papel,
+    lgpd: state.lgpd,
     path: state.path, score: state.score, total: state.total
   };
   try {
